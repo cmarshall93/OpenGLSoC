@@ -33,6 +33,8 @@ public class OpenGL_Program {
 		GL11.glOrtho(0, 800, 0, 600, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		
+		System.out.println(GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE));
+		
 		eng.startGame();
 		while(!Display.isCloseRequested()){
 			eng.renderGame();
