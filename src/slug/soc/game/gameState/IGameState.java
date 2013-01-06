@@ -7,6 +7,6 @@ public interface IGameState {
 
 	public void createImage();
 	
-	public void processKey(KeyEvent e);
+	public void checkInput();
 	
 }

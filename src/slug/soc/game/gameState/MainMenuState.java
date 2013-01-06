@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
@@ -43,14 +44,14 @@ public class MainMenuState implements IGameState {
 	}
 
 	@Override
-	public void processKey(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	public void checkInput() {
+		if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
 			options[currentOption].act();
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){//down
 			nextOption();
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_UP){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
 			previousOption();
 		}
 	}
@@ -77,28 +78,38 @@ public class MainMenuState implements IGameState {
 	public void createImage() {
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(30, Display.getDisplayMode().getHeight() - 30, 0);
+		GL11.glTranslatef(10, Display.getDisplayMode().getHeight() + 60, 0);
 		for(int i = 0;i < options.length; i++){
 			GL11.glColor3f(0.5f,0.5f,0.5f);
 			if(i == currentOption){
 				GL11.glColor3f(0.8f,0.8f,0.8f);
 			}
-			
+
 			GL11.glPushMatrix();
 			for(Character c: options[i].getDesc().toCharArray()){
-				
-				GL11.glBegin(GL11.GL_QUADS);
-				AsciiTextureGenerator.getInstance().getCharacterTexture(c).bind();
-				GL11.glTexCoord2f(0,0);
-				GL11.glVertex2f(0,0);
-				GL11.glTexCoord2f(1, 0);
-				GL11.glVertex2f(0+16,0);
-				GL11.glTexCoord2f(1, 1);
-				GL11.glVertex2f(0+16,0+16);
-				GL11.glTexCoord2f(0, 1);
-				GL11.glVertex2f(0,0+16);
-				GL11.glEnd();
-				GL11.glTranslatef(17, 0, 0);
+			Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
+				if(tex != null){
+					tex.bind();
+					GL11.glBegin(GL11.GL_QUADS);
+					GL11.glTexCoord2f(0,0);
+					GL11.glVertex2f(0,0);
+					GL11.glTexCoord2f(1, 0);
+					GL11.glVertex2f(0+16,0);
+					GL11.glTexCoord2f(1, 1);
+					GL11.glVertex2f(0+16,0+16);
+					GL11.glTexCoord2f(0, 1);
+					GL11.glVertex2f(0,0+16);
+					GL11.glEnd();
+				}
+				else{
+					GL11.glBegin(GL11.GL_QUADS);
+					GL11.glVertex2f(0,0);
+					GL11.glVertex2f(0+16,0);
+					GL11.glVertex2f(0+16,0+16);
+					GL11.glVertex2f(0,0+16);
+					GL11.glEnd();
+				}
+				GL11.glTranslatef(16, 0, 0);
 			}
 			GL11.glPopMatrix();
 			GL11.glTranslatef(0,-17,0);

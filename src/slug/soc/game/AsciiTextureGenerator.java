@@ -13,19 +13,22 @@ public class AsciiTextureGenerator {
 
 	private HashMap<Character, Texture> map;
 	private Character[] chars = {'a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'
-			,'k', 'l', 'm', 'n' ,'o' ,'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+			,'k', 'l', 'm', 'n' ,'o' ,'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q'
+			,'R', 'S', 'T', 'U', 'V', 'W' ,'X' ,'Y', 'Z'
 	};
 
 	private AsciiTextureGenerator(){
 		map = new HashMap<Character, Texture>();
-		try{
-			for(Character c: chars){
-				Texture tex = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("sprites/"+c+".png"));
-				map.put(c, tex );
+
+		for(Character c: chars){
+			try {
+				map.put(c, new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/"+c+".png"),true));
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+		System.out.println(map.size());
 	}
 
 	public static AsciiTextureGenerator getInstance(){
@@ -34,7 +37,7 @@ public class AsciiTextureGenerator {
 		}
 		return instance;
 	}
-
+	
 	public Texture getCharacterTexture(Character c){
 		return map.get(c);
 	}

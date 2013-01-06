@@ -30,6 +30,11 @@ public class GameEngine {
 	public void startGame(){
 		Game.getInstance().setCurrentGameState(MainMenuState.getInstance());
 	}
+	
+	public void checkInput(){
+		Game.getInstance().getCurrentGameState().checkInput();
+	}
+	
 	/**
 	 * Calls the drawGameImage method in the gameView, passing the image generated from the renderGameImage method in the renderEngine.
 	 */
