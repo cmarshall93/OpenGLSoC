@@ -87,7 +87,7 @@ public class MainMenuState implements IGameState {
 
 			GL11.glPushMatrix();
 			for(Character c: options[i].getDesc().toCharArray()){
-			Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
+			Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c.toString());
 				if(tex != null){
 					tex.bind();
 					GL11.glBegin(GL11.GL_QUADS);

@@ -1,19 +1,24 @@
 package slug.soc.game.gameObjects.tiles;
 
 import java.awt.Color;
+import java.io.IOException;
+
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 public abstract class GameTile {
 
-	private Character symbol;
+	private String textureName;
 	private Color color;
 	
-	public GameTile(Character symbol, Color color){
-		this.symbol = symbol;
+	public GameTile(String textureName, Color color){
+		this.textureName = textureName;
 		this.color = color;
 	}
 	
-	public Character getSymbol(){
-		return symbol;
+	public String getSymbol(){
+		return textureName;
 	}
 	
 	public Color getColor(){

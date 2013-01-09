@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileHoldfast extends GameTile {
 
 	public TileHoldfast(Color color) {
-		super('H',color);
+		super("H",color);
 	}
 
 }

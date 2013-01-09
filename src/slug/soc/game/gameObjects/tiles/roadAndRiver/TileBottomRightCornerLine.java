@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileBottomRightCornerLine extends GameTile {
 
 	public TileBottomRightCornerLine(Color color) {
-		super('\u2518', color);
+		super("u2518", color);
 	}
 
 }

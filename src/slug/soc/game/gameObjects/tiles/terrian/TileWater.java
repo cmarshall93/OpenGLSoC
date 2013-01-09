@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileWater extends GameTile{
 
 	public TileWater() {
-		super('~', Color.BLUE);
+		super("water", Color.BLUE);
 	}
 
 }

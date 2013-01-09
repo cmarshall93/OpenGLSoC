@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileRiverSource extends GameTile {
 
 	public TileRiverSource() {
-		super('o', Color.BLUE);
+		super("o", Color.BLUE);
 	}
 
 }

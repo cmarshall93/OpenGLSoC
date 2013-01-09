@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileMountain extends GameTile {
 
 	public TileMountain() {
-		super('\u25B2', Color.GRAY);
+		super("mountain", Color.GRAY);
 	}
 
 }

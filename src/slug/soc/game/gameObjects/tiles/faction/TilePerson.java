@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TilePerson extends GameTile {
 	
 	public TilePerson(Color color){
-		super('\u263A', color);
+		super("person", color);
 	}
 
 }

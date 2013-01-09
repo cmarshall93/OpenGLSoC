@@ -52,7 +52,7 @@ public class OpenGL_Program {
 			Display.sync(60);
 			if(isCounting == true){
 				frameCounter++;
-				if(frameCounter == 10){
+				if(frameCounter == 5){
 					frameCounter = 0;
 					isCounting = false;		
 				}

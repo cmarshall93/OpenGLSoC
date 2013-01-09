@@ -11,17 +11,19 @@ public class AsciiTextureGenerator {
 
 	private static AsciiTextureGenerator instance ;
 
-	private HashMap<Character, Texture> map;
-	private Character[] chars = {'a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'
-			,'k', 'l', 'm', 'n' ,'o' ,'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q'
-			,'R', 'S', 'T', 'U', 'V', 'W' ,'X' ,'Y', 'Z'
+	private HashMap<String, Texture> map;
+	
+	private String[] chars = {"a","b", "c", "d", "e", "f", "g", "h", "i", "j"
+			,"k", "l", "m", "n" ,"o" ,"p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", 
+			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"
+			,"R", "S", "T", "U", "V", "W" ,"X" ,"Y", "Z", "mountain", "plains", "u250c", "u2500", "u2502", "u2510"
+			,"u2514", "u2518", "water"
 	};
 
 	private AsciiTextureGenerator(){
-		map = new HashMap<Character, Texture>();
+		map = new HashMap<String, Texture>();
 
-		for(Character c: chars){
+		for(String c: chars){
 			try {
 				map.put(c, new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/"+c+".png"),true));
 			} catch (IOException e) {
@@ -38,7 +40,7 @@ public class AsciiTextureGenerator {
 		return instance;
 	}
 	
-	public Texture getCharacterTexture(Character c){
+	public Texture getCharacterTexture(String c){
 		return map.get(c);
 	}
 }

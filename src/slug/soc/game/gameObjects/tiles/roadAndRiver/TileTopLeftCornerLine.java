@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileTopLeftCornerLine extends GameTile {
 
 	public TileTopLeftCornerLine(Color color) {
-		super('\u250C', color);
+		super("u250c", color);
 	}
 
 }

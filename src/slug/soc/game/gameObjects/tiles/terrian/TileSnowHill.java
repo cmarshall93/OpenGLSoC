@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileSnowHill extends GameTile {
 
 	public TileSnowHill() {
-		super('n', Color.WHITE);
+		super("n", Color.WHITE);
 	}
 
 }

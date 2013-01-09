@@ -7,6 +7,12 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.opengl.Texture;
+
+import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
 import slug.soc.game.HouseSigilGenerator;
@@ -40,8 +46,8 @@ public class GameModeState implements IGameState, Runnable {
 	private GameObjectCursor cursor = new GameObjectCursor();
 	private Integer currentXPos;
 	private Integer currentYPos;
-	private double[] zoomScales = {
-			1.0, 0.5	
+	private float[] zoomScales = {
+			1.0f, 0.5f	
 	};
 
 	private boolean cursorActive = false;
@@ -111,8 +117,8 @@ public class GameModeState implements IGameState, Runnable {
 		return map;
 	}
 
-	public void processKey(KeyEvent e){
-		if(e.getKeyCode() == KeyEvent.VK_UP){
+	public void checkInput(){
+		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
 			if(currentYPos > 0){
 				if(cursorActive){
 					map[currentYPos][currentXPos].removeGameObject(cursor);
@@ -124,7 +130,7 @@ public class GameModeState implements IGameState, Runnable {
 				}
 			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){//down
 			if(currentYPos < getMap().length - 1){
 				if(cursorActive){
 					map[currentYPos][currentXPos].removeGameObject(cursor);
@@ -136,7 +142,7 @@ public class GameModeState implements IGameState, Runnable {
 				}
 			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
 			if(currentXPos < getMap().length -1){ 
 				if(cursorActive){
 					map[currentYPos][currentXPos].removeGameObject(cursor);
@@ -148,7 +154,7 @@ public class GameModeState implements IGameState, Runnable {
 				}
 			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_LEFT){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){//left
 			if(currentXPos > 0){
 				if(cursorActive){
 					map[currentYPos][currentXPos].removeGameObject(cursor);
@@ -160,17 +166,17 @@ public class GameModeState implements IGameState, Runnable {
 				}
 			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_OPEN_BRACKET){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_LBRACKET)){//open bracket
 			if(currentZoomIndex - 1 > -1){
 				currentZoomIndex--;
 			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_CLOSE_BRACKET){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_RBRACKET)){//close bracket
 			if(currentZoomIndex + 1 < zoomScales.length){
 				currentZoomIndex++;
 			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_C){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_C)){//c
 			if(!cursorActive){
 				map[currentYPos][currentXPos].addGameObject(cursor);
 				cursorActive = true;
@@ -180,68 +186,90 @@ public class GameModeState implements IGameState, Runnable {
 				map[currentYPos][currentXPos].removeGameObject(cursor);
 			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
 			Game.getInstance().setCurrentGameState(PauseGameState.getInstance());
 		}
-		else if(e.getKeyCode() ==  KeyEvent.VK_H){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_H)){//h
 			viewHoldings = !viewHoldings;
 		}
 	}
 
-	public Image createImage(){
+	public void createImage(){
 		frameCounter++;
-		Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
-		Graphics g = gameImage.getGraphics();
+		//Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
+		//Graphics g = gameImage.getGraphics();
 		if(loadedWorld){
-			drawMap(g);
-			g.setColor(Color.WHITE);
-			g.drawLine(500, 0, 500, 500);
-			drawInfo(g);
+			drawMap();
+			//g.setColor(Color.WHITE);
+			GL11.glColor3f(1f, 1f, 1f);
+			//g.drawLine(500, 0, 500, 500);
+			drawInfo();
 		}
 		else{
-			drawLoading(g);
+			drawLoading();
 		}
 
 		if(frameCounter >= UPDATE_RATE ){
 			frameCounter = 0;
 		}
-
-		return gameImage;
 	}	
 
-	private void drawMap(Graphics g){
-		int gy = 30;
-		int gx;
-		g.setFont(FontProvider.getInstance().getFont());
-		g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
+	private void drawMap(){
+		//int gy = 30;
+		//int gx;
+		GL11.glPushMatrix();
+		
+		GL11.glTranslatef(0f, Display.getDisplayMode().getHeight() - 30f, 0f);
+		//g.setFont(FontProvider.getInstance().getFont());
+		//g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
+		//GL11.glScalef(zoomScales[currentZoomIndex], zoomScales[currentZoomIndex], 0f);
 		for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
-			gx = 15;
+			//gx = 15;
+			GL11.glPushMatrix();
 			for(int x = currentXPos - 12 * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
 				if(x < 0 || y < 0 || x >= getMap().length || y >= getMap().length ){
-					g.setColor(Color.BLACK);
-					g.drawString(" ", gx, gy);
+					//g.setColor(Color.BLACK);
+					GL11.glColor3f(1f,1f,1f);
+					//g.drawString(" ", gx, gy);
+					drawCharacter("a");
 				}
 				else{
 					if(frameCounter >= UPDATE_RATE){
 						getMap()[y][x].nextTile();
 					}
 					if(viewHoldings && map[y][x].getOwner() != null){ //check if player wants to see owners of tiles
-						g.setColor(map[y][x].getOwner().getFactionColor().getColor());
+						//g.setColor(map[y][x].getOwner().getFactionColor().getColor());
+						Color color = map[y][x].getOwner().getFactionColor().getColor();
+						//GL11.glColor3f(color.getRed()/256, color.getGreen()/256, color.getBlue()/256);
+						GL11.glColor3f(1f, 1f, 1f);
 					}
 					else{//default viewing
-						g.setColor(getMap()[y][x].getTile().getColor());
+						//g.setColor(getMap()[y][x].getTile().getColor());
+						Color color = map[y][x].getTile().getColor();
+						GL11.glColor3f(1f, 1f, 1f);
+						//GL11.glColor3f(color.getRed()/256, color.getGreen()/256, color.getBlue()/256);
 					}
-					g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
+					//g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
+					//drawCharacter('a');
+					System.out.println(getMap()[y][x].getTile().getSymbol());
+					drawCharacter(getMap()[y][x].getTile().getSymbol());
 				}
-				gx += g.getFont().getSize();
+				//gx += g.getFont().getSize();
+				GL11.glTranslatef(20 * zoomScales[currentZoomIndex], 0, 0);
+
 			}
-			gy += g.getFont().getSize();
+			//gy += g.getFont().getSize();
+			GL11.glPopMatrix();
+			GL11.glTranslatef(0, - 20 * zoomScales[currentZoomIndex], 0);
+
 		}
+		
+		GL11.glPopMatrix();
 	}
 
-	private void drawInfo(Graphics g){
+	private void drawInfo(){
 
-		int gx = 510;
+		/**int gx = 510;
 		int gy = 30;
 
 		g.setFont(FontProvider.getInstance().getFont().deriveFont(10f));
@@ -276,13 +304,13 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		Integer f = currentFPS;
 		g.drawString(f.toString(), gx, gy);
-		frames++;
+		frames++;*/
 	}
 
-	private void drawLoading(Graphics g){
-		int gy = 30;
+	private void drawLoading(){
+		/**int gy = 30;
 		int gx = 30;
-		g.setFont(FontProvider.getInstance().getFont());
+		g.setFont(Fon``tProvider.getInstance().getFont());
 		g.drawString("Generating world", gx, gy);
 		gy += 20;
 		for(String s: getGenStatus()){
@@ -299,7 +327,7 @@ public class GameModeState implements IGameState, Runnable {
 				currentLoadingString = 0;
 			}
 		}
-		g.drawString(loadingString[currentLoadingString], gx, gy);
+		g.drawString(loadingString[currentLoadingString], gx, gy);*/
 	}
 
 	private String[] getGenStatus(){
@@ -309,5 +337,30 @@ public class GameModeState implements IGameState, Runnable {
 		status[2] = "test";
 		status[3] = "test";
 		return status;
+	}
+	
+	private void drawCharacter(String c){
+		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
+		if(tex != null){
+			tex.bind();
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(0,0);
+			GL11.glVertex2f(0,0);
+			GL11.glTexCoord2f(1, 0);
+			GL11.glVertex2f(0+20,0);
+			GL11.glTexCoord2f(1, 1);
+			GL11.glVertex2f(0+20,0+20);
+			GL11.glTexCoord2f(0, 1);
+			GL11.glVertex2f(0,0+20);
+			GL11.glEnd();
+		}
+		else{
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glVertex2f(0,0);
+			GL11.glVertex2f(0+16,0);
+			GL11.glVertex2f(0+16,0+16);
+			GL11.glVertex2f(0,0+16);
+			GL11.glEnd();
+		}
 	}
 }
