@@ -18,9 +18,12 @@ public class AboutState implements IGameState {
 
 	private static AboutState instance;
 
-	private static final String[] text = {"Songs Of Conquest is an ascii tile based game written entirely by me (Charlie Marshall)."
-		,"Think of it as Medieval Total War crossed with the politics/backstabbing/drama from "
-		,"Game Of Thrones."} ;
+	private static final String[] text = {
+		"Songs Of Conquest is an ascii tile based game"
+		,"written entirely by me (Charlie Marshall).Think",
+		"of it as Medieval Total War crossed with the",
+		"politics/backstabbing/drama from Game Of Thrones."
+		,""} ;
 
 	public static AboutState getInstance(){
 		if(instance == null){
@@ -58,7 +61,7 @@ public class AboutState implements IGameState {
 		for(String s : text){
 			GL11.glPushMatrix();
 			for(Character c : s.toCharArray()){
-				Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
+				Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c.toString());
 				if(tex != null){
 					tex.bind();
 					GL11.glBegin(GL11.GL_QUADS);

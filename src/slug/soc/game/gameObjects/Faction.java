@@ -14,13 +14,17 @@ public class Faction {
 	private ArrayList<GameObject> holdings;
 	private String name;
 	
+	private GameObjectPerson headOfFamily;
+	
 	public Faction(){
 		factionColor = ColorFactory.getInstance().getRandomFactionColor();
 		sigil = HouseSigilGenerator.getInstance().createNewSigilString(factionColor);
 		name = WordGenerator.getInstance().getRandomFactionName();
+		headOfFamily = new GameObjectPerson(factionColor.getColor(), this);
 		
 		holdings = new ArrayList<GameObject>();
 		holdings.add(new GameObjectCastle(factionColor.getColor(), this));
+		holdings.add(headOfFamily);
 	}
 	
 	public ArrayList<GameObject> getHoldings(){
@@ -33,6 +37,10 @@ public class Faction {
 	
 	public FactionColor getFactionColor(){
 		return factionColor;
+	}
+	
+	public GameObjectPerson getHeadOfFamily(){
+		return headOfFamily;
 	}
 	
 	public String toString(){

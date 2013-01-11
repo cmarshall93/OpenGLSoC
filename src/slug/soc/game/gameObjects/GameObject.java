@@ -12,7 +12,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public abstract class GameObject implements GameDrawable {
 
 	private GameTile tile;
-	private Faction owner;
+	protected Faction owner;
 	
 	public GameObject(GameTile tile, Faction owner){
 		this.tile = tile;	
@@ -26,5 +26,7 @@ public abstract class GameObject implements GameDrawable {
 	public Faction getOwner(){
 		return owner;
 	}
+	
+	public abstract String[] getStringDesc();
 }
 

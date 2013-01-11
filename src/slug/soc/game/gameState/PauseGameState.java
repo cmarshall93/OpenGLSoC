@@ -6,6 +6,12 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.opengl.Texture;
+
+import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
 import slug.soc.game.menu.AbstractMenuOption;
 import slug.soc.game.menu.ContinueGameOption;
@@ -13,6 +19,8 @@ import slug.soc.game.menu.ExitProgramOption;
 
 public class PauseGameState implements IGameState {
 
+	private static final float DEFAULT_TEXT_SIZE = 16;
+	
 	private static PauseGameState instance;
 
 	private AbstractMenuOption[] options;
@@ -33,14 +41,14 @@ public class PauseGameState implements IGameState {
 	}
 
 	@Override
-	public void processKey(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	public void checkInput() {
+		if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){//enter
 			options[currentOption].act();
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){//down
 			nextOption();
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_UP){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
 			previousOption();
 		}
 	}
@@ -64,21 +72,56 @@ public class PauseGameState implements IGameState {
 	}
 
 	@Override
-	public Image createImage() {
-		Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
-		Graphics g = gameImage.getGraphics();
-		int gx = 30;
-		int gy = 30;
-		g.setFont(FontProvider.getInstance().getFont());
+	public void createImage() {
+		//Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
+		//Graphics g = gameImage.getGraphics();
+		//int gx = 30;
+		//int gy = 30;
+		//g.setFont(FontProvider.getInstance().getFont());
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0,Display.getDisplayMode().getHeight() + 80, 0);
 		for(int i = 0;i < options.length; i++){
-			g.setColor(Color.GRAY);
+			GL11.glColor3f(0.5f, 0.5f, 0.5f);
 			if(i == currentOption){
-				g.setColor(Color.WHITE);
+				GL11.glColor3f(1f, 1f, 1f);
 			}
-			g.drawString(options[i].getDesc(), gx, gy);
-			gy += 30;
+			GL11.glPushMatrix();
+			for(Character c : options[i].getDesc().toCharArray()){
+				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
+			}
+			GL11.glPopMatrix();
+			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
+			//g.drawString(options[i].getDesc(), gx, gy);
+			//gy += 30;
 		}
-		return gameImage;
+		GL11.glPopMatrix();
+		//return gameImage;
+	}
+	
+	private void drawCharacter(String c, float size){
+		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
+		if(tex != null){
+			tex.bind();
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(0,0);
+			GL11.glVertex2f(0,0);
+			GL11.glTexCoord2f(1, 0);
+			GL11.glVertex2f(0+size,0);
+			GL11.glTexCoord2f(1, 1);
+			GL11.glVertex2f(0+size,0+size);
+			GL11.glTexCoord2f(0, 1);
+			GL11.glVertex2f(0,0+size);
+			GL11.glEnd();
+		}
+		else{
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glVertex2f(0,0);
+			GL11.glVertex2f(0+ size,0);
+			GL11.glVertex2f(0+size,0+size);
+			GL11.glVertex2f(0,0+size);
+			GL11.glEnd();
+		}
 	}
 }
 

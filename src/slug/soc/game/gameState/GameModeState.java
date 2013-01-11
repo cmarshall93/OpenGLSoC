@@ -32,7 +32,11 @@ import slug.soc.game.gameObjects.TerrainObjectWater;
  */
 public class GameModeState implements IGameState, Runnable {
 
-	private static final int UPDATE_RATE = 30;
+
+	private static final int MAP_UPDATE_RATE = 30;
+	private static final int INFO_UPDATE_RATE = 120;
+	private static final float DEFAULT_TILE_SIZE = 19;
+	private static final float DEFAULT_TEXT_SIZE = 10;
 	private static GameModeState instance;
 
 	private long lastFPS;
@@ -57,8 +61,10 @@ public class GameModeState implements IGameState, Runnable {
 	private int currentLoadingString = 0;
 
 	private int currentZoomIndex = 0;
-	private int frameCounter;
 
+	private int mapFrameCounter;
+	private int infoFrameCounter;
+	
 	public static GameModeState getInstance(){
 		if(instance == null){
 			instance = new GameModeState();
@@ -192,10 +198,17 @@ public class GameModeState implements IGameState, Runnable {
 		else if(Keyboard.isKeyDown(Keyboard.KEY_H)){//h
 			viewHoldings = !viewHoldings;
 		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+			if(getMap()[currentYPos][currentXPos].getOwner() != null){
+				FactionInformationState.getInstance().setFactionToDispaly(getMap()[currentYPos][currentXPos].getOwner());
+				Game.getInstance().setCurrentGameState(FactionInformationState.getInstance());
+			}
+		}
 	}
 
-	public void createImage(){
-		frameCounter++;
+	public void createImage(){		
+		mapFrameCounter++;
+		infoFrameCounter++;
 		//Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
 		//Graphics g = gameImage.getGraphics();
 		if(loadedWorld){
@@ -209,8 +222,11 @@ public class GameModeState implements IGameState, Runnable {
 			drawLoading();
 		}
 
-		if(frameCounter >= UPDATE_RATE ){
-			frameCounter = 0;
+		if(mapFrameCounter >= MAP_UPDATE_RATE ){
+			mapFrameCounter = 0;
+		}
+		if(infoFrameCounter >= INFO_UPDATE_RATE){
+			infoFrameCounter = 0;
 		}
 	}	
 
@@ -218,11 +234,10 @@ public class GameModeState implements IGameState, Runnable {
 		//int gy = 30;
 		//int gx;
 		GL11.glPushMatrix();
-		
-		GL11.glTranslatef(0f, Display.getDisplayMode().getHeight() - 30f, 0f);
+
+		GL11.glTranslatef(0f, Display.getDisplayMode().getHeight() + 80 , 0f);
 		//g.setFont(FontProvider.getInstance().getFont());
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
-		//GL11.glScalef(zoomScales[currentZoomIndex], zoomScales[currentZoomIndex], 0f);
 		for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
 			//gx = 15;
 			GL11.glPushMatrix();
@@ -231,95 +246,196 @@ public class GameModeState implements IGameState, Runnable {
 					//g.setColor(Color.BLACK);
 					GL11.glColor3f(1f,1f,1f);
 					//g.drawString(" ", gx, gy);
-					drawCharacter("a");
+					drawCharacter(" ", DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 				}
 				else{
-					if(frameCounter >= UPDATE_RATE){
+					if(mapFrameCounter >= MAP_UPDATE_RATE){
 						getMap()[y][x].nextTile();
 					}
 					if(viewHoldings && map[y][x].getOwner() != null){ //check if player wants to see owners of tiles
 						//g.setColor(map[y][x].getOwner().getFactionColor().getColor());
 						Color color = map[y][x].getOwner().getFactionColor().getColor();
-						//GL11.glColor3f(color.getRed()/256, color.getGreen()/256, color.getBlue()/256);
-						GL11.glColor3f(1f, 1f, 1f);
+						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
 					}
 					else{//default viewing
 						//g.setColor(getMap()[y][x].getTile().getColor());
 						Color color = map[y][x].getTile().getColor();
-						GL11.glColor3f(1f, 1f, 1f);
-						//GL11.glColor3f(color.getRed()/256, color.getGreen()/256, color.getBlue()/256);
+						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
 					}
 					//g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
 					//drawCharacter('a');
-					System.out.println(getMap()[y][x].getTile().getSymbol());
-					drawCharacter(getMap()[y][x].getTile().getSymbol());
+					drawCharacter(getMap()[y][x].getTile().getSymbol(), DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 				}
 				//gx += g.getFont().getSize();
-				GL11.glTranslatef(20 * zoomScales[currentZoomIndex], 0, 0);
+				GL11.glTranslatef(DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex], 0, 0);
 
 			}
 			//gy += g.getFont().getSize();
 			GL11.glPopMatrix();
-			GL11.glTranslatef(0, - 20 * zoomScales[currentZoomIndex], 0);
+			GL11.glTranslatef(0, - DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex], 0);
 
 		}
-		
+
 		GL11.glPopMatrix();
 	}
 
 	private void drawInfo(){
 
-		/**int gx = 510;
-		int gy = 30;
+		//int gx = 510;
+		//int gy = 30;
+		GL11.glPushMatrix();
+		GL11.glTranslatef(DEFAULT_TILE_SIZE * 25, Display.getHeight() + 80, 0);
 
-		g.setFont(FontProvider.getInstance().getFont().deriveFont(10f));
+		//g.setFont(FontProvider.getInstance().getFont().deriveFont(10f));
 		if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
-			g.drawString(getMap()[currentYPos][currentXPos].toString(),gx, gy);
+			//g.drawString(getMap()[currentYPos][currentXPos].toString(),gx, gy);
+			GL11.glPushMatrix();
+			for(Character c : getMap()[currentYPos][currentXPos].toString().toCharArray()){
+				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
+			}
+			GL11.glPopMatrix();
 		}
-		gy += 11;
-		g.drawString("X: " + currentXPos.toString(), gx, gy);
-		gx += 50;
-		g.drawString("Y: " + currentYPos.toString(), gx, gy);
-		gx -= 50;
-		gy += 20;
+
+		GL11.glTranslatef(0 , -DEFAULT_TEXT_SIZE, 0);
+		//gy += 11;
+		GL11.glPushMatrix();
+		//g.drawString("X: " + currentXPos.toString(), gx, gy);
+		for(Character c : currentXPos.toString().toCharArray()){
+			drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+			GL11.glTranslatef(DEFAULT_TEXT_SIZE , 0, 0);
+		}
+		GL11.glPopMatrix();
+		//gx += 50;
+		//g.drawString("Y: " + currentYPos.toString(), gx, gy);
+		GL11.glPushMatrix();
+		GL11.glTranslatef(DEFAULT_TEXT_SIZE * 3, 0, 0);
+		for(Character c : currentYPos.toString().toCharArray()){
+			drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+			GL11.glTranslatef(DEFAULT_TEXT_SIZE , 0, 0);
+		}
+		GL11.glPopMatrix();
+		//gx -= 50;
+		//gy += 20;
+		GL11.glTranslatef(0, - DEFAULT_TEXT_SIZE, 0);
+		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getOwner() != null){
-			g.drawString("Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family", gx, gy);
+			String s = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family";
+			for(Character c : s.toCharArray()){
+				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0 ,0);
+			}
 		}
 		else{
-			g.drawString("Unclaimed land", gx, gy);
+			String s = "Unclaimed land";
+			for(Character c : s.toCharArray()){
+				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0 ,0);
+			}
 		}
+		GL11.glPopMatrix();
 
+		
+		if(infoFrameCounter >= INFO_UPDATE_RATE && getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
+			getMap()[currentYPos][currentXPos].getNextGameObject();
+			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor){
+				getMap()[currentYPos][currentXPos].getNextGameObject();
+			}
+		}
+		
+		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 2, 0);
+		GL11.glPushMatrix();
+		if(getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
+			GL11.glPushMatrix();
+			String string = (getMap()[currentYPos][currentXPos].getCurrentGameObject().toString() + " 1 of " 
+						+ getMap()[currentYPos][currentXPos].getGameObjects().size() +" objects on this tile");
+			for(Character c : string.toCharArray()){
+				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
+			}
+			GL11.glPopMatrix();
+			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
+			
+			String [] desc = getMap()[currentYPos][currentXPos].getCurrentGameObject().getStringDesc();
+			for(int i = 0; i < desc.length; i++){
+				GL11.glPushMatrix();
+				for(Character c : desc[i].toCharArray()){
+					drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+					GL11.glTranslated(DEFAULT_TEXT_SIZE, 0, 0);
+				}
+				GL11.glPopMatrix();
+				GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
+			}
+		}
+		GL11.glPopMatrix();
+	
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0, -410 , 0);
 		if(viewHoldings){
-			gy = 480;
-			gx = 520;
-			g.drawString("Holdings View", gx, gy);
-		}
+			GL11.glColor3f(1, 0, 0);
+			//gy = 480;
+			//gx = 520;
+			//g.drawString("Holdings View", gx, gy);
+			GL11.glPushMatrix();
+			for(Character c : "Holdings View".toCharArray()){
+				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
+			}
+			GL11.glPopMatrix();
 
-		gy = 480;
-		gx = 980;
+			GL11.glColor3f(1, 1, 1);
+		}
+		//gy = 480;
+		//gx = 980;
 		if(System.currentTimeMillis() - lastFPS > 1000){
 			currentFPS = frames;
 			frames = 0;
 			lastFPS += 1000;
 		}
 		Integer f = currentFPS;
-		g.drawString(f.toString(), gx, gy);
-		frames++;*/
+		GL11.glTranslatef(300, 0, 0);
+			for(Character c : f.toString().toCharArray()){
+				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
+				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
+			}
+		//g.drawString(f.toString(), gx, gy);
+		frames++;
+		GL11.glPopMatrix();
+		
+		GL11.glPopMatrix();
+		
 	}
 
 	private void drawLoading(){
-		/**int gy = 30;
-		int gx = 30;
-		g.setFont(Fon``tProvider.getInstance().getFont());
-		g.drawString("Generating world", gx, gy);
-		gy += 20;
-		for(String s: getGenStatus()){
-			g.drawString(s, gx, gy);
-			gy += 20;
+		//int gy = 30;
+		//int gx = 30;
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0, Display.getDisplayMode().getHeight() + 60, 0);
+		//g.setFont(FontProvider.getInstance().getFont());
+		//g.drawString("Generating world", gx, gy);
+		GL11.glPushMatrix();
+		for(Character c : "Generating world".toCharArray()){
+			drawCharacter(c.toString(), 16);
+			GL11.glTranslatef(16, 0, 0);
 		}
-		gy = 480;
-		gx = 500;
-		if(frameCounter >= UPDATE_RATE){
+		GL11.glPopMatrix();
+		//gy += 20;
+		GL11.glPushMatrix();
+		for(String s: getGenStatus()){
+			GL11.glTranslatef(0, -30, 0);
+			//g.drawString(s, gx, gy);
+			GL11.glPushMatrix();
+			for(Character c : s.toCharArray()){
+				drawCharacter(c.toString(), 16);
+				GL11.glTranslatef(16, 0, 0);
+			}
+			GL11.glPopMatrix();
+			//gy += 20;
+		}
+		GL11.glPopMatrix();
+		//gy = 480;
+		//gx = 500;
+		if(mapFrameCounter >= MAP_UPDATE_RATE){
 			if(currentLoadingString + 1 < loadingString.length){
 				currentLoadingString++  ;
 			}
@@ -327,7 +443,15 @@ public class GameModeState implements IGameState, Runnable {
 				currentLoadingString = 0;
 			}
 		}
-		g.drawString(loadingString[currentLoadingString], gx, gy);*/
+		GL11.glPushMatrix();
+		GL11.glTranslatef(500, 50, 0);
+		for(Character c : loadingString[currentLoadingString].toCharArray()){
+			drawCharacter(c.toString(), 16);
+			GL11.glTranslatef(16, 0, 0);
+		}
+		GL11.glPopMatrix();
+		//g.drawString(loadingString[currentLoadingString], gx, gy);*/
+		GL11.glPopMatrix();
 	}
 
 	private String[] getGenStatus(){
@@ -338,8 +462,8 @@ public class GameModeState implements IGameState, Runnable {
 		status[3] = "test";
 		return status;
 	}
-	
-	private void drawCharacter(String c){
+
+	private void drawCharacter(String c, float size){
 		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
 		if(tex != null){
 			tex.bind();
@@ -347,19 +471,19 @@ public class GameModeState implements IGameState, Runnable {
 			GL11.glTexCoord2f(0,0);
 			GL11.glVertex2f(0,0);
 			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f(0+20,0);
+			GL11.glVertex2f(0+size,0);
 			GL11.glTexCoord2f(1, 1);
-			GL11.glVertex2f(0+20,0+20);
+			GL11.glVertex2f(0+size,0+size);
 			GL11.glTexCoord2f(0, 1);
-			GL11.glVertex2f(0,0+20);
+			GL11.glVertex2f(0,0+size);
 			GL11.glEnd();
 		}
 		else{
 			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glVertex2f(0,0);
-			GL11.glVertex2f(0+16,0);
-			GL11.glVertex2f(0+16,0+16);
-			GL11.glVertex2f(0,0+16);
+			GL11.glVertex2f(0+ size,0);
+			GL11.glVertex2f(0+size,0+size);
+			GL11.glVertex2f(0,0+size);
 			GL11.glEnd();
 		}
 	}

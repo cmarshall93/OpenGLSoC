@@ -15,7 +15,10 @@ public abstract class TerrainObject implements GameDrawable{
 	private int tileIndex;
 	private GameTile baseTile;
 	private GameTile currentTile;
+	
 	private ArrayList<GameObject> gameObjects;
+	private int gameObjectIndex;
+
 	private boolean isBiome;
 	private Biome biome;
 	public boolean isBuildable;
@@ -27,6 +30,7 @@ public abstract class TerrainObject implements GameDrawable{
 		tileIndex = 0;
 		isBiome = false;
 		gameObjects = new ArrayList<GameObject>();
+		gameObjectIndex = 0;
 		this.isBuildable = isBuildable;
 		owner = null;
 	}
@@ -36,7 +40,7 @@ public abstract class TerrainObject implements GameDrawable{
 	}
 
 	public void addGameObject(GameObject o){
-		if(isBuildable){
+		if(isBuildable || o.getOwner() == null){
 			if(owner == null){
 				gameObjects.add(o);
 				if(o.getOwner() != null){
@@ -54,6 +58,24 @@ public abstract class TerrainObject implements GameDrawable{
 		if(gameObjects.size() == 0 && o.getOwner() != null){
 			owner = null;
 		}
+	}
+	
+	public GameObject getCurrentGameObject(){
+		return gameObjects.get(gameObjectIndex);
+	}
+	
+	public ArrayList<GameObject> getGameObjects(){
+		return gameObjects;
+	}
+	
+	public GameObject getNextGameObject(){
+		if(gameObjectIndex + 1 < gameObjects.size()){
+			gameObjectIndex += 1;
+		}
+		else{
+			gameObjectIndex = 0;
+		}
+		return gameObjects.get(gameObjectIndex);
 	}
 
 	public void nextTile(){

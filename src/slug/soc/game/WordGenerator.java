@@ -11,6 +11,7 @@ public class WordGenerator {
 
 	private File nounsFile = new File("nouns.txt");
 	private File verbsFile = new File("verbs.txt");
+	private File maleFirstNameFile = new File("maleFirstName.txt");
 	private File surnamePrefixFile = new File("surnamePrefix.txt");
 	private File surnameSuffixFile = new File("surnameSuffix.txt");
 	private File surnameWholeFile = new File("surnameWhole.txt");
@@ -68,6 +69,10 @@ public class WordGenerator {
 		else{
 			return getRandomWordFromFile(surnamePrefixFile) + getRandomWordFromFile(surnameSuffixFile).toLowerCase();
 		}
+	}
+	
+	public String getRandomMaleFirstName(){
+		return getRandomWordFromFile(maleFirstNameFile);
 	}
 	
 	public String getRandomAdjective(){
