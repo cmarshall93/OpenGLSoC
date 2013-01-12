@@ -13,17 +13,16 @@ import org.newdawn.slick.opengl.Texture;
 import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
+import slug.soc.game.TextRenderer;
 
 public class AboutState implements IGameState {
 
 	private static AboutState instance;
 
-	private static final String[] text = {
-		"Songs Of Conquest is an ascii tile based game"
-		,"written entirely by me (Charlie Marshall).Think",
-		"of it as Medieval Total War crossed with the",
-		"politics/backstabbing/drama from Game Of Thrones."
-		,""} ;
+	private static final String text =
+		"Songs Of Conquest is an ascii tile based game written entirely by me " +
+		"(Charlie Marshall).Think of it as Medieval Total War crossed with the politics/backstabbing/drama " +
+		"from Game Of Thrones";
 
 	public static AboutState getInstance(){
 		if(instance == null){
@@ -58,36 +57,7 @@ public class AboutState implements IGameState {
 		GL11.glPushMatrix();
 		GL11.glColor3f(1f, 1f, 1f);
 		GL11.glTranslatef(10, Display.getDisplayMode().getHeight() + 60, 0);
-		for(String s : text){
-			GL11.glPushMatrix();
-			for(Character c : s.toCharArray()){
-				Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c.toString());
-				if(tex != null){
-					tex.bind();
-					GL11.glBegin(GL11.GL_QUADS);
-					GL11.glTexCoord2f(0,0);
-					GL11.glVertex2f(0,0);
-					GL11.glTexCoord2f(1, 0);
-					GL11.glVertex2f(0+16,0);
-					GL11.glTexCoord2f(1, 1);
-					GL11.glVertex2f(0+16,0+16);
-					GL11.glTexCoord2f(0, 1);
-					GL11.glVertex2f(0,0+16);
-					GL11.glEnd();
-				}
-				else{
-					GL11.glBegin(GL11.GL_QUADS);
-					GL11.glVertex2f(0,0);
-					GL11.glVertex2f(0+16,0);
-					GL11.glVertex2f(0+16,0+16);
-					GL11.glVertex2f(0,0+16);
-					GL11.glEnd();
-				}
-				GL11.glTranslated(16, 0, 0);
-			}
-			GL11.glPopMatrix();
-			GL11.glTranslatef(0, -16, 0);
-		}
+		TextRenderer.getInstance().drawString(text, 20);
 		GL11.glPopMatrix();
 	}
 }

@@ -13,6 +13,7 @@ import org.newdawn.slick.opengl.Texture;
 import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
+import slug.soc.game.TextRenderer;
 import slug.soc.game.gameObjects.Faction;
 
 public class FactionInformationState implements IGameState {
@@ -47,42 +48,19 @@ public class FactionInformationState implements IGameState {
 		GL11.glTranslatef(0, Display.getDisplayMode().getHeight() + 60, 0);
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont(27f));
 		GL11.glPushMatrix();
+		
 		String string = "The Great House Of " + faction.toString();
-		for(Character c : string.toCharArray()){
-			drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-			GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
-		}
+		TextRenderer.getInstance().drawString(string, DEFAULT_TEXT_SIZE);
 		GL11.glPopMatrix();
 		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 2f, 0);
 		//gy += 30;
+		
 		GL11.glPushMatrix();
-		boolean buildingString = true;
-		String out = "The great house of " + faction.toString() + " flys " + faction.getSigil().toLowerCase() + "as their sigil.";
-		String[] outStrings =  new String[10];
-		int i = 0;
-		while(buildingString){
-			outStrings[i]= out.substring(0, 25);
-			out = out.substring(26);
-			if(out.equals(null)){
-				buildingString = false;
-			}
-			i++;
-		}
-		GL11.glTranslatef(0, -14, 0);
-		for(String s : outStrings){
-			for(Character c : out.toCharArray()){
-				GL11.glPushMatrix();
-				drawCharacter(c.toString(), 14f);
-				GL11.glTranslatef(14f, 0, 0);
-				GL11.glPopMatrix();
-			}
-			GL11.glTranslatef(0, -14, 0);
-		}
+		
+		String out = "The great house of " + faction.toString() + " flys " + faction.getSigil().toLowerCase() + " as their sigil.";
+		out += " The head of the family is " + faction.getHeadOfFamily().getName() + ".";
+		TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE - 2);
 		GL11.glPopMatrix();
-		//gy += 20;
-		//g.drawString("as their sigil.", gx, gy);
-		//gy += 20;
-		//g.drawString("Head of family : " + faction.getHeadOfFamily().getName(), gx, gy);
 		//return gameImage;
 		GL11.glPopMatrix();
 	}
