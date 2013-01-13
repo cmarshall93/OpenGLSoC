@@ -50,7 +50,7 @@ public class FactionInformationState implements IGameState {
 		GL11.glPushMatrix();
 		
 		String string = "The Great House Of " + faction.toString();
-		TextRenderer.getInstance().drawString(string, DEFAULT_TEXT_SIZE);
+		TextRenderer.getInstance().drawString(string, DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 2f, 0);
 		//gy += 30;
@@ -59,7 +59,7 @@ public class FactionInformationState implements IGameState {
 		
 		String out = "The great house of " + faction.toString() + " flys " + faction.getSigil().toLowerCase() + " as their sigil.";
 		out += " The head of the family is " + faction.getHeadOfFamily().getName() + ".";
-		TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE - 2);
+		TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE - 2, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 		//return gameImage;
 		GL11.glPopMatrix();
@@ -69,31 +69,6 @@ public class FactionInformationState implements IGameState {
 	public void checkInput() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
 			Game.getInstance().setCurrentGameState(GameModeState.getInstance());
-		}
-	}
-
-	private void drawCharacter(String c, float size){
-		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
-		if(tex != null){
-			tex.bind();
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
-			GL11.glVertex2f(0,0);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f(0+size,0);
-			GL11.glTexCoord2f(1, 1);
-			GL11.glVertex2f(0+size,0+size);
-			GL11.glTexCoord2f(0, 1);
-			GL11.glVertex2f(0,0+size);
-			GL11.glEnd();
-		}
-		else{
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(0,0);
-			GL11.glVertex2f(0+ size,0);
-			GL11.glVertex2f(0+size,0+size);
-			GL11.glVertex2f(0,0+size);
-			GL11.glEnd();
 		}
 	}
 }

@@ -18,6 +18,7 @@ import slug.soc.game.Game;
 import slug.soc.game.HouseSigilGenerator;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.TerrianGenerator;
+import slug.soc.game.TextRenderer;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectArmy;
@@ -204,6 +205,12 @@ public class GameModeState implements IGameState, Runnable {
 				Game.getInstance().setCurrentGameState(FactionInformationState.getInstance());
 			}
 		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() != null){
+				GameObjectInformationState.getInstance().setObjectToDetail(getMap()[currentYPos][currentXPos].getCurrentGameObject());
+				Game.getInstance().setCurrentGameState(GameObjectInformationState.getInstance());
+			}
+		}
 	}
 
 	public void createImage(){		
@@ -246,7 +253,7 @@ public class GameModeState implements IGameState, Runnable {
 					//g.setColor(Color.BLACK);
 					GL11.glColor3f(1f,1f,1f);
 					//g.drawString(" ", gx, gy);
-					drawCharacter(" ", DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+					TextRenderer.getInstance().drawSymbol(" ", DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 				}
 				else{
 					if(mapFrameCounter >= MAP_UPDATE_RATE){
@@ -264,7 +271,8 @@ public class GameModeState implements IGameState, Runnable {
 					}
 					//g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
 					//drawCharacter('a');
-					drawCharacter(getMap()[y][x].getTile().getSymbol(), DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+					TextRenderer.getInstance().drawSymbol(getMap()[y][x].getTile().getSymbol(),
+							DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 				}
 				//gx += g.getFont().getSize();
 				GL11.glTranslatef(DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex], 0, 0);
@@ -281,6 +289,10 @@ public class GameModeState implements IGameState, Runnable {
 
 	private void drawInfo(){
 
+		float textSpace = 425; 
+				//Display.getDisplayMode().getWidth() - DEFAULT_TILE_SIZE * 25;
+		
+		System.out.println();
 		//int gx = 510;
 		//int gy = 30;
 		GL11.glPushMatrix();
@@ -290,48 +302,35 @@ public class GameModeState implements IGameState, Runnable {
 		if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
 			//g.drawString(getMap()[currentYPos][currentXPos].toString(),gx, gy);
 			GL11.glPushMatrix();
-			for(Character c : getMap()[currentYPos][currentXPos].toString().toCharArray()){
-				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
-			}
+			TextRenderer.getInstance().drawString(getMap()[currentYPos][currentXPos].toString(), DEFAULT_TEXT_SIZE,
+					textSpace);
 			GL11.glPopMatrix();
 		}
 
 		GL11.glTranslatef(0 , -DEFAULT_TEXT_SIZE, 0);
 		//gy += 11;
 		GL11.glPushMatrix();
-		//g.drawString("X: " + currentXPos.toString(), gx, gy);
-		for(Character c : currentXPos.toString().toCharArray()){
-			drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-			GL11.glTranslatef(DEFAULT_TEXT_SIZE , 0, 0);
-		}
+		String out = "X: " + currentXPos.toString();
+		TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
 		//gx += 50;
 		//g.drawString("Y: " + currentYPos.toString(), gx, gy);
 		GL11.glPushMatrix();
-		GL11.glTranslatef(DEFAULT_TEXT_SIZE * 3, 0, 0);
-		for(Character c : currentYPos.toString().toCharArray()){
-			drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-			GL11.glTranslatef(DEFAULT_TEXT_SIZE , 0, 0);
-		}
+		GL11.glTranslatef(DEFAULT_TEXT_SIZE * 6, 0, 0);
+		out = "Y: " + currentYPos.toString();
+		TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
 		//gx -= 50;
 		//gy += 20;
 		GL11.glTranslatef(0, - DEFAULT_TEXT_SIZE, 0);
 		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getOwner() != null){
-			String s = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family";
-			for(Character c : s.toCharArray()){
-				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0 ,0);
-			}
+			out = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family";
+			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 		}
 		else{
-			String s = "Unclaimed land";
-			for(Character c : s.toCharArray()){
-				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0 ,0);
-			}
+			out = "Unclaimed land";
+			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 		}
 		GL11.glPopMatrix();
 
@@ -343,26 +342,20 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 		
-		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 2, 0);
+		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 4, 0);
 		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
 			GL11.glPushMatrix();
-			String string = (getMap()[currentYPos][currentXPos].getCurrentGameObject().toString() + " 1 of " 
+			out = (getMap()[currentYPos][currentXPos].getCurrentGameObject().toString() + " 1 of " 
 						+ getMap()[currentYPos][currentXPos].getGameObjects().size() +" objects on this tile");
-			for(Character c : string.toCharArray()){
-				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
-			}
+			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 			GL11.glPopMatrix();
-			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
+			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 3, 0);
 			
 			String [] desc = getMap()[currentYPos][currentXPos].getCurrentGameObject().getStringDesc();
 			for(int i = 0; i < desc.length; i++){
 				GL11.glPushMatrix();
-				for(Character c : desc[i].toCharArray()){
-					drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-					GL11.glTranslated(DEFAULT_TEXT_SIZE, 0, 0);
-				}
+				TextRenderer.getInstance().drawString(desc[i], DEFAULT_TEXT_SIZE, textSpace);
 				GL11.glPopMatrix();
 				GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
 			}
@@ -377,10 +370,9 @@ public class GameModeState implements IGameState, Runnable {
 			//gx = 520;
 			//g.drawString("Holdings View", gx, gy);
 			GL11.glPushMatrix();
-			for(Character c : "Holdings View".toCharArray()){
-				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
-			}
+			out = "Holdings View";
+			GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
+			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 			GL11.glPopMatrix();
 
 			GL11.glColor3f(1, 1, 1);
@@ -394,10 +386,7 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		Integer f = currentFPS;
 		GL11.glTranslatef(300, 0, 0);
-			for(Character c : f.toString().toCharArray()){
-				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
-			}
+			TextRenderer.getInstance().drawString(f.toString(), DEFAULT_TEXT_SIZE, textSpace);
 		//g.drawString(f.toString(), gx, gy);
 		frames++;
 		GL11.glPopMatrix();
@@ -414,10 +403,7 @@ public class GameModeState implements IGameState, Runnable {
 		//g.setFont(FontProvider.getInstance().getFont());
 		//g.drawString("Generating world", gx, gy);
 		GL11.glPushMatrix();
-		for(Character c : "Generating world".toCharArray()){
-			drawCharacter(c.toString(), 16);
-			GL11.glTranslatef(16, 0, 0);
-		}
+			TextRenderer.getInstance().drawString("Generating World", 16, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 		//gy += 20;
 		GL11.glPushMatrix();
@@ -425,10 +411,7 @@ public class GameModeState implements IGameState, Runnable {
 			GL11.glTranslatef(0, -30, 0);
 			//g.drawString(s, gx, gy);
 			GL11.glPushMatrix();
-			for(Character c : s.toCharArray()){
-				drawCharacter(c.toString(), 16);
-				GL11.glTranslatef(16, 0, 0);
-			}
+			TextRenderer.getInstance().drawString(s, 16, Display.getDisplayMode().getWidth());
 			GL11.glPopMatrix();
 			//gy += 20;
 		}
@@ -445,10 +428,7 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		GL11.glPushMatrix();
 		GL11.glTranslatef(500, 50, 0);
-		for(Character c : loadingString[currentLoadingString].toCharArray()){
-			drawCharacter(c.toString(), 16);
-			GL11.glTranslatef(16, 0, 0);
-		}
+		TextRenderer.getInstance().drawString(loadingString[currentLoadingString], 16, Display.getDisplayMode().getHeight());
 		GL11.glPopMatrix();
 		//g.drawString(loadingString[currentLoadingString], gx, gy);*/
 		GL11.glPopMatrix();

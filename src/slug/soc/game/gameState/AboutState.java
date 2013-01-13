@@ -57,7 +57,7 @@ public class AboutState implements IGameState {
 		GL11.glPushMatrix();
 		GL11.glColor3f(1f, 1f, 1f);
 		GL11.glTranslatef(10, Display.getDisplayMode().getHeight() + 60, 0);
-		TextRenderer.getInstance().drawString(text, 20);
+		TextRenderer.getInstance().drawString(text, 20, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 	}
 }

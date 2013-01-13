@@ -28,5 +28,7 @@ public abstract class GameObject implements GameDrawable {
 	}
 	
 	public abstract String[] getStringDesc();
+	
+	public abstract String getDetailedDesc();
 }
 

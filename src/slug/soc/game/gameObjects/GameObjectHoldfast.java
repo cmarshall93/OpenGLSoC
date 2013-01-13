@@ -9,4 +9,15 @@ public class GameObjectHoldfast extends GameObject {
 		super(new TileHoldfast(color), owner);
 	}
 
+	@Override
+	public String[] getStringDesc() {
+		String[] desc = new String[1];
+		desc[0] = "Property of the " + owner.toString() + " family";
+		return null;
+	}
+	
+	public String toString(){
+		return "Holdfast";
+	}
+
 }

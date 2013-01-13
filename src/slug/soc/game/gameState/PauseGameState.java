@@ -13,6 +13,7 @@ import org.newdawn.slick.opengl.Texture;
 
 import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
+import slug.soc.game.TextRenderer;
 import slug.soc.game.menu.AbstractMenuOption;
 import slug.soc.game.menu.ContinueGameOption;
 import slug.soc.game.menu.ExitProgramOption;
@@ -86,10 +87,7 @@ public class PauseGameState implements IGameState {
 				GL11.glColor3f(1f, 1f, 1f);
 			}
 			GL11.glPushMatrix();
-			for(Character c : options[i].getDesc().toCharArray()){
-				drawCharacter(c.toString(), DEFAULT_TEXT_SIZE);
-				GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
-			}
+			TextRenderer.getInstance().drawString(options[i].getDesc(), 16, Display.getDisplayMode().getWidth());
 			GL11.glPopMatrix();
 			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
 			//g.drawString(options[i].getDesc(), gx, gy);
@@ -97,31 +95,6 @@ public class PauseGameState implements IGameState {
 		}
 		GL11.glPopMatrix();
 		//return gameImage;
-	}
-	
-	private void drawCharacter(String c, float size){
-		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
-		if(tex != null){
-			tex.bind();
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
-			GL11.glVertex2f(0,0);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f(0+size,0);
-			GL11.glTexCoord2f(1, 1);
-			GL11.glVertex2f(0+size,0+size);
-			GL11.glTexCoord2f(0, 1);
-			GL11.glVertex2f(0,0+size);
-			GL11.glEnd();
-		}
-		else{
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(0,0);
-			GL11.glVertex2f(0+ size,0);
-			GL11.glVertex2f(0+size,0+size);
-			GL11.glVertex2f(0,0+size);
-			GL11.glEnd();
-		}
 	}
 }
 

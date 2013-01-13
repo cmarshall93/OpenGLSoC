@@ -16,6 +16,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
+import slug.soc.game.TextRenderer;
 import slug.soc.game.menu.AbstractMenuOption;
 import slug.soc.game.menu.ExitProgramOption;
 import slug.soc.game.menu.AboutOption;
@@ -86,31 +87,7 @@ public class MainMenuState implements IGameState {
 			}
 
 			GL11.glPushMatrix();
-			for(Character c: options[i].getDesc().toCharArray()){
-			Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c.toString());
-				if(tex != null){
-					tex.bind();
-					GL11.glBegin(GL11.GL_QUADS);
-					GL11.glTexCoord2f(0,0);
-					GL11.glVertex2f(0,0);
-					GL11.glTexCoord2f(1, 0);
-					GL11.glVertex2f(0+16,0);
-					GL11.glTexCoord2f(1, 1);
-					GL11.glVertex2f(0+16,0+16);
-					GL11.glTexCoord2f(0, 1);
-					GL11.glVertex2f(0,0+16);
-					GL11.glEnd();
-				}
-				else{
-					GL11.glBegin(GL11.GL_QUADS);
-					GL11.glVertex2f(0,0);
-					GL11.glVertex2f(0+16,0);
-					GL11.glVertex2f(0+16,0+16);
-					GL11.glVertex2f(0,0+16);
-					GL11.glEnd();
-				}
-				GL11.glTranslatef(16, 0, 0);
-			}
+			TextRenderer.getInstance().drawString(options[i].getDesc(), 16, Display.getDisplayMode().getWidth());
 			GL11.glPopMatrix();
 			GL11.glTranslatef(0,-17,0);
 		}

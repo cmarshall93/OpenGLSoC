@@ -7,12 +7,8 @@ import org.newdawn.slick.opengl.Texture;
 public class TextRenderer {
 
 	private static TextRenderer instance;
-	private float screenWidth;
-	private float screenHeight;
 	
 	private TextRenderer(){
-		screenWidth = Display.getDisplayMode().getWidth();
-		screenHeight = Display.getDisplayMode().getHeight();
 	}
 	
 	public static TextRenderer getInstance(){
@@ -48,11 +44,10 @@ public class TextRenderer {
 
 	}
 	
-	public void drawString(String s, float size){
+	public void drawString(String s, float size, float screenWidth){
 		char[] charArray = s.toCharArray();
 		int i = 0;
 		int charsperline = (int) (screenWidth/size) - 13;
-		GL11.glPushMatrix();
 		for(Character c : charArray){
 			drawCharacter(c, size);
 			if(i <= charsperline){
@@ -64,7 +59,30 @@ public class TextRenderer {
 				i = 0;
 			}
 		}
-		GL11.glPopMatrix();
 	}
 	
+	public void drawSymbol(String symbol, float size){
+		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(symbol);
+		if(tex != null){
+			tex.bind();
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(0,0);
+			GL11.glVertex2f(0,0);
+			GL11.glTexCoord2f(1, 0);
+			GL11.glVertex2f(0+size,0);
+			GL11.glTexCoord2f(1, 1);
+			GL11.glVertex2f(0+size,0+size);
+			GL11.glTexCoord2f(0, 1);
+			GL11.glVertex2f(0,0+size);
+			GL11.glEnd();
+		}
+		else{
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glVertex2f(0,0);
+			GL11.glVertex2f(0+ size,0);
+			GL11.glVertex2f(0+size,0+size);
+			GL11.glVertex2f(0,0+size);
+			GL11.glEnd();
+		}	
+	}	
 }

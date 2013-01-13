@@ -8,4 +8,15 @@ public class GameObjectCursor extends GameObject {
 		super(new TileCursor(), null);
 	}
 
+	@Override
+	public String[] getStringDesc() {
+		String[] string = new String[1];
+		string[0] = " ";
+		return string;
+	}
+	
+	public String toString(){
+		return " ";
+	}
+
 }
