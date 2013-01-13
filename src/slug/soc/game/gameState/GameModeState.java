@@ -327,6 +327,10 @@ public class GameModeState implements IGameState, Runnable {
 		if(getMap()[currentYPos][currentXPos].getOwner() != null){
 			out = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family";
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
+			GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
+			GL11.glColor3f(1f, 0f, 0f);
+			TextRenderer.getInstance().drawString("(i)", DEFAULT_TEXT_SIZE, textSpace);
+			GL11.glColor3f(1f, 1f, 1f);
 		}
 		else{
 			out = "Unclaimed land";
@@ -356,6 +360,14 @@ public class GameModeState implements IGameState, Runnable {
 			for(int i = 0; i < desc.length; i++){
 				GL11.glPushMatrix();
 				TextRenderer.getInstance().drawString(desc[i], DEFAULT_TEXT_SIZE, textSpace);
+				if(i == 0){
+					GL11.glPushMatrix();
+					GL11.glColor3f(1f, 0f, 0f);
+					GL11.glTranslatef(DEFAULT_TEXT_SIZE * 2, 0, 0);
+					TextRenderer.getInstance().drawString("(d)", DEFAULT_TEXT_SIZE, textSpace);
+					GL11.glColor3f(1f, 1f, 1f);
+					GL11.glPopMatrix();
+				}
 				GL11.glPopMatrix();
 				GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
 			}

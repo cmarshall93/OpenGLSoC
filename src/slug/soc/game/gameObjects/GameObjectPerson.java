@@ -12,19 +12,29 @@ public class GameObjectPerson extends GameObject {
 
 	private String firstName;
 	private String lastName;
+	
+	private String noseDesc;
+	
+	private String hairDesc;
+	private String hairColour;
+	
 	private Integer troopNumber;
 	
 	public GameObjectPerson(Color color, Faction owner) {
 		super(new TilePerson(color), owner);
-		firstName =  WordGenerator.getInstance().getRandomMaleFirstName();
 		lastName = owner.toString();
 		troopNumber = 1;
 		if(RandomProvider.getInstance().nextInt(2) == 0){
 			isFemale = true;
+			firstName = WordGenerator.getInstance().getRandomFemaleFirstName();
 		}
 		else{
 			isFemale = false;
+			firstName =  WordGenerator.getInstance().getRandomMaleFirstName();
 		}
+		noseDesc = WordGenerator.getInstance().getRandomSize();
+		hairDesc = WordGenerator.getInstance().getRandomLength();
+		hairColour = WordGenerator.getInstance().getRandomHairColour();
 	}
 
 	@Override
@@ -46,13 +56,17 @@ public class GameObjectPerson extends GameObject {
 	@Override
 	public String getDetailedDesc() {
 		String gender;
+		String secondPerson;
 		if(isFemale){
 			gender = "female";
+			secondPerson = "She";
 		}
 		else{
 			gender = "male";
+			secondPerson = "He";
 		}
-		String out = firstName + " " + lastName + " is a " + gender;
+		String out = firstName + " " + lastName + " is a " + gender + "." + secondPerson + " has a " + 
+		noseDesc + " nose." + secondPerson + " has " + hairDesc + " " + hairColour + " hair.";
 		return out;
 	}
 
