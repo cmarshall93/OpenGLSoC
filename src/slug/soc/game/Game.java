@@ -7,7 +7,7 @@ public class Game {
 	
 	private static Game instance;
 	
-	private IGameState currentGame;
+	private IGameState currentGameState;
 	
 	public static Game getInstance(){
 		if(instance == null){
@@ -17,15 +17,14 @@ public class Game {
 	}
 	
 	private Game(){
-		currentGame = MainMenuState.getInstance();
+		currentGameState = MainMenuState.getInstance();
 	}
 	
 	public void setCurrentGameState(IGameState gameState){
-		currentGame = gameState;
+		currentGameState = gameState;
 	}
 	
 	public IGameState getCurrentGameState(){
-		return currentGame;
+		return currentGameState;
 	}
-
 }

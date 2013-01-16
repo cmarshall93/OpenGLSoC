@@ -20,11 +20,25 @@ public class Faction {
 		factionColor = ColorFactory.getInstance().getRandomFactionColor();
 		sigil = HouseSigilGenerator.getInstance().createNewSigilString(factionColor);
 		name = WordGenerator.getInstance().getRandomFactionName();
-		headOfFamily = new GameObjectPerson(factionColor.getColor(), this);
+		headOfFamily = new GameObjectPerson(factionColor.getColor(), this, null, null);
 		
+		/*		 
+		 * This is faction testing stuff
+		 * ----------------------------------------------------------------------------------------------
+		 * */
+		
+		headOfFamily.setIsFemale(true);
 		holdings = new ArrayList<GameObject>();
+		GameObjectPerson person = new GameObjectPerson(factionColor.getColor(), this, null, null);
+		person.setIsFemale(false);
 		holdings.add(new GameObjectCastle(factionColor.getColor(), this));
 		holdings.add(headOfFamily);
+		holdings.add(new GameObjectVillage(factionColor.getColor(), this));
+		holdings.add(person);
+		holdings.add(headOfFamily.haveChild(headOfFamily, person));
+		/*
+		 * ----------------------------------------------------------------------------------------------
+		 */
 	}
 	
 	public ArrayList<GameObject> getHoldings(){

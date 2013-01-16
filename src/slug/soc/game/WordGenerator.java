@@ -19,6 +19,9 @@ public class WordGenerator {
 	private File sizeFile = new File("sizes.txt");
 	private File lengthsFile = new File("lengths.txt");
 	private File hairColoursFile = new File("hairColours.txt");
+	private File eyeColoursFile = new File("eyeColours.txt");
+	private File placeSuffixFile = new File("placeSuffix.txt");
+	private File placesPrefixFile = new File("placePrefix.txt");
 	
 	private Scanner scanner;
 	
@@ -101,5 +104,13 @@ public class WordGenerator {
 	
 	public String getRandomFemaleFirstName(){
 		return getRandomWordFromFile(femaleFirstNameFile);
+	}
+	
+	public String getRandomEyeColour(){
+		return getRandomWordFromFile(eyeColoursFile);
+	}
+	
+	public String getRandomPlaceName(){
+		return getRandomWordFromFile(placesPrefixFile) + getRandomWordFromFile(placeSuffixFile);
 	}
 }

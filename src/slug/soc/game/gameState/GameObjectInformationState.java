@@ -45,6 +45,10 @@ public class GameObjectInformationState implements IGameState {
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
 			Game.getInstance().setCurrentGameState(GameModeState.getInstance());
 		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+			FactionInformationState.getInstance().setFactionToDispaly(gameObject.getOwner());
+			Game.getInstance().setCurrentGameState(FactionInformationState.getInstance());
+		}
 	}
 
 }

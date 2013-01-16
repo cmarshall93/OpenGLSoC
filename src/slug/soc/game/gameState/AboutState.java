@@ -21,7 +21,7 @@ public class AboutState implements IGameState {
 
 	private static final String text =
 		"Songs Of Conquest is an ascii tile based game written entirely by me " +
-		"(Charlie Marshall).Think of it as Medieval Total War crossed with the politics/backstabbing/drama " +
+		".Think of it as Medieval Total War crossed with the politics/backstabbing/drama " +
 		"from Game Of Thrones";
 
 	public static AboutState getInstance(){
@@ -38,7 +38,7 @@ public class AboutState implements IGameState {
 	@Override
 	public void checkInput() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//escape
-			Game.getInstance().setCurrentGameState(MainMenuState.getInstance());
+			Game.getInstance().setCurrentGameState(GameModeState.getInstance());
 		}
 	}
 

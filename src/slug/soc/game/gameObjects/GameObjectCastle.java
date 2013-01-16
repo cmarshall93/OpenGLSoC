@@ -2,19 +2,26 @@ package slug.soc.game.gameObjects;
 
 import java.awt.Color;
 
+import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.tiles.GameTile;
 import slug.soc.game.gameObjects.tiles.faction.TileCastle;
 
 public class GameObjectCastle extends GameObject {
+	
+	private int troopPopulation;
+	private int civPopulation;
 
 	public GameObjectCastle(Color color, Faction owner) {
 		super(new TileCastle(color), owner);
+		troopPopulation = RandomProvider.getInstance().nextInt(201);
+		civPopulation = RandomProvider.getInstance().nextInt(601);
 	}
 
 	public String[] getStringDesc(){
-		String[] desc = new String[2];
+		String[] desc = new String[3];
 		desc[0] = "Castle " + owner.toString();
 		desc[1] = "Property of the " + owner.toString() + " family";
+		desc[2] = "Number of troops : " + troopPopulation;
 		return desc;
 	}
 	
@@ -24,7 +31,9 @@ public class GameObjectCastle extends GameObject {
 
 	@Override
 	public String getDetailedDesc() {
-		return "Castle " + owner.toString() + " belongs to the " + owner.toString() + " family.";
+		return "Castle " + owner.toString() + " belongs to the " + owner.toString() + " family(i). " +
+				"The caste has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
+				" soilders and " + civPopulation + " peasants.";
 	}
 
 }

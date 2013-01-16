@@ -20,6 +20,9 @@ public class TextRenderer {
 	
 	private void drawCharacter(Character c, float size){
 		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c.toString());
+		if(c == '('){
+			GL11.glColor3f(1f, 0f, 0f);
+		}
 		if(tex != null){
 			tex.bind();
 			GL11.glBegin(GL11.GL_QUADS);
@@ -40,7 +43,10 @@ public class TextRenderer {
 			GL11.glVertex2f(0+size,0+size);
 			GL11.glVertex2f(0,0+size);
 			GL11.glEnd();
-		}	
+		}
+		if(c == ')'){
+			GL11.glColor3f(1f, 1f, 1f);
+		}
 
 	}
 	

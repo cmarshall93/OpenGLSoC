@@ -21,7 +21,6 @@ import slug.soc.game.TerrianGenerator;
 import slug.soc.game.TextRenderer;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
-import slug.soc.game.gameObjects.GameObjectArmy;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
@@ -117,7 +116,7 @@ public class GameModeState implements IGameState, Runnable {
 
 		long end = System.nanoTime();
 		System.out.println("GenTime: " + (end - start)/1000000);
-		loadedWorld = true;
+		loadedWorld = true;		
 	}
 
 	public TerrainObject[][] getMap(){
@@ -325,12 +324,9 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glTranslatef(0, - DEFAULT_TEXT_SIZE, 0);
 		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getOwner() != null){
-			out = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family";
+			out = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family  (i)";
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 			GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
-			GL11.glColor3f(1f, 0f, 0f);
-			TextRenderer.getInstance().drawString("(i)", DEFAULT_TEXT_SIZE, textSpace);
-			GL11.glColor3f(1f, 1f, 1f);
 		}
 		else{
 			out = "Unclaimed land";
@@ -359,15 +355,11 @@ public class GameModeState implements IGameState, Runnable {
 			String [] desc = getMap()[currentYPos][currentXPos].getCurrentGameObject().getStringDesc();
 			for(int i = 0; i < desc.length; i++){
 				GL11.glPushMatrix();
-				TextRenderer.getInstance().drawString(desc[i], DEFAULT_TEXT_SIZE, textSpace);
+				String string = desc[i];
 				if(i == 0){
-					GL11.glPushMatrix();
-					GL11.glColor3f(1f, 0f, 0f);
-					GL11.glTranslatef(DEFAULT_TEXT_SIZE * 2, 0, 0);
-					TextRenderer.getInstance().drawString("(d)", DEFAULT_TEXT_SIZE, textSpace);
-					GL11.glColor3f(1f, 1f, 1f);
-					GL11.glPopMatrix();
+					string += "  (d)";
 				}
+				TextRenderer.getInstance().drawString(string, DEFAULT_TEXT_SIZE, textSpace);
 				GL11.glPopMatrix();
 				GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
 			}

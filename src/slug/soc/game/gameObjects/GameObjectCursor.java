@@ -19,4 +19,9 @@ public class GameObjectCursor extends GameObject {
 		return " ";
 	}
 
+	@Override
+	public String getDetailedDesc() {
+		return " ";
+	}
+
 }
