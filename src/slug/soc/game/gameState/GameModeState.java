@@ -6,24 +6,25 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 
-import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
-import slug.soc.game.HouseSigilGenerator;
 import slug.soc.game.RandomProvider;
-import slug.soc.game.TerrianGenerator;
-import slug.soc.game.TextRenderer;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
+import slug.soc.game.rendering.AsciiTextureGenerator;
+import slug.soc.game.rendering.TextRenderer;
+import slug.soc.game.worldBuilding.HouseSigilGenerator;
+import slug.soc.game.worldBuilding.TerrianGenerator;
 
 /**
  * Represents the current game.
@@ -46,6 +47,9 @@ public class GameModeState implements IGameState, Runnable {
 	private boolean viewHoldings;
 
 	private TerrainObject[][] map;
+	private Integer year;
+	private ArrayList<GameObject> gameObjects;
+	
 	private TerrianGenerator terrianGenerator;
 	private GameObjectCursor cursor = new GameObjectCursor();
 	private Integer currentXPos;
@@ -75,6 +79,7 @@ public class GameModeState implements IGameState, Runnable {
 	private GameModeState(){
 		terrianGenerator = new TerrianGenerator();
 		lastFPS = System.currentTimeMillis();
+		gameObjects = new ArrayList<GameObject>();
 	}
 
 	public void run(){
@@ -89,6 +94,8 @@ public class GameModeState implements IGameState, Runnable {
 		currentYPos = 50;
 
 		//**************faction testing*******************
+		year = 100;
+		
 		Faction faction = new Faction();
 		System.out.println(faction.getSigil());
 		int x = 50;
@@ -105,12 +112,18 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		for(GameObject g : faction.getHoldings()){
 			map[y][x].addGameObject(g);
+			gameObjects.add(g);
 			for(TerrainObject t: map[y][x].getBiome().getContents()){
 				if(t != null){
 					t.setOwner(faction);
 				}
 			}
 			y++;
+		}
+		
+		
+		for(int i = 0; i < 51; i++){
+			advanceStep();
 		}
 		//************************************************
 
@@ -121,6 +134,17 @@ public class GameModeState implements IGameState, Runnable {
 
 	public TerrainObject[][] getMap(){
 		return map;
+	}
+	
+	public int getYear(){
+		return year;
+	}
+	
+	public void advanceStep(){
+		year++;
+		for(GameObject o : gameObjects){
+			o.act();
+		}
 	}
 
 	public void checkInput(){

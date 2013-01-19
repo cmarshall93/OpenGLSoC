@@ -14,13 +14,13 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
-import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
-import slug.soc.game.TextRenderer;
 import slug.soc.game.menu.AbstractMenuOption;
 import slug.soc.game.menu.ExitProgramOption;
 import slug.soc.game.menu.AboutOption;
 import slug.soc.game.menu.RunGameOption;
+import slug.soc.game.rendering.AsciiTextureGenerator;
+import slug.soc.game.rendering.TextRenderer;
 
 public class MainMenuState implements IGameState {
 

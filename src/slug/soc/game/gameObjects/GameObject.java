@@ -11,7 +11,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
  */
 public abstract class GameObject implements GameDrawable {
 
-	private GameTile tile;
+	protected GameTile tile;
 	protected Faction owner;
 	
 	public GameObject(GameTile tile, Faction owner){
@@ -30,5 +30,7 @@ public abstract class GameObject implements GameDrawable {
 	public abstract String[] getStringDesc();
 	
 	public abstract String getDetailedDesc();
+	
+	public abstract void act();
 }
 

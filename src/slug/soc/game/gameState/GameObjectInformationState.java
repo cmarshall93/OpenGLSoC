@@ -5,8 +5,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import slug.soc.game.Game;
-import slug.soc.game.TextRenderer;
 import slug.soc.game.gameObjects.GameObject;
+import slug.soc.game.rendering.TextRenderer;
 
 public class GameObjectInformationState implements IGameState {
 

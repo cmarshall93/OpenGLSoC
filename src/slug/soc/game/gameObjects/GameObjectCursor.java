@@ -15,6 +15,10 @@ public class GameObjectCursor extends GameObject {
 		return string;
 	}
 	
+	public void act(){
+		
+	}
+	
 	public String toString(){
 		return " ";
 	}

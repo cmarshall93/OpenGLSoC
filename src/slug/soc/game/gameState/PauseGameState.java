@@ -11,12 +11,12 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 
-import slug.soc.game.AsciiTextureGenerator;
 import slug.soc.game.FontProvider;
-import slug.soc.game.TextRenderer;
 import slug.soc.game.menu.AbstractMenuOption;
 import slug.soc.game.menu.ContinueGameOption;
 import slug.soc.game.menu.ExitProgramOption;
+import slug.soc.game.rendering.AsciiTextureGenerator;
+import slug.soc.game.rendering.TextRenderer;
 
 public class PauseGameState implements IGameState {
 

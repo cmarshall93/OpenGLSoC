@@ -3,8 +3,8 @@ package slug.soc.game.gameObjects;
 import java.awt.Color;
 
 import slug.soc.game.RandomProvider;
-import slug.soc.game.WordGenerator;
 import slug.soc.game.gameObjects.tiles.faction.TileVillage;
+import slug.soc.game.worldBuilding.WordGenerator;
 
 public class GameObjectVillage extends GameObject {
 	
@@ -28,6 +28,10 @@ public class GameObjectVillage extends GameObject {
 		return desc;
 	}
 
+	public void act(){
+		
+	}
+	
 	@Override
 	public String getDetailedDesc() {
 		String string = "The village of " + name + " is owned by the " + owner + " family(i)." +

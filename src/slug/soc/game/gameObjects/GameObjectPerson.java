@@ -3,8 +3,13 @@ package slug.soc.game.gameObjects;
 import java.awt.Color;
 
 import slug.soc.game.RandomProvider;
-import slug.soc.game.WordGenerator;
+import slug.soc.game.gameObjects.peopleFeatures.AbstractPersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.EyePersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.HairPersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.NosePersonFeature;
 import slug.soc.game.gameObjects.tiles.faction.TilePerson;
+import slug.soc.game.gameState.GameModeState;
+import slug.soc.game.worldBuilding.WordGenerator;
 
 public class GameObjectPerson extends GameObject {
 
@@ -12,19 +17,14 @@ public class GameObjectPerson extends GameObject {
 	private GameObjectPerson mother;
 	private GameObjectPerson father;
 	private boolean isFemale;
+	private Integer yearBorn;
 
 	private String firstName;
 	private String lastName;
 
-	private int age;
-
-	private String noseDesc;
-
-	private String hairDesc;
-	private String hairColour;
-
-	private String eyeColour;
-	private String eyeDesc;
+	private AbstractPersonFeature nose;
+	private AbstractPersonFeature eyes;
+	private AbstractPersonFeature hair;
 
 	private Integer troopNumber;
 
@@ -40,12 +40,10 @@ public class GameObjectPerson extends GameObject {
 			isFemale = false;
 			firstName =  WordGenerator.getInstance().getRandomMaleFirstName();
 		}
-		noseDesc = WordGenerator.getInstance().getRandomSize();
-		hairDesc = WordGenerator.getInstance().getRandomLength();
-		hairColour = WordGenerator.getInstance().getRandomHairColour();
-		eyeColour = WordGenerator.getInstance().getRandomEyeColour();
-		eyeDesc = WordGenerator.getInstance().getRandomSize();
-		age = RandomProvider.getInstance().nextInt(60) + 17;
+		yearBorn =  GameModeState.getInstance().getYear();
+		nose = new NosePersonFeature();
+		hair = new HairPersonFeature();
+		eyes = new EyePersonFeature();
 		if(mother != null){
 			if(mother.isFemale()){
 				this.mother = mother;
@@ -63,7 +61,7 @@ public class GameObjectPerson extends GameObject {
 		}
 		else{father = null;}
 	}
-	
+
 	@Override
 	public String[] getStringDesc() {
 		String[] desc = new String[2];
@@ -83,11 +81,15 @@ public class GameObjectPerson extends GameObject {
 	public void setIsFemale(boolean isFemale){
 		this.isFemale = isFemale;
 	}
-	
+
 	public boolean isFemale(){
 		return isFemale;
 	}
-	
+
+	public void act(){
+
+	}
+
 	public GameObjectPerson haveChild(GameObjectPerson person1, GameObjectPerson person2){
 		if(person1.isFemale() && !person2.isFemale()){
 			return new GameObjectPerson(owner.getFactionColor().getColor(), owner, person1, person2);
@@ -126,10 +128,11 @@ public class GameObjectPerson extends GameObject {
 		}else{
 			fatherString = father.getName();
 		}
+		int currentYear = GameModeState.getInstance().getYear();
 		String out = firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
-				+ secondPerson.toLowerCase() +" is " + age + " years old.  " + seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
-				+ fatherString + ". " + secondPerson + " has a " + noseDesc + " nose." + secondPerson + " has " + hairDesc + " " + hairColour + " hair. "
-				+ secondPerson + " has " + eyeDesc + " " + eyeColour + " eyes.";
+				+ secondPerson.toLowerCase() + " was born in the year " + yearBorn +" and is " + (currentYear - yearBorn) + " years old.  " + seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
+				+ fatherString + ". " + secondPerson + " has a " + nose.getDesc() + secondPerson + " has " + hair.getDesc() +
+				secondPerson + " has " + eyes.getDesc();
 		return out;
 	}
 

@@ -25,6 +25,10 @@ public class GameObjectCastle extends GameObject {
 		return desc;
 	}
 	
+	public void act(){
+		
+	}
+	
 	public String toString(){
 		return "Castle";
 	}

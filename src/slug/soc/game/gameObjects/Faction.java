@@ -2,10 +2,10 @@ package slug.soc.game.gameObjects;
 
 import java.util.ArrayList;
 
-import slug.soc.game.ColorFactory;
-import slug.soc.game.FactionColor;
-import slug.soc.game.HouseSigilGenerator;
-import slug.soc.game.WordGenerator;
+import slug.soc.game.worldBuilding.ColorFactory;
+import slug.soc.game.worldBuilding.FactionColor;
+import slug.soc.game.worldBuilding.HouseSigilGenerator;
+import slug.soc.game.worldBuilding.WordGenerator;
 
 public class Faction {
 
@@ -31,9 +31,9 @@ public class Faction {
 		holdings = new ArrayList<GameObject>();
 		GameObjectPerson person = new GameObjectPerson(factionColor.getColor(), this, null, null);
 		person.setIsFemale(false);
-		holdings.add(new GameObjectCastle(factionColor.getColor(), this));
+		holdings.add(new GameObjectHoldfast(factionColor.getColor(), this));
 		holdings.add(headOfFamily);
-		holdings.add(new GameObjectVillage(factionColor.getColor(), this));
+		holdings.add(new GameObjectTown(factionColor.getColor(), this));
 		holdings.add(person);
 		holdings.add(headOfFamily.haveChild(headOfFamily, person));
 		/*
