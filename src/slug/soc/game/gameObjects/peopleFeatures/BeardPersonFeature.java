@@ -2,14 +2,15 @@ package slug.soc.game.gameObjects.peopleFeatures;
 
 import slug.soc.game.worldBuilding.WordGenerator;
 
-public class NosePersonFeature implements AbstractPersonFeature {
+public class BeardPersonFeature implements AbstractPersonFeature {
 
 	private String desc;
 	
-	public NosePersonFeature(){ 
-		desc = "a " + WordGenerator.getInstance().getRandomSize() + " nose. ";
+	public BeardPersonFeature(){
+		desc = "a" + WordGenerator.getInstance().getRandomBeard() + ". ";
 	}
 	
+	@Override
 	public String getDesc() {
 		return desc;
 	}

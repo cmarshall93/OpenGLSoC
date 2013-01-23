@@ -1,0 +1,8 @@
+thick full beard
+handle bar moustache
+light stubble beard
+medium stubble beard
+heavy stubble beard
+long curly moustache
+short curly moustache
+handle bar moustache

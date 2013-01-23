@@ -1,9 +1,12 @@
 package slug.soc.game.gameObjects;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.peopleFeatures.AbstractPersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.BeardPersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.BodyPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.EyePersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.HairPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.NosePersonFeature;
@@ -22,14 +25,13 @@ public class GameObjectPerson extends GameObject {
 	private String firstName;
 	private String lastName;
 
-	private AbstractPersonFeature nose;
-	private AbstractPersonFeature eyes;
-	private AbstractPersonFeature hair;
+	private ArrayList<AbstractPersonFeature> features;
 
 	private Integer troopNumber;
 
 	public GameObjectPerson(Color color, Faction owner, GameObjectPerson mother, GameObjectPerson father) {
 		super(new TilePerson(color), owner);
+		features = new ArrayList<AbstractPersonFeature>();
 		lastName = owner.toString();
 		troopNumber = 1;
 		if(RandomProvider.getInstance().nextInt(2) == 0){
@@ -38,12 +40,16 @@ public class GameObjectPerson extends GameObject {
 		}
 		else{
 			isFemale = false;
-			firstName =  WordGenerator.getInstance().getRandomMaleFirstName();
+			firstName =  WordGenerator.getInstance().getRandomMaleFirstName(); 
+			features.add(new BeardPersonFeature());
 		}
 		yearBorn =  GameModeState.getInstance().getYear();
-		nose = new NosePersonFeature();
-		hair = new HairPersonFeature();
-		eyes = new EyePersonFeature();
+
+		features.add(new NosePersonFeature());
+		features.add(new HairPersonFeature());
+		features.add(new EyePersonFeature());
+		features.add(new BodyPersonFeature());
+		
 		if(mother != null){
 			if(mother.isFemale()){
 				this.mother = mother;
@@ -131,8 +137,10 @@ public class GameObjectPerson extends GameObject {
 		int currentYear = GameModeState.getInstance().getYear();
 		String out = firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
 				+ secondPerson.toLowerCase() + " was born in the year " + yearBorn +" and is " + (currentYear - yearBorn) + " years old.  " + seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
-				+ fatherString + ". " + secondPerson + " has a " + nose.getDesc() + secondPerson + " has " + hair.getDesc() +
-				secondPerson + " has " + eyes.getDesc();
+				+ fatherString + ". ";
+		for(AbstractPersonFeature a : features){
+			out += secondPerson + " has " + a.getDesc();
+		}
 		return out;
 	}
 

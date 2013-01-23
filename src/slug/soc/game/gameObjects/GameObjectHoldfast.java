@@ -30,7 +30,7 @@ public class GameObjectHoldfast extends GameObject {
 	@Override
 	public String getDetailedDesc() {		
 		return owner.toString()  + " Holdfast belongs to the " + owner.toString() + " family(i). " +
-			"The caste has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
+			"It has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
 			" soilders and " + civPopulation + " peasants.";
 	}
 

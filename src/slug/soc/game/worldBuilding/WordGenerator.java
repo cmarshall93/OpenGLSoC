@@ -11,19 +11,25 @@ public class WordGenerator {
 
 	private static WordGenerator instance = null;
 
-	private File nounsFile = new File("nouns.txt");
-	private File verbsFile = new File("verbs.txt");
-	private File maleFirstNameFile = new File("maleFirstNames.txt");
-	private File femaleFirstNameFile = new File("femaleFirstNames.txt");
-	private File surnamePrefixFile = new File("surnamePrefix.txt");
-	private File surnameSuffixFile = new File("surnameSuffix.txt");
-	private File surnameWholeFile = new File("surnameWhole.txt");
-	private File sizeFile = new File("sizes.txt");
-	private File lengthsFile = new File("lengths.txt");
-	private File hairColoursFile = new File("hairColours.txt");
-	private File eyeColoursFile = new File("eyeColours.txt");
-	private File placeSuffixFile = new File("placeSuffix.txt");
-	private File placesPrefixFile = new File("placePrefix.txt");
+	private File nounsFile = new File("textFiles/nouns.txt");
+	private File verbsFile = new File("textFiles/verbs.txt");
+	private File sizeFile = new File("textFiles/sizes.txt");
+	private File lengthsFile = new File("textFiles/lengths.txt");
+	
+	private File maleFirstNameFile = new File("textFiles/people/names/maleFirstNames.txt");
+	private File femaleFirstNameFile = new File("textFiles/people/names/femaleFirstNames.txt");
+	private File surnamePrefixFile = new File("textFiles/people/names/surnamePrefix.txt");
+	private File surnameSuffixFile = new File("textFiles/people/names/surnameSuffix.txt");
+	private File surnameWholeFile = new File("textFiles/people/names/surnameWhole.txt");
+	
+	private File hairColoursFile = new File("textFiles/people/features/hairColours.txt");
+	private File eyeColoursFile = new File("textFiles/people/features/eyeColours.txt");
+	private File bodyTypesFile = new File("textFiles/people/features/bodyTypes.txt");
+	private File beardTypesFile = new File("textFiles/people/features/beards.txt");
+	
+	
+	private File placeSuffixFile = new File("textFiles/places/placeSuffix.txt");
+	private File placesPrefixFile = new File("textFiles/places/placePrefix.txt");
 	
 	private Scanner scanner;
 	
@@ -112,7 +118,15 @@ public class WordGenerator {
 		return getRandomWordFromFile(eyeColoursFile);
 	}
 	
+	public String getRandomBodyType(){
+		return getRandomWordFromFile(bodyTypesFile);
+	}
+	
 	public String getRandomPlaceName(){
 		return getRandomWordFromFile(placesPrefixFile) + getRandomWordFromFile(placeSuffixFile);
+	}
+	
+	public String getRandomBeard(){
+		return getRandomWordFromFile(beardTypesFile);
 	}
 }
