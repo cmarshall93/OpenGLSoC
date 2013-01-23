@@ -3,6 +3,7 @@ package slug.soc.game.gameObjects;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import slug.soc.game.GameCalendar;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.peopleFeatures.AbstractPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.BeardPersonFeature;
@@ -31,7 +32,9 @@ public class GameObjectPerson extends GameObject {
 
 	public GameObjectPerson(Color color, Faction owner, GameObjectPerson mother, GameObjectPerson father) {
 		super(new TilePerson(color), owner);
+		
 		features = new ArrayList<AbstractPersonFeature>();
+		
 		lastName = owner.toString();
 		troopNumber = 1;
 		if(RandomProvider.getInstance().nextInt(2) == 0){
@@ -43,7 +46,7 @@ public class GameObjectPerson extends GameObject {
 			firstName =  WordGenerator.getInstance().getRandomMaleFirstName(); 
 			features.add(new BeardPersonFeature());
 		}
-		yearBorn =  GameModeState.getInstance().getYear();
+		yearBorn =  GameCalendar.getInstance().getCurrentYear();
 
 		features.add(new NosePersonFeature());
 		features.add(new HairPersonFeature());
@@ -134,7 +137,7 @@ public class GameObjectPerson extends GameObject {
 		}else{
 			fatherString = father.getName();
 		}
-		int currentYear = GameModeState.getInstance().getYear();
+		int currentYear = GameCalendar.getInstance().getCurrentYear();
 		String out = firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
 				+ secondPerson.toLowerCase() + " was born in the year " + yearBorn +" and is " + (currentYear - yearBorn) + " years old.  " + seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
 				+ fatherString + ". ";

@@ -15,6 +15,7 @@ import org.newdawn.slick.opengl.Texture;
 
 import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
+import slug.soc.game.GameCalendar;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
@@ -47,7 +48,6 @@ public class GameModeState implements IGameState, Runnable {
 	private boolean viewHoldings;
 
 	private TerrainObject[][] map;
-	private Integer year;
 	private ArrayList<GameObject> gameObjects;
 	
 	private TerrianGenerator terrianGenerator;
@@ -93,9 +93,7 @@ public class GameModeState implements IGameState, Runnable {
 		currentXPos = 50;
 		currentYPos = 50;
 
-		//**************faction testing*******************
-		year = 100;
-		
+		//**************faction testing*******************		
 		Faction faction = new Faction();
 		System.out.println(faction.getSigil());
 		int x = 50;
@@ -135,13 +133,9 @@ public class GameModeState implements IGameState, Runnable {
 	public TerrainObject[][] getMap(){
 		return map;
 	}
-	
-	public int getYear(){
-		return year;
-	}
-	
+		
 	public void advanceStep(){
-		year++;
+		GameCalendar.getInstance().advanceDay();
 		for(GameObject o : gameObjects){
 			o.act();
 		}
@@ -417,6 +411,8 @@ public class GameModeState implements IGameState, Runnable {
 			TextRenderer.getInstance().drawString(f.toString(), DEFAULT_TEXT_SIZE, textSpace);
 		//g.drawString(f.toString(), gx, gy);
 		frames++;
+		GL11.glTranslatef(-300f, -DEFAULT_TEXT_SIZE, 0);
+		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDate(), DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
 		
 		GL11.glPopMatrix();
@@ -469,30 +465,5 @@ public class GameModeState implements IGameState, Runnable {
 		status[2] = "test";
 		status[3] = "test";
 		return status;
-	}
-
-	private void drawCharacter(String c, float size){
-		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(c);
-		if(tex != null){
-			tex.bind();
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
-			GL11.glVertex2f(0,0);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f(0+size,0);
-			GL11.glTexCoord2f(1, 1);
-			GL11.glVertex2f(0+size,0+size);
-			GL11.glTexCoord2f(0, 1);
-			GL11.glVertex2f(0,0+size);
-			GL11.glEnd();
-		}
-		else{
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(0,0);
-			GL11.glVertex2f(0+ size,0);
-			GL11.glVertex2f(0+size,0+size);
-			GL11.glVertex2f(0,0+size);
-			GL11.glEnd();
-		}
 	}
 }
