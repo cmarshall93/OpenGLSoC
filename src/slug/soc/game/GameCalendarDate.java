@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 public class GameCalendarDate {
 
-	private ArrayList<String> events;
+	private ArrayList<GameCalendarEvent> events;
 	
 	private int year;
 	private GameCalendarMonth date;
 	
 	public GameCalendarDate(int year, GameCalendarMonth month){
 		date = month;
-		events = new ArrayList<String>();
+		events = new ArrayList<GameCalendarEvent>();
 		this.year = year;
 		
 	}
@@ -20,11 +20,11 @@ public class GameCalendarDate {
 		return year;
 	}
 	
-	public void addEvent(String event){
+	public void addEvent(GameCalendarEvent event){
 		events.add(event);
 	}
 	
-	public ArrayList<String> getEvents(){
+	public ArrayList<GameCalendarEvent> getEvents(){
 		return events;
 	}
 	

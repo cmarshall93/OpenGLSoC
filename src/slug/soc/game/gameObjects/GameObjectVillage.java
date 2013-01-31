@@ -2,6 +2,7 @@ package slug.soc.game.gameObjects;
 
 import java.awt.Color;
 
+import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.tiles.faction.TileVillage;
 import slug.soc.game.worldBuilding.WordGenerator;
@@ -17,7 +18,7 @@ public class GameObjectVillage extends GameObject {
 		troops = RandomProvider.getInstance().nextInt(40) + 5;
 		population = RandomProvider.getInstance().nextInt(100) + 20;
 		name = WordGenerator.getInstance().getRandomPlaceName();
-		dateCreated.addEvent("The founding of " + name);
+		dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));
 	}
 
 	@Override

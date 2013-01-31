@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarDate;
+import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.GameCalendarMonth;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.peopleFeatures.AbstractPersonFeature;
@@ -72,7 +73,7 @@ public class GameObjectPerson extends GameObject {
 		}
 		else{father = null;}
 		
-		dateCreated.addEvent("The birth of " + getName() + ".");
+		dateCreated.addEvent(new GameCalendarEvent("The birth of " + getName() + ".", this));
 	}
 
 	@Override

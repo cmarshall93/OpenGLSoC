@@ -2,6 +2,7 @@ package slug.soc.game.gameObjects;
 
 import java.awt.Color;
 
+import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.tiles.faction.TileHoldfast;
 
@@ -14,7 +15,7 @@ public class GameObjectHoldfast extends GameObject {
 		super(new TileHoldfast(color), owner);
 		troopPopulation = RandomProvider.getInstance().nextInt(101);
 		civPopulation = RandomProvider.getInstance().nextInt(301);
-		dateCreated.addEvent("The completion of work on " + owner.toString() + " holdfast.");
+		dateCreated.addEvent(new GameCalendarEvent("The completion of work on " + owner.toString() + " holdfast.", this));
 	}
 
 	@Override

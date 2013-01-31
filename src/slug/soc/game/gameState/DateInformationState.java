@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import slug.soc.game.Game;
 import slug.soc.game.GameCalendarDate;
+import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.rendering.TextRenderer;
 
 public class DateInformationState implements IGameState {
@@ -39,9 +40,9 @@ public class DateInformationState implements IGameState {
 		TextRenderer.getInstance().drawString(date.toString(), 24, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 		GL11.glTranslatef(0, -24, 0);
-		for(String s : date.getEvents()){
+		for(GameCalendarEvent e : date.getEvents()){
 			GL11.glPushMatrix();
-			TextRenderer.getInstance().drawString(s, DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
+			TextRenderer.getInstance().drawString(e.toString(), DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
 			GL11.glPopMatrix();
 			GL11.glTranslatef(0f, -DEFAULT_TEXT_SIZE, 0f);
 		}
