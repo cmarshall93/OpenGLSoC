@@ -15,6 +15,7 @@ public class GameObjectCastle extends GameObject {
 		super(new TileCastle(color), owner);
 		troopPopulation = RandomProvider.getInstance().nextInt(201);
 		civPopulation = RandomProvider.getInstance().nextInt(601);
+		dateCreated.addEvent("The complettion of work on castle" + owner.toString());
 	}
 
 	public String[] getStringDesc(){
@@ -36,7 +37,7 @@ public class GameObjectCastle extends GameObject {
 	@Override
 	public String getDetailedDesc() {
 		return "Castle " + owner.toString() + " belongs to the " + owner.toString() + " family(i). " +
-				"The caste has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
+				"Work was completed on " + dateCreated.toString() + ". The caste has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
 				" soilders and " + civPopulation + " peasants.";
 	}
 

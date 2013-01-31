@@ -17,6 +17,7 @@ public class GameObjectTown extends GameObject {
 		troops = RandomProvider.getInstance().nextInt(100) +30;
 		population = RandomProvider.getInstance().nextInt(2000) + 200;
 		name = WordGenerator.getInstance().getRandomPlaceName();
+		dateCreated.addEvent("The founding of " + name);
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class GameObjectTown extends GameObject {
 	@Override
 	public String getDetailedDesc() {
 		String string = "The town of " + name + " is owned by the " + owner + " family(i)." +
-				" It has a population of " + (population + troops) + " of which " + troops + " are able to fight.";
+				"The town was founded on " + dateCreated.toString() + ". It has a population of " + (population + troops) + " of which " + troops + " are able to fight.";
 		return string;
 	}
 

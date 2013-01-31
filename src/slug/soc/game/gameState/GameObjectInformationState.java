@@ -49,6 +49,10 @@ public class GameObjectInformationState implements IGameState {
 			FactionInformationState.getInstance().setFactionToDispaly(gameObject.getOwner());
 			Game.getInstance().setCurrentGameState(FactionInformationState.getInstance());
 		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_B)){
+			DateInformationState.getInstance().setDateToDisplay(gameObject.getDateCreated());
+			Game.getInstance().setCurrentGameState(DateInformationState.getInstance());
+		}
 	}
 
 }

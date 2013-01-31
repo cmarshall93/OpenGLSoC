@@ -120,7 +120,7 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		
 		
-		for(int i = 0; i < 51; i++){
+		for(int i = 0; i < 1000; i++){
 			advanceStep();
 		}
 		//************************************************
@@ -412,7 +412,7 @@ public class GameModeState implements IGameState, Runnable {
 		//g.drawString(f.toString(), gx, gy);
 		frames++;
 		GL11.glTranslatef(-300f, -DEFAULT_TEXT_SIZE, 0);
-		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDate(), DEFAULT_TEXT_SIZE, textSpace);
+		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
 		
 		GL11.glPopMatrix();

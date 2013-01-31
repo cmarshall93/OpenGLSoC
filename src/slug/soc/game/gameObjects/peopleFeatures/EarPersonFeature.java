@@ -2,12 +2,12 @@ package slug.soc.game.gameObjects.peopleFeatures;
 
 import slug.soc.game.worldBuilding.WordGenerator;
 
-public class BeardPersonFeature implements AbstractPersonFeature {
+public class EarPersonFeature implements AbstractPersonFeature {
 
 	private String desc;
 	
-	public BeardPersonFeature(){
-		desc = "a " + WordGenerator.getInstance().getRandomBeard() + ". ";
+	public EarPersonFeature(){
+		desc = WordGenerator.getInstance().getRandomSize() + " ears.";
 	}
 	
 	@Override

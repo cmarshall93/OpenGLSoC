@@ -5,7 +5,8 @@ public class GameCalendar {
 	private static GameCalendar instance;
 	//holds a linked list to represent the months, int to store current year.
 	private GameCalendarMonth startOfYear;
-	private GameCalendarMonth currentDate;
+	private GameCalendarMonth currentMonth;
+	private GameCalendarDate currentDate;
 	
 	private int year;
 	
@@ -18,19 +19,29 @@ public class GameCalendar {
 		GameCalendarMonth june = new GameCalendarMonth("Suns Reigh", 30);
 		GameCalendarMonth july = new GameCalendarMonth("Suns Heat", 30);
 		GameCalendarMonth august = new GameCalendarMonth("Suns Decline", 30);
-		GameCalendarMonth sept = new GameCalendarMonth("Leaves Fall", 30);
-		GameCalendarMonth oct = new GameCalendarMonth("", 30);
+		GameCalendarMonth sept = new GameCalendarMonth("Leafs Fall", 30);
+		GameCalendarMonth oct = new GameCalendarMonth("Last Harvest", 30);
 		GameCalendarMonth nov = new GameCalendarMonth("Frosts Rise", 30);
 		GameCalendarMonth dec = new GameCalendarMonth("Frosts Reigh", 30);
 		
 		year = 0;
 		startOfYear = jan;
-		currentDate = startOfYear;
+		currentMonth = startOfYear;
 		
 		jan.setNext(feb);
 		feb.setNext(march);
 		march.setNext(april);
-		april.setNext(jan);
+		april.setNext(may);
+		may.setNext(june);
+		june.setNext(july);
+		july.setNext(august);
+		august.setNext(sept);
+		sept.setNext(oct);
+		oct.setNext(nov);
+		nov.setNext(dec);
+		dec.setNext(jan);
+		
+		currentDate = new GameCalendarDate(year, currentMonth);
 	}
 	
 	public static GameCalendar getInstance(){
@@ -41,19 +52,24 @@ public class GameCalendar {
 	}
 	
 	public void advanceDay(){
-		if(currentDate != startOfYear){
-			currentDate = currentDate.advanceDay();
-			if(currentDate.equals(startOfYear)){
+		if(currentMonth != startOfYear){
+			currentMonth = currentMonth.advanceDay();
+			if(currentMonth.equals(startOfYear)){
 				year++;
 			}
 		}
 		else{
-			currentDate = currentDate.advanceDay();
+			currentMonth = currentMonth.advanceDay();
 		}
+		currentDate = new GameCalendarDate(year, currentMonth);
 	}
 	
-	public String getCurrentDate(){
-		return currentDate.toString() + " " + year;
+	public GameCalendarDate getCurrentDate(){
+		return currentDate;
+	}
+	
+	public String getCurrentDateAsString(){
+		return currentMonth.toString() + " " + year;
 	}
 	
 	public int getCurrentYear(){

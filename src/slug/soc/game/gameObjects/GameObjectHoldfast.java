@@ -14,6 +14,7 @@ public class GameObjectHoldfast extends GameObject {
 		super(new TileHoldfast(color), owner);
 		troopPopulation = RandomProvider.getInstance().nextInt(101);
 		civPopulation = RandomProvider.getInstance().nextInt(301);
+		dateCreated.addEvent("The completion of work on " + owner.toString() + " holdfast.");
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class GameObjectHoldfast extends GameObject {
 	@Override
 	public String getDetailedDesc() {		
 		return owner.toString()  + " Holdfast belongs to the " + owner.toString() + " family(i). " +
-			"It has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
+				"Work was completed on " + dateCreated.toString() + ". It has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
 			" soilders and " + civPopulation + " peasants.";
 	}
 

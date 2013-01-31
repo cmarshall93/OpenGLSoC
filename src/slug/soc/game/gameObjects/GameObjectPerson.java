@@ -4,10 +4,13 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import slug.soc.game.GameCalendar;
+import slug.soc.game.GameCalendarDate;
+import slug.soc.game.GameCalendarMonth;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.peopleFeatures.AbstractPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.BeardPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.BodyPersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.EarPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.EyePersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.HairPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.NosePersonFeature;
@@ -21,7 +24,6 @@ public class GameObjectPerson extends GameObject {
 	private GameObjectPerson mother;
 	private GameObjectPerson father;
 	private boolean isFemale;
-	private Integer yearBorn;
 
 	private String firstName;
 	private String lastName;
@@ -46,12 +48,12 @@ public class GameObjectPerson extends GameObject {
 			firstName =  WordGenerator.getInstance().getRandomMaleFirstName(); 
 			features.add(new BeardPersonFeature());
 		}
-		yearBorn =  GameCalendar.getInstance().getCurrentYear();
 
 		features.add(new NosePersonFeature());
 		features.add(new HairPersonFeature());
 		features.add(new EyePersonFeature());
 		features.add(new BodyPersonFeature());
+		features.add(new EarPersonFeature());
 		
 		if(mother != null){
 			if(mother.isFemale()){
@@ -69,6 +71,8 @@ public class GameObjectPerson extends GameObject {
 			}
 		}
 		else{father = null;}
+		
+		dateCreated.addEvent("The birth of " + getName() + ".");
 	}
 
 	@Override
@@ -139,7 +143,7 @@ public class GameObjectPerson extends GameObject {
 		}
 		int currentYear = GameCalendar.getInstance().getCurrentYear();
 		String out = firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
-				+ secondPerson.toLowerCase() + " was born in the year " + yearBorn +" and is " + (currentYear - yearBorn) + " years old.  " + seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
+				+ secondPerson.toLowerCase() + " was born on " + dateCreated.toString()  +" (b) and is " + (currentYear - dateCreated.getYear()) + " years old.  " + seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
 				+ fatherString + ". ";
 		for(AbstractPersonFeature a : features){
 			out += secondPerson + " has " + a.getDesc();
