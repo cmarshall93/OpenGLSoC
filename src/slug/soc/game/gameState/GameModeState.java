@@ -228,6 +228,9 @@ public class GameModeState implements IGameState, Runnable {
 				Game.getInstance().setCurrentGameState(GameObjectInformationState.getInstance());
 			}
 		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_T)){
+			Game.getInstance().setCurrentGameState(DatesListState.getInstance());
+		}
 	}
 
 	public void createImage(){		

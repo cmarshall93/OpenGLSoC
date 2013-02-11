@@ -74,6 +74,7 @@ public class GameObjectPerson extends GameObject {
 		else{father = null;}
 		
 		dateCreated.addEvent(new GameCalendarEvent("The birth of " + getName() + ".", this));
+		GameCalendar.getInstance().addKeyDate(dateCreated);
 	}
 
 	@Override

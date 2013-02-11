@@ -1,5 +1,9 @@
 package slug.soc.game;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+
 public class GameCalendar {
 
 	private static GameCalendar instance;
@@ -8,9 +12,13 @@ public class GameCalendar {
 	private GameCalendarMonth currentMonth;
 	private GameCalendarDate currentDate;
 	
+	private HashSet<GameCalendarDate> keyDates;
+	
 	private int year;
 	
 	private GameCalendar(){
+		keyDates = new HashSet<GameCalendarDate>();
+		
 		GameCalendarMonth jan = new GameCalendarMonth("First Moon", 31);
 		GameCalendarMonth feb = new GameCalendarMonth("Frosts Decline", 28);
 		GameCalendarMonth march = new GameCalendarMonth("Flowers Rise", 31);
@@ -76,5 +84,12 @@ public class GameCalendar {
 		return year;
 	}
 	
+	public void addKeyDate(GameCalendarDate date){
+		keyDates.add(date);
+	}
+	
+	public HashSet<GameCalendarDate> getKeyDates(){
+		return keyDates;
+	}
 	
 }
