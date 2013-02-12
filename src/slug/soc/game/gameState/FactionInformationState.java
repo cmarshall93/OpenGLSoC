@@ -68,7 +68,7 @@ public class FactionInformationState implements IGameState {
 	@Override
 	public void checkInput() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
-			Game.getInstance().setCurrentGameState(GameModeState.getInstance());
+			Game.getInstance().changeToPreviousGameState();
 		}
 	}
 }

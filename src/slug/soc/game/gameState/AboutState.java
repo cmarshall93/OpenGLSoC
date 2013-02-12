@@ -38,7 +38,7 @@ public class AboutState implements IGameState {
 	@Override
 	public void checkInput() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//escape
-			Game.getInstance().setCurrentGameState(MainMenuState.getInstance());
+			Game.getInstance().changeToPreviousGameState();
 		}
 	}
 

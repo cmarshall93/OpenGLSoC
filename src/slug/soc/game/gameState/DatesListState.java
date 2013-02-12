@@ -1,6 +1,7 @@
 package slug.soc.game.gameState;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -18,7 +19,7 @@ public class DatesListState implements IGameState {
 	private static DatesListState instance;
 	
 
-	private Collection<GameCalendarDate> dates;
+	private HashMap<GameCalendarDate, GameCalendarDate> dates;
 	private int currentDateIndex;
 		
 	public static DatesListState getInstance(){
@@ -26,6 +27,7 @@ public class DatesListState implements IGameState {
 			instance = new DatesListState();
 		}
 		instance.dates = GameCalendar.getInstance().getKeyDates();
+		instance.currentDateIndex = 0; 
 		return instance;
 	}
 	
@@ -34,11 +36,12 @@ public class DatesListState implements IGameState {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0, Display.getDisplayMode().getHeight() + 80, 0);
 		GL11.glPushMatrix();
+			GL11.glColor3f(1f, 1f, 1f);
 			TextRenderer.getInstance().drawString("A History Of Events", 20, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 		GL11.glTranslatef(0, -20f, 0);
 		int i = 0;
-			for(GameCalendarDate date: GameCalendar.getInstance().getKeyDates()){
+			for(GameCalendarDate date: GameCalendar.getInstance().getKeyDates().keySet()){
 				GL11.glPushMatrix();
 				if(currentDateIndex == i){
 					GL11.glColor3f(1f, 1f, 1f);
@@ -60,8 +63,9 @@ public class DatesListState implements IGameState {
 			nextDate(-1);
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){//d
-			DateInformationState.getInstance().setObjectToDetail(GameCalendar.getInstance().getKeyDates().get(currentDateIndex));
-			Game.getInstance().setCurrentGameState(DateInformationState.getInstance());
+			
+			DateInformationState.getInstance().setDateToDisplay((GameCalendarDate)dates.keySet().toArray()[currentDateIndex]);
+			Game.getInstance().changeToNextGameState(DateInformationState.getInstance());
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 			nextDate(1);

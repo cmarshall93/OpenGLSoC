@@ -23,7 +23,7 @@ public class DateInformationState implements IGameState {
 
 	private DateInformationState(){
 		date = null;
-		events = null;
+		events = new ArrayList<GameCalendarEvent>();
 	}
 
 	public static DateInformationState getInstance(){
@@ -35,7 +35,7 @@ public class DateInformationState implements IGameState {
 
 	public void setDateToDisplay(GameCalendarDate date){
 		this.date = date;
-		events = date.getEvents();
+		events = this.date.getEvents();
 		currentEventIndex = 0; 
 	}
 
@@ -70,11 +70,11 @@ public class DateInformationState implements IGameState {
 	@Override
 	public void checkInput() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
-			Game.getInstance().setCurrentGameState(GameObjectInformationState.getInstance());
+			Game.getInstance().changeToPreviousGameState();
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_D)){//d
 			GameObjectInformationState.getInstance().setObjectToDetail(events.get(currentEventIndex).getGameObject());
-			Game.getInstance().setCurrentGameState(GameObjectInformationState.getInstance());
+			Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
 			nextEvent(-1);

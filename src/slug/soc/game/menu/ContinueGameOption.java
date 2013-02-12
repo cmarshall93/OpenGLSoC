@@ -11,7 +11,7 @@ public class ContinueGameOption extends AbstractMenuOption {
 	
 	@Override
 	public void act() {
-		Game.getInstance().setCurrentGameState(GameModeState.getInstance());
+		Game.getInstance().changeToPreviousGameState();
 	}
 
 }

@@ -211,7 +211,7 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
-			Game.getInstance().setCurrentGameState(PauseGameState.getInstance());
+			Game.getInstance().changeToNextGameState(PauseGameState.getInstance());
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_H)){//h
 			viewHoldings = !viewHoldings;
@@ -219,17 +219,17 @@ public class GameModeState implements IGameState, Runnable {
 		else if(Keyboard.isKeyDown(Keyboard.KEY_I)){
 			if(getMap()[currentYPos][currentXPos].getOwner() != null){
 				FactionInformationState.getInstance().setFactionToDispaly(getMap()[currentYPos][currentXPos].getOwner());
-				Game.getInstance().setCurrentGameState(FactionInformationState.getInstance());
+				Game.getInstance().changeToNextGameState(FactionInformationState.getInstance());
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
 			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() != null){
 				GameObjectInformationState.getInstance().setObjectToDetail(getMap()[currentYPos][currentXPos].getCurrentGameObject());
-				Game.getInstance().setCurrentGameState(GameObjectInformationState.getInstance());
+				Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_T)){
-			Game.getInstance().setCurrentGameState(DatesListState.getInstance());
+			Game.getInstance().changeToNextGameState(DatesListState.getInstance());
 		}
 	}
 

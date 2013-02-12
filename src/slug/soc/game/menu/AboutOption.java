@@ -11,7 +11,7 @@ public class AboutOption extends AbstractMenuOption {
 
 	@Override
 	public void act() {
-		Game.getInstance().setCurrentGameState(AboutState.getInstance());
+		Game.getInstance().changeToNextGameState(AboutState.getInstance());
 	}
 
 }

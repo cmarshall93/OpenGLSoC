@@ -11,7 +11,7 @@ public class RunGameOption extends AbstractMenuOption {
 	
 	@Override
 	public void act() {
-		Game.getInstance().setCurrentGameState(	GameModeState.getInstance());
+		Game.getInstance().changeToNextGameState(	GameModeState.getInstance());
 		Thread t = new Thread(GameModeState.getInstance());
 		t.start();
 	}

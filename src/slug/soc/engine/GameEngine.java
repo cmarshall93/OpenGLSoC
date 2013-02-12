@@ -28,7 +28,7 @@ public class GameEngine {
 	 * Adds the renderTask to the renderTimer, which draws the game every 15ms.
 	 */
 	public void startGame(){
-		Game.getInstance().setCurrentGameState(MainMenuState.getInstance());
+		Game.getInstance().changeToNextGameState(MainMenuState.getInstance());
 	}
 	
 	public void checkInput(){
