@@ -69,8 +69,11 @@ public class DateInformationState implements IGameState {
 
 	@Override
 	public void checkInput() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
+		if (Keyboard.isKeyDown(Keyboard.KEY_BACK)){//back
 			Game.getInstance().changeToPreviousGameState();
+		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
+			Game.getInstance().changeToMainScreen();
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_D)){//d
 			GameObjectInformationState.getInstance().setObjectToDetail(events.get(currentEventIndex).getGameObject());

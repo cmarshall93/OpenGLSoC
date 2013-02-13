@@ -2,6 +2,7 @@ package slug.soc.game;
 
 import java.util.Stack;
 
+import slug.soc.game.gameState.GameModeState;
 import slug.soc.game.gameState.IGameState;
 import slug.soc.game.gameState.MainMenuState;
 
@@ -33,6 +34,14 @@ public class Game {
 		if(previousGameStates.size() != 0){
 			currentGameState = previousGameStates.pop();
 		}
+		else{
+			currentGameState = GameModeState.getInstance();
+		}
+	}
+	
+	public void changeToMainScreen(){
+		previousGameStates.clear();
+		currentGameState = GameModeState.getInstance();
 	}
 
 	public IGameState getCurrentGameState(){

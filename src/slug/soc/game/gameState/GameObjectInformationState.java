@@ -42,14 +42,17 @@ public class GameObjectInformationState implements IGameState {
 
 	@Override
 	public void checkInput() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
+		if (Keyboard.isKeyDown(Keyboard.KEY_BACK)){//back
 			Game.getInstance().changeToPreviousGameState();
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
+			Game.getInstance().changeToMainScreen();
+		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_I)){//i
 			FactionInformationState.getInstance().setFactionToDispaly(gameObject.getOwner());
 			Game.getInstance().changeToNextGameState(FactionInformationState.getInstance());
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_B)){
+		else if(Keyboard.isKeyDown(Keyboard.KEY_B)){//b
 			DateInformationState.getInstance().setDateToDisplay(gameObject.getDateCreated());
 			Game.getInstance().changeToNextGameState(DateInformationState.getInstance());
 		}
