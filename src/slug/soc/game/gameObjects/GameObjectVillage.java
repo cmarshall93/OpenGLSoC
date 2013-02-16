@@ -2,6 +2,7 @@ package slug.soc.game.gameObjects;
 
 import java.awt.Color;
 
+import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.tiles.faction.TileVillage;
@@ -18,7 +19,9 @@ public class GameObjectVillage extends GameObject {
 		troops = RandomProvider.getInstance().nextInt(40) + 5;
 		population = RandomProvider.getInstance().nextInt(100) + 20;
 		name = WordGenerator.getInstance().getRandomPlaceName();
+		
 		dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));
+		GameCalendar.getInstance().addKeyDate(dateCreated);
 	}
 
 	@Override
@@ -37,7 +40,7 @@ public class GameObjectVillage extends GameObject {
 	@Override
 	public String getDetailedDesc() {
 		String string = "The village of " + name + " is owned by the " + owner + " family(i)." +
-				"The village was founded on " + dateCreated.toString() +". It has a population of " + (population + troops) + " of which " + troops + " are able to fight.";
+				"The village was founded on " + dateCreated.toString() +". It has a population of " + (population + troops) + " with a militia of " + troops + ".";
 		return string;
 	}
 	

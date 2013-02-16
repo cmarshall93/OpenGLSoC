@@ -2,6 +2,7 @@ package slug.soc.game.gameObjects;
 
 import java.awt.Color;
 
+import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.tiles.GameTile;
@@ -16,7 +17,9 @@ public class GameObjectCastle extends GameObject {
 		super(new TileCastle(color), owner);
 		troopPopulation = RandomProvider.getInstance().nextInt(201);
 		civPopulation = RandomProvider.getInstance().nextInt(601);
+		
 		dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(), this));
+		GameCalendar.getInstance().addKeyDate(dateCreated);
 	}
 
 	public String[] getStringDesc(){

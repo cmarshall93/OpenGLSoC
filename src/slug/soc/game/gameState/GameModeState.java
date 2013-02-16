@@ -111,7 +111,7 @@ public class GameModeState implements IGameState, Runnable {
 		for(GameObject g : faction.getHoldings()){
 			map[y][x].addGameObject(g);
 			gameObjects.add(g);
-			if(map[y][x].getBiome().getContents() != null){
+			if(map[y][x].getBiome() != null && map[y][x].getBiome().getContents() != null){
 				for(TerrainObject t: map[y][x].getBiome().getContents()){
 					if(t != null){
 						t.setOwner(faction);
@@ -122,11 +122,13 @@ public class GameModeState implements IGameState, Runnable {
 		}
 
 		//testing multiple object on one tile
-		map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
-		map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
 
 		for(int i = 0; i < 1000; i++){
 			advanceStep();
+			if( i == 500){
+				map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
+				map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
+			}
 		}
 		//************************************************
 

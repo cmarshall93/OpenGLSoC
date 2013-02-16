@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 public class GameCalendar {
 
@@ -18,7 +19,7 @@ public class GameCalendar {
 	private int year;
 	
 	private GameCalendar(){
-		keyDates = new HashMap<GameCalendarDate, GameCalendarDate>();
+		keyDates = new LinkedHashMap<GameCalendarDate, GameCalendarDate>();
 		
 		GameCalendarMonth jan = new GameCalendarMonth("First Moon", 31);
 		GameCalendarMonth feb = new GameCalendarMonth("Frosts Decline", 28);
