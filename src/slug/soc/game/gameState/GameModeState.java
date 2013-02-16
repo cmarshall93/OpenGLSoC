@@ -49,7 +49,7 @@ public class GameModeState implements IGameState, Runnable {
 
 	private TerrainObject[][] map;
 	private ArrayList<GameObject> gameObjects;
-	
+
 	private TerrianGenerator terrianGenerator;
 	private GameObjectCursor cursor = new GameObjectCursor();
 	private Integer currentXPos;
@@ -68,7 +68,7 @@ public class GameModeState implements IGameState, Runnable {
 
 	private int mapFrameCounter;
 	private int infoFrameCounter;
-	
+
 	public static GameModeState getInstance(){
 		if(instance == null){
 			instance = new GameModeState();
@@ -111,15 +111,17 @@ public class GameModeState implements IGameState, Runnable {
 		for(GameObject g : faction.getHoldings()){
 			map[y][x].addGameObject(g);
 			gameObjects.add(g);
-			for(TerrainObject t: map[y][x].getBiome().getContents()){
-				if(t != null){
-					t.setOwner(faction);
+			if(map[y][x].getBiome().getContents() != null){
+				for(TerrainObject t: map[y][x].getBiome().getContents()){
+					if(t != null){
+						t.setOwner(faction);
+					}
 				}
+				y++;
 			}
-			y++;
 		}
-		
-		
+
+
 		for(int i = 0; i < 1000; i++){
 			advanceStep();
 		}
@@ -133,7 +135,7 @@ public class GameModeState implements IGameState, Runnable {
 	public TerrainObject[][] getMap(){
 		return map;
 	}
-		
+
 	public void advanceStep(){
 		GameCalendar.getInstance().advanceDay();
 		for(GameObject o : gameObjects){
@@ -310,8 +312,8 @@ public class GameModeState implements IGameState, Runnable {
 	private void drawInfo(){
 
 		float textSpace = 425; 
-				//Display.getDisplayMode().getWidth() - DEFAULT_TILE_SIZE * 25;
-		
+		//Display.getDisplayMode().getWidth() - DEFAULT_TILE_SIZE * 25;
+
 		System.out.println();
 		//int gx = 510;
 		//int gy = 30;
@@ -355,24 +357,24 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		GL11.glPopMatrix();
 
-		
+
 		if(infoFrameCounter >= INFO_UPDATE_RATE && getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
 			getMap()[currentYPos][currentXPos].getNextGameObject();
 			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor){
 				getMap()[currentYPos][currentXPos].getNextGameObject();
 			}
 		}
-		
+
 		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 4, 0);
 		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
 			GL11.glPushMatrix();
 			out = (getMap()[currentYPos][currentXPos].getCurrentGameObject().toString() + " 1 of " 
-						+ getMap()[currentYPos][currentXPos].getGameObjects().size() +" objects on this tile");
+					+ getMap()[currentYPos][currentXPos].getGameObjects().size() +" objects on this tile");
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 			GL11.glPopMatrix();
 			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 3, 0);
-			
+
 			String [] desc = getMap()[currentYPos][currentXPos].getCurrentGameObject().getStringDesc();
 			for(int i = 0; i < desc.length; i++){
 				GL11.glPushMatrix();
@@ -386,7 +388,7 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 		GL11.glPopMatrix();
-	
+
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0, -410 , 0);
 		if(viewHoldings){
@@ -411,15 +413,15 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		Integer f = currentFPS;
 		GL11.glTranslatef(300, 0, 0);
-			TextRenderer.getInstance().drawString(f.toString(), DEFAULT_TEXT_SIZE, textSpace);
+		TextRenderer.getInstance().drawString(f.toString(), DEFAULT_TEXT_SIZE, textSpace);
 		//g.drawString(f.toString(), gx, gy);
 		frames++;
 		GL11.glTranslatef(-300f, -DEFAULT_TEXT_SIZE, 0);
 		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
-		
+
 		GL11.glPopMatrix();
-		
+
 	}
 
 	private void drawLoading(){
@@ -430,7 +432,7 @@ public class GameModeState implements IGameState, Runnable {
 		//g.setFont(FontProvider.getInstance().getFont());
 		//g.drawString("Generating world", gx, gy);
 		GL11.glPushMatrix();
-			TextRenderer.getInstance().drawString("Generating World", 16, Display.getDisplayMode().getWidth());
+		TextRenderer.getInstance().drawString("Generating World", 16, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 		//gy += 20;
 		GL11.glPushMatrix();
