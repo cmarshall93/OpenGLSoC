@@ -39,7 +39,7 @@ public class GameObjectVillage extends GameObject {
 	
 	@Override
 	public String getDetailedDesc() {
-		String string = "The village of " + name + " is owned by the " + owner + " family(i)." +
+		String string = "The village of " + name + " is owned by the " + owner + " family(i)." + " It is located in " + location + ". " +
 				"The village was founded on " + dateCreated.toString() +". It has a population of " + (population + troops) + " with a militia of " + troops + ".";
 		return string;
 	}

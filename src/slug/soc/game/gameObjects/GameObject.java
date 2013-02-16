@@ -15,6 +15,7 @@ public abstract class GameObject implements GameDrawable {
 
 	protected GameTile tile;
 	protected Faction owner;
+	protected String location;
 	protected GameCalendarDate dateCreated;
 	
 	public GameObject(GameTile tile, Faction owner){
@@ -33,6 +34,10 @@ public abstract class GameObject implements GameDrawable {
 	
 	public Faction getOwner(){
 		return owner;
+	}
+	
+	public void setLocation(String location){
+		this.location =  location;
 	}
 	
 	public abstract String[] getStringDesc();

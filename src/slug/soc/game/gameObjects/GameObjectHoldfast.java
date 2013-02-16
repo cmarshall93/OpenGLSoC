@@ -34,7 +34,7 @@ public class GameObjectHoldfast extends GameObject {
 
 	@Override
 	public String getDetailedDesc() {		
-		return owner.toString()  + " Holdfast belongs to the " + owner.toString() + " family(i). " +
+		return owner.toString()  + " Holdfast belongs to the " + owner.toString() + " family(i). " + " It is located in " + location + ". " +
 				"Work was completed on " + dateCreated.toString() + "(b). It has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
 			" soilders and " + civPopulation + " peasants.";
 	}

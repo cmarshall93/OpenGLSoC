@@ -51,6 +51,7 @@ public abstract class TerrainObject implements GameDrawable{
 			else if(owner == o.getOwner() || o.getOwner() == null){
 				gameObjects.add(o);
 			}
+			o.setLocation(toString());
 			
 			if(!(o instanceof GameObjectCursor)){
 				numberOfGameObjects = gameObjects.size();
