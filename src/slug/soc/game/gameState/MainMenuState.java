@@ -14,7 +14,6 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
-import slug.soc.game.FontProvider;
 import slug.soc.game.menu.AbstractMenuOption;
 import slug.soc.game.menu.ExitProgramOption;
 import slug.soc.game.menu.AboutOption;

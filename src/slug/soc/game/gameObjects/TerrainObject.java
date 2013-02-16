@@ -17,6 +17,7 @@ public abstract class TerrainObject implements GameDrawable{
 	private GameTile currentTile;
 	
 	private ArrayList<GameObject> gameObjects;
+	private int numberOfGameObjects;
 	private int gameObjectIndex;
 
 	private boolean isBiome;
@@ -49,6 +50,10 @@ public abstract class TerrainObject implements GameDrawable{
 			}
 			else if(owner == o.getOwner() || o.getOwner() == null){
 				gameObjects.add(o);
+			}
+			
+			if(!(o instanceof GameObjectCursor)){
+				numberOfGameObjects = gameObjects.size();
 			}
 		}
 	}
@@ -87,6 +92,10 @@ public abstract class TerrainObject implements GameDrawable{
 			tileIndex = 0;
 			currentTile = baseTile;
 		}
+	}
+	
+	public int getNumberOfGameObjects(){
+		return numberOfGameObjects;
 	}
 
 	public boolean isBiome(){

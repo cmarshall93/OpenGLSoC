@@ -13,12 +13,12 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 
-import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
 import slug.soc.game.GameCalendar;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
+import slug.soc.game.gameObjects.GameObjectCastle;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
@@ -121,6 +121,9 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 
+		//testing multiple object on one tile
+		map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
+		map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
 
 		for(int i = 0; i < 1000; i++){
 			advanceStep();
@@ -225,7 +228,7 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() != null){
+			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() != null && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
 				GameObjectInformationState.getInstance().setObjectToDetail(getMap()[currentYPos][currentXPos].getCurrentGameObject());
 				Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
 			}
@@ -358,7 +361,7 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glPopMatrix();
 
 
-		if(infoFrameCounter >= INFO_UPDATE_RATE && getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
+		if(infoFrameCounter >= INFO_UPDATE_RATE && getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
 			getMap()[currentYPos][currentXPos].getNextGameObject();
 			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor){
 				getMap()[currentYPos][currentXPos].getNextGameObject();
@@ -367,10 +370,10 @@ public class GameModeState implements IGameState, Runnable {
 
 		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 4, 0);
 		GL11.glPushMatrix();
-		if(getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
+		if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects()> 0 && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
 			GL11.glPushMatrix();
 			out = (getMap()[currentYPos][currentXPos].getCurrentGameObject().toString() + " 1 of " 
-					+ getMap()[currentYPos][currentXPos].getGameObjects().size() +" objects on this tile");
+					+ getMap()[currentYPos][currentXPos].getNumberOfGameObjects() +" objects on this tile");
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 			GL11.glPopMatrix();
 			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 3, 0);

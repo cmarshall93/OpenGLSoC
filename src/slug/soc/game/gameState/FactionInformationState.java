@@ -9,8 +9,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
-
-import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.rendering.AsciiTextureGenerator;
