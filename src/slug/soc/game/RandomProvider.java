@@ -23,4 +23,8 @@ public class RandomProvider {
 		return random.nextInt(limit);
 	}
 	
+	public boolean nextBoolean(){
+		return random.nextBoolean();
+	}
+	
 }
