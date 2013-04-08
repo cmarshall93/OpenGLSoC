@@ -34,7 +34,8 @@ public class OpenGL_Program {
 	private void run(){
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, 800, 0, 600, 1, -1);
+		//GL11.glOrtho(0, 800, 0, 600, 1, -1);
+		GL11.glOrtho(0.0f, 1000, 500, 0.0f, 0.0f, 1.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		System.out.println(GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE));

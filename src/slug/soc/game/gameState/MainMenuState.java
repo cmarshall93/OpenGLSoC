@@ -78,7 +78,7 @@ public class MainMenuState implements IGameState {
 	public void createImage() {
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(10, Display.getDisplayMode().getHeight() + 60, 0);
+		GL11.glTranslatef(10, 17/*Display.getDisplayMode().getHeight() + 60*/, 0);
 		for(int i = 0;i < options.length; i++){
 			GL11.glColor3f(0.5f,0.5f,0.5f);
 			if(i == currentOption){
@@ -88,7 +88,7 @@ public class MainMenuState implements IGameState {
 			GL11.glPushMatrix();
 			TextRenderer.getInstance().drawString(options[i].getDesc(), 16, Display.getDisplayMode().getWidth());
 			GL11.glPopMatrix();
-			GL11.glTranslatef(0,-17,0);
+			GL11.glTranslatef(0,17,0);
 		}
 		GL11.glPopMatrix();
 	}

@@ -32,10 +32,10 @@ public class GameObjectInformationState implements IGameState {
 	@Override
 	public void createImage() {
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0, Display.getDisplayMode().getHeight() + 60, 0);
+		GL11.glTranslatef(0, 20, 0);
 		if(gameObject != null){
 			TextRenderer.getInstance().drawString(gameObject.getDetailedDesc(), 16, Display.getDisplayMode().getWidth() - 16);
-			GL11.glTranslatef(0, -16, 0);
+			GL11.glTranslatef(0, 16, 0);
 		}
 		GL11.glPopMatrix();
 	}

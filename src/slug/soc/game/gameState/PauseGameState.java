@@ -79,7 +79,7 @@ public class PauseGameState implements IGameState {
 		//int gy = 30;
 		//g.setFont(FontProvider.getInstance().getFont());
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0,Display.getDisplayMode().getHeight() + 80, 0);
+		GL11.glTranslatef(0,20, 0);
 		for(int i = 0;i < options.length; i++){
 			GL11.glColor3f(0.5f, 0.5f, 0.5f);
 			if(i == currentOption){
@@ -88,7 +88,7 @@ public class PauseGameState implements IGameState {
 			GL11.glPushMatrix();
 			TextRenderer.getInstance().drawString(options[i].getDesc(), 16, Display.getDisplayMode().getWidth());
 			GL11.glPopMatrix();
-			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
+			GL11.glTranslatef(0, DEFAULT_TEXT_SIZE, 0);
 			//g.drawString(options[i].getDesc(), gx, gy);
 			//gy += 30;
 		}

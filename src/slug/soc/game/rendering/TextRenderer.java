@@ -26,13 +26,13 @@ public class TextRenderer {
 		if(tex != null){
 			tex.bind();
 			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
+			GL11.glTexCoord2f(0,1);
 			GL11.glVertex2f(0,0);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f(0+size,0);
 			GL11.glTexCoord2f(1, 1);
+			GL11.glVertex2f(0+size,0);
+			GL11.glTexCoord2f(1, 0);
 			GL11.glVertex2f(0+size,0+size);
-			GL11.glTexCoord2f(0, 1);
+			GL11.glTexCoord2f(0, 0);
 			GL11.glVertex2f(0,0+size);
 			GL11.glEnd();
 		}
@@ -53,7 +53,7 @@ public class TextRenderer {
 	public void drawString(String s, float size, float screenWidth){
 		char[] charArray = s.toCharArray();
 		int i = 0;
-		int charsperline = (int) (screenWidth/size) - 13;
+		int charsperline = (int) Math.floor((screenWidth/size)) - 3;
 		for(Character c : charArray){
 			drawCharacter(c, size);
 			if(i <= charsperline){
@@ -61,7 +61,7 @@ public class TextRenderer {
 				i++;
 			}
 			else{
-				GL11.glTranslatef(-(size * i), -size, 0);
+				GL11.glTranslatef((-(size * i)), size, 0);
 				i = 0;
 			}
 		}
@@ -72,13 +72,13 @@ public class TextRenderer {
 		if(tex != null){
 			tex.bind();
 			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0,0);
+			GL11.glTexCoord2f(0,1);
 			GL11.glVertex2f(0,0);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f(0+size,0);
 			GL11.glTexCoord2f(1, 1);
+			GL11.glVertex2f(0+size,0);
+			GL11.glTexCoord2f(1, 0);
 			GL11.glVertex2f(0+size,0+size);
-			GL11.glTexCoord2f(0, 1);
+			GL11.glTexCoord2f(0, 0);
 			GL11.glVertex2f(0,0+size);
 			GL11.glEnd();
 		}

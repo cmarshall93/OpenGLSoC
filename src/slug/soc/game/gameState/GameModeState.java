@@ -20,6 +20,7 @@ import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectCastle;
 import slug.soc.game.gameObjects.GameObjectCursor;
+import slug.soc.game.gameObjects.GameObjectVillage;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
 import slug.soc.game.rendering.AsciiTextureGenerator;
@@ -39,6 +40,7 @@ public class GameModeState implements IGameState, Runnable {
 	private static final int INFO_UPDATE_RATE = 120;
 	private static final float DEFAULT_TILE_SIZE = 19;
 	private static final float DEFAULT_TEXT_SIZE = 10;
+	private static final int DEFAULT_GRID_SIZE = 25;
 	private static GameModeState instance;
 
 	private long lastFPS;
@@ -127,7 +129,7 @@ public class GameModeState implements IGameState, Runnable {
 			advanceStep();
 			if( i == 500){
 				map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
-				map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
+				map[70][70].addGameObject(new GameObjectVillage(faction.getFactionColor().getColor(), faction));
 			}
 		}
 		//************************************************
@@ -269,13 +271,13 @@ public class GameModeState implements IGameState, Runnable {
 		//int gx;
 		GL11.glPushMatrix();
 
-		GL11.glTranslatef(0f, Display.getDisplayMode().getHeight() + 80 , 0f);
+		GL11.glTranslatef(0f, 20 , 0f);
 		//g.setFont(FontProvider.getInstance().getFont());
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
-		for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
+		for(int y = currentYPos - (DEFAULT_GRID_SIZE / 2) * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (DEFAULT_GRID_SIZE * 1/zoomScales[currentZoomIndex]); y++,my++){
 			//gx = 15;
 			GL11.glPushMatrix();
-			for(int x = currentXPos - 12 * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
+			for(int x = currentXPos - (DEFAULT_GRID_SIZE / 2) * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (DEFAULT_GRID_SIZE * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
 				if(x < 0 || y < 0 || x >= getMap().length || y >= getMap().length ){
 					//g.setColor(Color.BLACK);
 					GL11.glColor3f(1f,1f,1f);
@@ -307,7 +309,7 @@ public class GameModeState implements IGameState, Runnable {
 			}
 			//gy += g.getFont().getSize();
 			GL11.glPopMatrix();
-			GL11.glTranslatef(0, - DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex], 0);
+			GL11.glTranslatef(0, DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex], 0);
 
 		}
 
@@ -316,14 +318,14 @@ public class GameModeState implements IGameState, Runnable {
 
 	private void drawInfo(){
 
-		float textSpace = 425; 
+		float textSpace = Display.getWidth() - (DEFAULT_TILE_SIZE * DEFAULT_GRID_SIZE);
 		//Display.getDisplayMode().getWidth() - DEFAULT_TILE_SIZE * 25;
 
 		System.out.println();
 		//int gx = 510;
 		//int gy = 30;
 		GL11.glPushMatrix();
-		GL11.glTranslatef(DEFAULT_TILE_SIZE * 25, Display.getHeight() + 80, 0);
+		GL11.glTranslatef(DEFAULT_TILE_SIZE * DEFAULT_GRID_SIZE, 20, 0);
 
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont(10f));
 		if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
@@ -334,7 +336,7 @@ public class GameModeState implements IGameState, Runnable {
 			GL11.glPopMatrix();
 		}
 
-		GL11.glTranslatef(0 , -DEFAULT_TEXT_SIZE, 0);
+		GL11.glTranslatef(0 , DEFAULT_TEXT_SIZE, 0);
 		//gy += 11;
 		GL11.glPushMatrix();
 		String out = "X: " + currentXPos.toString();
@@ -349,7 +351,7 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glPopMatrix();
 		//gx -= 50;
 		//gy += 20;
-		GL11.glTranslatef(0, - DEFAULT_TEXT_SIZE, 0);
+		GL11.glTranslatef(0, DEFAULT_TEXT_SIZE, 0);
 		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getOwner() != null){
 			out = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family  (i)";
@@ -370,7 +372,7 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 
-		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 4, 0);
+		GL11.glTranslatef(0, DEFAULT_TEXT_SIZE * 4, 0);
 		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects()> 0 && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
 			GL11.glPushMatrix();
@@ -378,7 +380,7 @@ public class GameModeState implements IGameState, Runnable {
 					+ getMap()[currentYPos][currentXPos].getNumberOfGameObjects() +" objects on this tile");
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 			GL11.glPopMatrix();
-			GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 3, 0);
+			GL11.glTranslatef(0, DEFAULT_TEXT_SIZE * 3, 0);
 
 			String [] desc = getMap()[currentYPos][currentXPos].getCurrentGameObject().getStringDesc();
 			for(int i = 0; i < desc.length; i++){
@@ -389,13 +391,13 @@ public class GameModeState implements IGameState, Runnable {
 				}
 				TextRenderer.getInstance().drawString(string, DEFAULT_TEXT_SIZE, textSpace);
 				GL11.glPopMatrix();
-				GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE, 0);
+				GL11.glTranslatef(0, DEFAULT_TEXT_SIZE, 0);
 			}
 		}
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0, -410 , 0);
+		GL11.glTranslatef(0, 410 , 0);
 		if(viewHoldings){
 			GL11.glColor3f(1, 0, 0);
 			//gy = 480;
@@ -421,7 +423,7 @@ public class GameModeState implements IGameState, Runnable {
 		TextRenderer.getInstance().drawString(f.toString(), DEFAULT_TEXT_SIZE, textSpace);
 		//g.drawString(f.toString(), gx, gy);
 		frames++;
-		GL11.glTranslatef(-300f, -DEFAULT_TEXT_SIZE, 0);
+		GL11.glTranslatef(-300f, DEFAULT_TEXT_SIZE, 0);
 		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
 
@@ -433,7 +435,7 @@ public class GameModeState implements IGameState, Runnable {
 		//int gy = 30;
 		//int gx = 30;
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0, Display.getDisplayMode().getHeight() + 60, 0);
+		GL11.glTranslatef(0, 20, 0);
 		//g.setFont(FontProvider.getInstance().getFont());
 		//g.drawString("Generating world", gx, gy);
 		GL11.glPushMatrix();
@@ -442,7 +444,7 @@ public class GameModeState implements IGameState, Runnable {
 		//gy += 20;
 		GL11.glPushMatrix();
 		for(String s: getGenStatus()){
-			GL11.glTranslatef(0, -30, 0);
+			GL11.glTranslatef(0, 30, 0);
 			//g.drawString(s, gx, gy);
 			GL11.glPushMatrix();
 			TextRenderer.getInstance().drawString(s, 16, Display.getDisplayMode().getWidth());
@@ -461,7 +463,7 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 		GL11.glPushMatrix();
-		GL11.glTranslatef(500, 50, 0);
+		GL11.glTranslatef(500, Display.getHeight(), 0);
 		TextRenderer.getInstance().drawString(loadingString[currentLoadingString], 16, Display.getDisplayMode().getHeight());
 		GL11.glPopMatrix();
 		//g.drawString(loadingString[currentLoadingString], gx, gy);*/

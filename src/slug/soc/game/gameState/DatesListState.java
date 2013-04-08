@@ -34,12 +34,12 @@ public class DatesListState implements IGameState {
 	@Override
 	public void createImage() {
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0, Display.getDisplayMode().getHeight() + 80, 0);
+		GL11.glTranslatef(0, 20, 0);
 		GL11.glPushMatrix();
 			GL11.glColor3f(1f, 1f, 1f);
 			TextRenderer.getInstance().drawString("A History Of Events", 20, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
-		GL11.glTranslatef(0, -20f, 0);
+		GL11.glTranslatef(0, 20f, 0);
 		int i = 0;
 			for(GameCalendarDate date: GameCalendar.getInstance().getKeyDates().keySet()){
 				GL11.glPushMatrix();
@@ -51,7 +51,7 @@ public class DatesListState implements IGameState {
 				}
 				TextRenderer.getInstance().drawString(date.toString(), DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
 				GL11.glPopMatrix();
-				GL11.glTranslatef(0, -16f, 0);
+				GL11.glTranslatef(0, 16f, 0);
 				i++;
 			}
 		GL11.glPopMatrix();

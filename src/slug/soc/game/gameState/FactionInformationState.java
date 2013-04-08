@@ -43,14 +43,14 @@ public class FactionInformationState implements IGameState {
 		GL11.glPushMatrix();
 		//Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
 		//Graphics g = gameImage.getGraphics();
-		GL11.glTranslatef(0, Display.getDisplayMode().getHeight() + 60, 0);
+		GL11.glTranslatef(0, 20, 0);
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont(27f));
 		GL11.glPushMatrix();
 		
 		String string = "The Great House Of " + faction.toString();
 		TextRenderer.getInstance().drawString(string, DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
-		GL11.glTranslatef(0, -DEFAULT_TEXT_SIZE * 2f, 0);
+		GL11.glTranslatef(0, DEFAULT_TEXT_SIZE * 2f, 0);
 		//gy += 30;
 		
 		GL11.glPushMatrix();
