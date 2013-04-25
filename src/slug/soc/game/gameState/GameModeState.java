@@ -112,6 +112,7 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		for(GameObject g : faction.getHoldings()){
 			map[y][x].addGameObject(g);
+			g.setXAndY(x, y);
 			gameObjects.add(g);
 			if(map[y][x].getBiome() != null && map[y][x].getBiome().getContents() != null){
 				for(TerrainObject t: map[y][x].getBiome().getContents()){
@@ -128,8 +129,8 @@ public class GameModeState implements IGameState, Runnable {
 		for(int i = 0; i < 1000; i++){
 			advanceStep();
 			if( i == 500){
-				map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction));
-				map[70][70].addGameObject(new GameObjectVillage(faction.getFactionColor().getColor(), faction));
+				map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction, 70, 70));
+				map[70][70].addGameObject(new GameObjectVillage(faction.getFactionColor().getColor(), faction, 70, 70));
 			}
 		}
 		//************************************************

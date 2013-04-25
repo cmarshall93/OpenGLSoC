@@ -35,8 +35,8 @@ public class GameObjectPerson extends GameObject {
 
 	private Integer troopNumber;
 
-	public GameObjectPerson(Color color, Faction owner, GameObjectPerson mother, GameObjectPerson father) {
-		super(new TilePerson(color), owner);
+	public GameObjectPerson(Color color, Faction owner, GameObjectPerson mother, GameObjectPerson father, int x, int y) {
+		super(new TilePerson(color), owner, x, y);
 
 		bodyFeatures = new ArrayList<AbstractPersonFeature>();
 		faceFeatures = new PersonFaceFeatureSet();
@@ -114,10 +114,10 @@ public class GameObjectPerson extends GameObject {
 
 	public GameObjectPerson haveChild(GameObjectPerson person1, GameObjectPerson person2){
 		if(person1.isFemale() && !person2.isFemale()){
-			return new GameObjectPerson(owner.getFactionColor().getColor(), owner, person1, person2);
+			return new GameObjectPerson(owner.getFactionColor().getColor(), owner, person1, person2, xPos, yPos);
 		}
 		else if(person2.isFemale() && !person1.isFemale()){
-			return new GameObjectPerson(owner.getFactionColor().getColor(), owner, person2, person1);
+			return new GameObjectPerson(owner.getFactionColor().getColor(), owner, person2, person1, xPos, yPos);
 		}
 		else return null;
 	}

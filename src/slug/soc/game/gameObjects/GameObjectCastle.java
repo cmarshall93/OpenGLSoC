@@ -13,8 +13,8 @@ public class GameObjectCastle extends GameObject {
 	private int troopPopulation;
 	private int civPopulation;
 
-	public GameObjectCastle(Color color, Faction owner) {
-		super(new TileCastle(color), owner);
+	public GameObjectCastle(Color color, Faction owner, int x, int y) {
+		super(new TileCastle(color), owner, x, y);
 		troopPopulation = RandomProvider.getInstance().nextInt(201);
 		civPopulation = RandomProvider.getInstance().nextInt(601);
 		

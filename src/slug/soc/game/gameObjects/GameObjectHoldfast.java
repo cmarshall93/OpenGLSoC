@@ -12,8 +12,8 @@ public class GameObjectHoldfast extends GameObject {
 	private int troopPopulation;
 	private int civPopulation;
 
-	public GameObjectHoldfast(Color color, Faction owner) {
-		super(new TileHoldfast(color), owner);
+	public GameObjectHoldfast(Color color, Faction owner, int x, int y){
+		super(new TileHoldfast(color), owner, x, y);
 		troopPopulation = RandomProvider.getInstance().nextInt(101);
 		civPopulation = RandomProvider.getInstance().nextInt(301);
 		

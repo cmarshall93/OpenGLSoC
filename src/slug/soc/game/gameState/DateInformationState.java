@@ -53,7 +53,7 @@ public class DateInformationState implements IGameState {
 			GL11.glPushMatrix();
 			if(currentEventIndex == i){
 				GL11.glColor3f(1f, 1f, 1f);
-				TextRenderer.getInstance().drawString(e.toString() + "(d)", DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
+				TextRenderer.getInstance().drawString(e.toString(), DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
 			}
 			else{
 				GL11.glColor3f(0.6f,0.6f,0.6f);
@@ -75,7 +75,7 @@ public class DateInformationState implements IGameState {
 		else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
 			Game.getInstance().changeToMainScreen();
 		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_D)){//d
+		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
 			GameObjectInformationState.getInstance().setObjectToDetail(events.get(currentEventIndex).getGameObject());
 			Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
 		}

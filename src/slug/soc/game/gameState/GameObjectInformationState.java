@@ -36,6 +36,7 @@ public class GameObjectInformationState implements IGameState {
 		if(gameObject != null){
 			TextRenderer.getInstance().drawString(gameObject.getDetailedDesc(), 16, Display.getDisplayMode().getWidth() - 16);
 			GL11.glTranslatef(0, 16, 0);
+			//TextRenderer.getInstance().drawString(gameObject.getX() + " : " + gameObject.getY(), 16, Display.getDisplayMode().getWidth() - 16);
 		}
 		GL11.glPopMatrix();
 	}

@@ -20,17 +20,17 @@ public class Faction {
 		factionColor = ColorFactory.getInstance().getRandomFactionColor();
 		sigil = HouseSigilGenerator.getInstance().createNewSigilString(factionColor);
 		name = WordGenerator.getInstance().getRandomFactionName();
-		headOfFamily = new GameObjectPerson(factionColor.getColor(), this, null, null);
+		headOfFamily = new GameObjectPerson(factionColor.getColor(), this, null, null, 0, 0);
 
 		/*		 
 		 * This is faction testing stuff
 		 * ----------------------------------------------------------------------------------------------
 		 * */
 		holdings = new ArrayList<GameObject>();
-		GameObjectPerson person = new GameObjectPerson(factionColor.getColor(), this, null, null);
-		holdings.add(new GameObjectHoldfast(factionColor.getColor(), this));
+		GameObjectPerson person = new GameObjectPerson(factionColor.getColor(), this, null, null, 0, 0);
+		holdings.add(new GameObjectHoldfast(factionColor.getColor(), this, 0, 0));
 		holdings.add(headOfFamily);
-		holdings.add(new GameObjectTown(factionColor.getColor(), this));
+		holdings.add(new GameObjectTown(factionColor.getColor(), this, 0 ,0));
 		holdings.add(person);
 
 		GameObjectPerson child =headOfFamily.haveChild(headOfFamily, person); 

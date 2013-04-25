@@ -17,11 +17,15 @@ public abstract class GameObject implements GameDrawable {
 	protected Faction owner;
 	protected String location;
 	protected GameCalendarDate dateCreated;
+	protected int xPos;
+	protected int yPos;
 	
-	public GameObject(GameTile tile, Faction owner){
+	public GameObject(GameTile tile, Faction owner, int x, int y){
 		this.tile = tile;	
 		this.owner = owner;
 		dateCreated = GameCalendar.getInstance().getCurrentDate();
+		xPos = x;
+		yPos = y;
 	}
 	
 	public GameCalendarDate getDateCreated(){
@@ -38,6 +42,19 @@ public abstract class GameObject implements GameDrawable {
 	
 	public void setLocation(String location){
 		this.location =  location;
+	}
+	
+	public void setXAndY(int x, int y){
+		xPos = x;
+		yPos = y;
+	}
+	
+	public int getX(){
+		return xPos;
+	}
+	
+	public int getY(){
+		return yPos;
 	}
 	
 	public abstract String[] getStringDesc();

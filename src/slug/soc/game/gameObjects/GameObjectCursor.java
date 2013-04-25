@@ -5,7 +5,7 @@ import slug.soc.game.gameObjects.tiles.faction.TileCursor;
 public class GameObjectCursor extends GameObject {
 
 	public GameObjectCursor() {
-		super(new TileCursor(), null);
+		super(new TileCursor(), null, 0, 0);
 	}
 
 	@Override

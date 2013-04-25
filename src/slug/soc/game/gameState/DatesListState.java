@@ -62,7 +62,7 @@ public class DatesListState implements IGameState {
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
 			nextDate(-1);
 		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){//d
+		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
 			DateInformationState.getInstance().setDateToDisplay((GameCalendarDate)dates.keySet().toArray()[currentDateIndex]);
 			Game.getInstance().changeToNextGameState(DateInformationState.getInstance());
 		}

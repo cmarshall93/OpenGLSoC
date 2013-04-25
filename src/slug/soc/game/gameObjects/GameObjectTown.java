@@ -14,8 +14,8 @@ public class GameObjectTown extends GameObject {
 	private int population;
 	private String name;
 
-	public GameObjectTown(Color color, Faction owner) {
-		super(new TileTown(color), owner);
+	public GameObjectTown(Color color, Faction owner, int x, int y) {
+		super(new TileTown(color), owner, x, y);
 		troops = RandomProvider.getInstance().nextInt(100) +30;
 		population = RandomProvider.getInstance().nextInt(2000) + 200;
 		name = WordGenerator.getInstance().getRandomPlaceName();

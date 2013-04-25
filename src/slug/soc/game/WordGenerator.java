@@ -11,17 +11,17 @@ public class WordGenerator {
 
 	private File nounsFile = new File("nouns.txt");
 	private File verbsFile = new File("verbs.txt");
-	private File maleFirstNameFile = new File("maleFirstNames.txt");
-	private File femaleFirstNameFile = new File("femaleFirstNames.txt");
-	private File surnamePrefixFile = new File("surnamePrefix.txt");
-	private File surnameSuffixFile = new File("surnameSuffix.txt");
-	private File surnameWholeFile = new File("surnameWhole.txt");
+	private File maleFirstNameFile = new File("people/names/maleFirstNames.txt");
+	private File femaleFirstNameFile = new File("people/namesfemaleFirstNames.txt");
+	private File surnamePrefixFile = new File("people/names/surnamePrefix.txt");
+	private File surnameSuffixFile = new File("people/names/surnameSuffix.txt");
+	private File surnameWholeFile = new File("people/names/surnameWhole.txt");
 	private File sizeFile = new File("sizes.txt");
 	private File lengthsFile = new File("lengths.txt");
-	private File hairColoursFile = new File("hairColours.txt");
-	private File eyeColoursFile = new File("eyeColours.txt");
-	private File placeSuffixFile = new File("placeSuffix.txt");
-	private File placesPrefixFile = new File("placePrefix.txt");
+	private File hairColoursFile = new File("people/features/hairColours.txt");
+	private File eyeColoursFile = new File("people/features/eyeColours.txt");
+	private File placeSuffixFile = new File("places/placeSuffix.txt");
+	private File placesPrefixFile = new File("places/placePrefix.txt");
 	
 	private Scanner scanner;
 	
