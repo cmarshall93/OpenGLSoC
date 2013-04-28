@@ -71,5 +71,9 @@ public class FactionInformationState implements IGameState {
 		else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
 			Game.getInstance().changeToMainScreen();
 		}
+//		else if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+//			GameObjectInformationState.getInstance().setObjectToDetail(faction.getHeadOfFamily());
+//			Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
+//		}
 	}
 }

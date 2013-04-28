@@ -11,5 +11,13 @@ public class TerrainObjectMountain extends TerrainObject {
 	public String toString(){
 		return (getBiomeString() + "Mountain");
 	}
+	
+	public String getDesc(){
+		String out = "";
+		if(hasResources){
+			out +="This mountain is said to contain iron";
+		}
+		return out;
+	}
 
 }

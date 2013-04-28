@@ -3,6 +3,7 @@ package slug.soc.game.gameObjects;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.tiles.GameTile;
 
 /**
@@ -20,6 +21,8 @@ public abstract class TerrainObject implements GameDrawable{
 	private int numberOfGameObjects;
 	private int gameObjectIndex;
 
+	protected boolean hasResources;
+	
 	private boolean isBiome;
 	private Biome biome;
 	public boolean isBuildable;
@@ -34,6 +37,9 @@ public abstract class TerrainObject implements GameDrawable{
 		gameObjectIndex = 0;
 		this.isBuildable = isBuildable;
 		owner = null;
+		if(RandomProvider.getInstance().nextBoolean()){
+			hasResources = true;
+		}
 	}
 
 	public GameTile getTile(){
@@ -131,5 +137,13 @@ public abstract class TerrainObject implements GameDrawable{
 	
 	public boolean isBuildable(){
 		return isBuildable;
+	}
+	
+	public String getDesc(){
+		return "";
+	}
+
+	public boolean hasResources() {
+		return hasResources;
 	}
 }

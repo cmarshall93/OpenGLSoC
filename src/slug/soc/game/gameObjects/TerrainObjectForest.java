@@ -12,4 +12,13 @@ public class TerrainObjectForest extends TerrainObject {
 	public String toString(){
 		return ("The " + getBiomeString() + "Forest");
 	}
+
+	@Override
+	public String getDesc() {
+		String out = "";
+		if(hasResources){
+			out += "This forset is said to contain deer.";
+		}
+		return out;
+	}
 }

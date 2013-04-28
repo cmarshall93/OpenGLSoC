@@ -11,4 +11,13 @@ public class TerrainObjectGrassPlain extends TerrainObject {
 	public String toString(){
 		return ("The " + getBiomeString()+ "Plains");
 	}
+
+	@Override
+	public String getDesc() {
+		String out = "";
+		if(hasResources){
+			out = "This plain is said to contain deer.";
+		}
+		return out;
+	}
 }

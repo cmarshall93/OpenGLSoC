@@ -48,6 +48,7 @@ public class GameModeState implements IGameState, Runnable {
 	private int frames;
 
 	private boolean viewHoldings;
+	private boolean viewResources;
 
 	private TerrainObject[][] map;
 	private ArrayList<GameObject> gameObjects;
@@ -241,6 +242,9 @@ public class GameModeState implements IGameState, Runnable {
 		else if(Keyboard.isKeyDown(Keyboard.KEY_T)){
 			Game.getInstance().changeToNextGameState(DatesListState.getInstance());
 		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_R)){
+			viewResources = !viewResources;
+		}
 	}
 
 	public void createImage(){		
@@ -293,6 +297,9 @@ public class GameModeState implements IGameState, Runnable {
 						//g.setColor(map[y][x].getOwner().getFactionColor().getColor());
 						Color color = map[y][x].getOwner().getFactionColor().getColor();
 						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
+					}
+					if(viewResources && map[y][x].hasResources()){
+						GL11.glColor3f(1f,1f,1f);
 					}
 					else{//default viewing
 						//g.setColor(getMap()[y][x].getTile().getColor());
@@ -355,14 +362,20 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glTranslatef(0, DEFAULT_TEXT_SIZE, 0);
 		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getOwner() != null){
+			GL11.glPushMatrix();
 			out = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family  (i)";
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 			GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
+			GL11.glPopMatrix();
 		}
 		else{
+			GL11.glPushMatrix();
 			out = "Unclaimed land";
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
+			GL11.glPopMatrix();
 		}
+		GL11.glTranslatef(0,DEFAULT_TEXT_SIZE * 2,0);
+		TextRenderer.getInstance().drawString(getMap()[currentYPos][currentXPos].getDesc(), DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
 
 
@@ -404,13 +417,19 @@ public class GameModeState implements IGameState, Runnable {
 			//gy = 480;
 			//gx = 520;
 			//g.drawString("Holdings View", gx, gy);
-			GL11.glPushMatrix();
+			//GL11.glPushMatrix();
 			out = "Holdings View";
 			GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
-			GL11.glPopMatrix();
+			//GL11.glPopMatrix();
 
 			GL11.glColor3f(1, 1, 1);
+		}
+		if(cursorActive){
+			TextRenderer.getInstance().drawString(" (Cursor Active)", DEFAULT_TEXT_SIZE, textSpace);
+		}
+		if(viewResources){
+			TextRenderer.getInstance().drawString(" (Resources View)", DEFAULT_TEXT_SIZE, textSpace);
 		}
 		//gy = 480;
 		//gx = 980;
@@ -426,6 +445,7 @@ public class GameModeState implements IGameState, Runnable {
 		frames++;
 		GL11.glTranslatef(-300f, DEFAULT_TEXT_SIZE, 0);
 		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), DEFAULT_TEXT_SIZE, textSpace);
+		
 		GL11.glPopMatrix();
 
 		GL11.glPopMatrix();

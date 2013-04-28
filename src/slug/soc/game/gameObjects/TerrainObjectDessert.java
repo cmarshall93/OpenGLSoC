@@ -11,4 +11,10 @@ public class TerrainObjectDessert extends TerrainObject {
 	public String toString(){
 		return ("The " + getBiomeString() + "Beach");
 	}
+
+	@Override
+	public String getDesc() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
