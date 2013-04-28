@@ -14,6 +14,7 @@ import slug.soc.game.gameObjects.peopleFeatures.BodyPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.EarPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.EyePersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.HairPersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.MouthPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.NosePersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.PersonFaceFeatureSet;
 import slug.soc.game.gameObjects.tiles.faction.TilePerson;
@@ -161,6 +162,7 @@ public class GameObjectPerson extends GameObject {
 		out += secondPerson + " has " + faceFeatures.getHair().getDesc();
 		out += secondPerson + " has " + faceFeatures.getEyes().getDesc();
 		out += secondPerson + " has " + faceFeatures.getEars().getDesc();
+		out += secondPerson + " has " + faceFeatures.getMouth().getDesc();
 		return out;
 	}
 
@@ -193,12 +195,20 @@ public class GameObjectPerson extends GameObject {
 			else{
 				faceFeatures.setEars(father.getFaceFeatures().getEars());
 			}
+			
+			if(RandomProvider.getInstance().nextBoolean()){
+				faceFeatures.setMouth(mother.getFaceFeatures().getMouth());
+			}
+			else{
+				faceFeatures.setMouth(father.getFaceFeatures().getMouth());
+			}
 		}
 		else{
 			faceFeatures.setNose(new NosePersonFeature());
 			faceFeatures.setHair(new HairPersonFeature());
 			faceFeatures.setEyes(new EyePersonFeature());
 			faceFeatures.setEars(new EarPersonFeature());
+			faceFeatures.setMouth(new MouthPersonFeature());
 
 			bodyFeatures.add(new BodyPersonFeature());
 
