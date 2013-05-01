@@ -17,7 +17,7 @@ public class TerrainObjectForest extends TerrainObject {
 	public String getDesc() {
 		String out = "";
 		if(hasResources){
-			out += "This forset is said to contain deer.";
+			out += "This forset is said to contain elk.";
 		}
 		return out;
 	}

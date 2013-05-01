@@ -52,6 +52,7 @@ public class GameModeState implements IGameState, Runnable {
 
 	private TerrainObject[][] map;
 	private ArrayList<GameObject> gameObjects;
+	private Faction faction;
 
 	private TerrianGenerator terrianGenerator;
 	private GameObjectCursor cursor = new GameObjectCursor();
@@ -97,7 +98,7 @@ public class GameModeState implements IGameState, Runnable {
 		currentYPos = 50;
 
 		//**************faction testing*******************		
-		Faction faction = new Faction();
+		faction = new Faction();
 		System.out.println(faction.getSigil());
 		int x = 50;
 		int y = 50;
@@ -225,7 +226,9 @@ public class GameModeState implements IGameState, Runnable {
 			Game.getInstance().changeToNextGameState(PauseGameState.getInstance());
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_H)){//h
-			viewHoldings = !viewHoldings;
+			if(!viewResources){
+				viewHoldings = !viewHoldings;
+			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_I)){
 			if(getMap()[currentYPos][currentXPos].getOwner() != null){
@@ -243,7 +246,9 @@ public class GameModeState implements IGameState, Runnable {
 			Game.getInstance().changeToNextGameState(DatesListState.getInstance());
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_R)){
-			viewResources = !viewResources;
+			if(!viewHoldings){
+				viewResources = !viewResources;
+			}
 		}
 	}
 
@@ -258,6 +263,8 @@ public class GameModeState implements IGameState, Runnable {
 			GL11.glColor3f(1f, 1f, 1f);
 			//g.drawLine(500, 0, 500, 500);
 			drawInfo();
+			drawTopBar();
+			drawConfirmBox();
 		}
 		else{
 			drawLoading();
@@ -333,7 +340,7 @@ public class GameModeState implements IGameState, Runnable {
 		//int gx = 510;
 		//int gy = 30;
 		GL11.glPushMatrix();
-		GL11.glTranslatef(DEFAULT_TILE_SIZE * DEFAULT_GRID_SIZE, 20, 0);
+		GL11.glTranslatef(DEFAULT_TILE_SIZE * DEFAULT_GRID_SIZE, 20 + (DEFAULT_TEXT_SIZE / 2), 0);
 
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont(10f));
 		if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
@@ -418,7 +425,7 @@ public class GameModeState implements IGameState, Runnable {
 			//gx = 520;
 			//g.drawString("Holdings View", gx, gy);
 			//GL11.glPushMatrix();
-			out = "Holdings View";
+			out = "(Holdings View)";
 			GL11.glTranslatef(DEFAULT_TEXT_SIZE, 0, 0);
 			TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE, textSpace);
 			//GL11.glPopMatrix();
@@ -445,11 +452,43 @@ public class GameModeState implements IGameState, Runnable {
 		frames++;
 		GL11.glTranslatef(-300f, DEFAULT_TEXT_SIZE, 0);
 		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), DEFAULT_TEXT_SIZE, textSpace);
-		
-		GL11.glPopMatrix();
 
 		GL11.glPopMatrix();
 
+		GL11.glPopMatrix();
+
+	}
+	
+	private void drawTopBar(){
+		GL11.glPushMatrix();
+			GL11.glTranslatef(0,DEFAULT_TEXT_SIZE/2, 0);
+			GL11.glColor3f(1f, 1f, 0f);
+			TextRenderer.getInstance().drawString(" Gold : " + faction.getMoney(), 12, 
+					Display.getDisplayMode().getWidth());
+			GL11.glColor3f(1f,1f,1f);
+			GL11.glBegin(GL11.GL_QUADS);
+				GL11.glVertex3f(0,0,0);
+				GL11.glVertex3f(900, 0, 0);
+				GL11.glVertex3f(900, 20, 0);
+				GL11.glVertex3f(0, 20, 0);
+			GL11.glEnd();
+		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+			GL11.glTranslatef(Display.getDisplayMode().getWidth() - GameCalendar.getInstance().getCurrentDateAsString().length() * DEFAULT_TEXT_SIZE
+					, DEFAULT_TEXT_SIZE/2, 0);
+			TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), 12,
+					Display.getDisplayMode().getWidth());
+		GL11.glPopMatrix();
+	}
+	
+	private void drawConfirmBox(){
+		GL11.glPushMatrix();
+			GL11.glTranslatef(Display.getDisplayMode().getWidth() / 2 - (16 * 5), Display.getDisplayMode().getHeight()/2, 0);
+			GL11.glBegin(GL11.GL_QUADS);
+				GL11.glColor3f(1f,1f,1f);
+				TextRenderer.getInstance().drawString("0123456789", 16, 180);
+			GL11.glEnd();
+		GL11.glPopMatrix();
 	}
 
 	private void drawLoading(){

@@ -2,6 +2,7 @@ package slug.soc.game.gameObjects;
 
 import java.util.ArrayList;
 
+import slug.soc.game.RandomProvider;
 import slug.soc.game.worldBuilding.ColorFactory;
 import slug.soc.game.worldBuilding.FactionColor;
 import slug.soc.game.worldBuilding.HouseSigilGenerator;
@@ -13,6 +14,7 @@ public class Faction {
 	private String sigil;
 	private ArrayList<GameObject> holdings;
 	private String name;
+	private long money;
 
 	private GameObjectPerson headOfFamily;
 
@@ -21,6 +23,7 @@ public class Faction {
 		sigil = HouseSigilGenerator.getInstance().createNewSigilString(factionColor);
 		name = WordGenerator.getInstance().getRandomFactionName();
 		headOfFamily = new GameObjectPerson(factionColor.getColor(), this, null, null, 0, 0);
+		money = RandomProvider.getInstance().nextInt(100000);
 
 		/*		 
 		 * This is faction testing stuff
@@ -56,6 +59,10 @@ public class Faction {
 
 	public GameObjectPerson getHeadOfFamily(){
 		return headOfFamily;
+	}
+	
+	public long getMoney(){
+		return money;
 	}
 
 	public String toString(){

@@ -16,7 +16,7 @@ public class TerrainObjectGrassHill extends TerrainObject {
 	public String getDesc() {
 		String out = "";
 		if(hasResources){
-			out = "This forest is said to contain elk";
+			out = "This hill is said to contain chalk";
 		}
 		return out;
 	}

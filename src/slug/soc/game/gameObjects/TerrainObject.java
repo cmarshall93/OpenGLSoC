@@ -37,7 +37,7 @@ public abstract class TerrainObject implements GameDrawable{
 		gameObjectIndex = 0;
 		this.isBuildable = isBuildable;
 		owner = null;
-		if(RandomProvider.getInstance().nextBoolean()){
+		if(RandomProvider.getInstance().nextInt(20) == 1){
 			hasResources = true;
 		}
 	}

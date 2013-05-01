@@ -17,7 +17,7 @@ public class TerrainObjectWater extends TerrainObject {
 	public String getDesc() {
 		String out = "";
 		if(hasResources){
-			out += "This body of water is said to contain rare whales.";
+			out += "This body of water is said to contain rare fish.";
 		}
 		return out;
 	}
