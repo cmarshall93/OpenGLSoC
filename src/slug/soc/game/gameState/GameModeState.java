@@ -49,6 +49,7 @@ public class GameModeState implements IGameState, Runnable {
 
 	private boolean viewHoldings;
 	private boolean viewResources;
+	private boolean confirmNextTurnDialog;
 
 	private TerrainObject[][] map;
 	private ArrayList<GameObject> gameObjects;
@@ -250,6 +251,15 @@ public class GameModeState implements IGameState, Runnable {
 				viewResources = !viewResources;
 			}
 		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_N)){
+			confirmNextTurnDialog = !confirmNextTurnDialog;
+		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_Y)){
+			if(confirmNextTurnDialog){
+				advanceStep();
+				confirmNextTurnDialog = !confirmNextTurnDialog;
+			}
+		}
 	}
 
 	public void createImage(){		
@@ -264,7 +274,9 @@ public class GameModeState implements IGameState, Runnable {
 			//g.drawLine(500, 0, 500, 500);
 			drawInfo();
 			drawTopBar();
-			drawConfirmBox();
+			if(confirmNextTurnDialog){
+				drawConfirmBox();
+			}
 		}
 		else{
 			drawLoading();
@@ -305,7 +317,7 @@ public class GameModeState implements IGameState, Runnable {
 						Color color = map[y][x].getOwner().getFactionColor().getColor();
 						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
 					}
-					if(viewResources && map[y][x].hasResources()){
+					else if(viewResources && map[y][x].hasResources()){
 						GL11.glColor3f(1f,1f,1f);
 					}
 					else{//default viewing
@@ -335,8 +347,6 @@ public class GameModeState implements IGameState, Runnable {
 
 		float textSpace = Display.getWidth() - (DEFAULT_TILE_SIZE * DEFAULT_GRID_SIZE);
 		//Display.getDisplayMode().getWidth() - DEFAULT_TILE_SIZE * 25;
-
-		System.out.println();
 		//int gx = 510;
 		//int gy = 30;
 		GL11.glPushMatrix();
@@ -458,36 +468,44 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glPopMatrix();
 
 	}
-	
+
 	private void drawTopBar(){
 		GL11.glPushMatrix();
-			GL11.glTranslatef(0,DEFAULT_TEXT_SIZE/2, 0);
-			GL11.glColor3f(1f, 1f, 0f);
-			TextRenderer.getInstance().drawString(" Gold : " + faction.getMoney(), 12, 
-					Display.getDisplayMode().getWidth());
-			GL11.glColor3f(1f,1f,1f);
-			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glVertex3f(0,0,0);
-				GL11.glVertex3f(900, 0, 0);
-				GL11.glVertex3f(900, 20, 0);
-				GL11.glVertex3f(0, 20, 0);
-			GL11.glEnd();
+		GL11.glTranslatef(0,DEFAULT_TEXT_SIZE/2, 0);
+		GL11.glColor3f(1f, 1f, 0f);
+		TextRenderer.getInstance().drawString(" Gold : " + faction.getMoney(), 12, 
+				Display.getDisplayMode().getWidth());
+		GL11.glColor3f(1f,1f,1f);
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glVertex3f(0,0,0);
+		GL11.glVertex3f(900, 0, 0);
+		GL11.glVertex3f(900, 20, 0);
+		GL11.glVertex3f(0, 20, 0);
+		GL11.glEnd();
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
-			GL11.glTranslatef(Display.getDisplayMode().getWidth() - GameCalendar.getInstance().getCurrentDateAsString().length() * DEFAULT_TEXT_SIZE
-					, DEFAULT_TEXT_SIZE/2, 0);
-			TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), 12,
-					Display.getDisplayMode().getWidth());
+		GL11.glTranslatef(Display.getDisplayMode().getWidth() - (GameCalendar.getInstance().getCurrentDateAsString().length() * DEFAULT_TEXT_SIZE) - 50
+				, DEFAULT_TEXT_SIZE/2, 0);
+		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), 12,
+				Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 	}
-	
+
 	private void drawConfirmBox(){
 		GL11.glPushMatrix();
-			GL11.glTranslatef(Display.getDisplayMode().getWidth() / 2 - (16 * 5), Display.getDisplayMode().getHeight()/2, 0);
-			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glColor3f(1f,1f,1f);
-				TextRenderer.getInstance().drawString("0123456789", 16, 180);
-			GL11.glEnd();
+		GL11.glTranslatef((DEFAULT_TILE_SIZE * DEFAULT_GRID_SIZE)/2 - 120, Display.getDisplayMode().getHeight()/2 - 35, 0);
+		GL11.glColor3f(1f,1f,1f);
+		GL11.glBegin(GL11.GL_POLYGON);
+		GL11.glVertex2f(0,0);
+		GL11.glVertex2f(0,70);
+		GL11.glVertex2f(260,70);
+		GL11.glVertex2f(260,0);
+		GL11.glEnd();	
+
+		TextRenderer.getInstance().drawString(" Do you want to advance to the next turn? ", 16, 260);
+		GL11.glTranslatef(-(4*43),20,0);
+		TextRenderer.getInstance().drawString( "Yes (y) No(n)", 16, 260);
+
 		GL11.glPopMatrix();
 	}
 

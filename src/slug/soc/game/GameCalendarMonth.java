@@ -10,6 +10,7 @@ public class GameCalendarMonth {
 	
 	public GameCalendarMonth(String name, int daysInMonth){
 		DAYS_IN_MONTH = daysInMonth;
+		currentDay = 1;
 		this.name = name;
 	}
 	
@@ -23,6 +24,7 @@ public class GameCalendarMonth {
 			return this;
 		}
 		else{
+			currentDay = 1;
 			return nextMonth;
 		}
 	}
