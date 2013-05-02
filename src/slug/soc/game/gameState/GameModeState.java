@@ -117,23 +117,16 @@ public class GameModeState implements IGameState, Runnable {
 			map[y][x].addGameObject(g);
 			g.setXAndY(x, y);
 			gameObjects.add(g);
-			if(map[y][x].getBiome() != null && map[y][x].getBiome().getContents() != null){
-				for(TerrainObject t: map[y][x].getBiome().getContents()){
-					if(t != null){
-						t.setOwner(faction);
+			
+			int w = 7;
+			int h = 7;
+			
+			for(int wi = (w/2) * -1 ;wi <= w/2 ;wi++){
+				for(int hi = (h/2) * -1;hi <= h/2;hi++){
+					if(map[y + hi][x + wi].getBiome() != null && map[y + hi][x + wi].getBiome().getContents() != null){
+					map[y + hi][x + wi].setOwner(faction);
 					}
 				}
-				y++;
-			}
-		}
-
-		//testing multiple object on one tile
-
-		for(int i = 0; i < 1000; i++){
-			advanceStep();
-			if( i == 500){
-				map[70][70].addGameObject(new GameObjectCastle(faction.getFactionColor().getColor(), faction, 70, 70));
-				map[70][70].addGameObject(new GameObjectVillage(faction.getFactionColor().getColor(), faction, 70, 70));
 			}
 		}
 		//************************************************
