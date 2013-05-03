@@ -117,19 +117,23 @@ public class GameModeState implements IGameState, Runnable {
 			map[y][x].addGameObject(g);
 			g.setXAndY(x, y);
 			gameObjects.add(g);
-			
+
 			int w = 7;
 			int h = 7;
-			
+
 			for(int wi = (w/2) * -1 ;wi <= w/2 ;wi++){
 				for(int hi = (h/2) * -1;hi <= h/2;hi++){
 					if(map[y + hi][x + wi].getBiome() != null && map[y + hi][x + wi].getBiome().getContents() != null){
-					map[y + hi][x + wi].setOwner(faction);
+						map[y + hi][x + wi].setOwner(faction);
 					}
 				}
 			}
 		}
 		//************************************************
+
+		for(int i = 0;i < 999; i++){
+			advanceStep();
+		}
 
 		long end = System.nanoTime();
 		System.out.println("GenTime: " + (end - start)/1000000);
@@ -419,9 +423,10 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 		GL11.glPopMatrix();
+		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0, 410 , 0);
+		GL11.glTranslatef(0, Display.getDisplayMode().getHeight() - (DEFAULT_TEXT_SIZE * 2) , 0);
 		if(viewHoldings){
 			GL11.glColor3f(1, 0, 0);
 			//gy = 480;
@@ -449,14 +454,14 @@ public class GameModeState implements IGameState, Runnable {
 			lastFPS += 1000;
 		}
 		Integer f = currentFPS;
-		GL11.glTranslatef(300, 0, 0);
+		GL11.glTranslatef(0, 0, 0);
 		TextRenderer.getInstance().drawString(f.toString(), DEFAULT_TEXT_SIZE, textSpace);
 		//g.drawString(f.toString(), gx, gy);
 		frames++;
-		GL11.glTranslatef(-300f, DEFAULT_TEXT_SIZE, 0);
-		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), DEFAULT_TEXT_SIZE, textSpace);
+		//GL11.glTranslatef(-300f, DEFAULT_TEXT_SIZE, 0);
+		//TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), DEFAULT_TEXT_SIZE, textSpace);
 
-		GL11.glPopMatrix();
+		//GL11.glPopMatrix();
 
 		GL11.glPopMatrix();
 

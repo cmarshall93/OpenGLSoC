@@ -62,10 +62,11 @@ public class GameCalendar {
 	}
 
 	public void advanceDay(){
-		currentMonth = currentMonth.advanceDay();
-		if(currentMonth.equals(startOfYear)){
+		GameCalendarMonth nextMonth = currentMonth.advanceDay();
+		if(nextMonth.equals(startOfYear) && !currentMonth.equals(startOfYear)){
 			year++;
 		}
+		currentMonth = nextMonth;
 		currentDate = new GameCalendarDate(year, currentMonth);
 	}
 
