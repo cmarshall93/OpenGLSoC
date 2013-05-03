@@ -22,6 +22,7 @@ public abstract class TerrainObject implements GameDrawable{
 	private int gameObjectIndex;
 
 	protected boolean hasResources;
+	protected int amountOfResources;
 	
 	private boolean isBiome;
 	private Biome biome;
