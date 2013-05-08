@@ -14,4 +14,8 @@ public class TerrainObjectRiverBottomLeftCorner extends TerrainObject {
 	public String toString(){
 		return "River";
 	}
+	
+	public String getTypeString(){
+		return "river";
+	}
 }

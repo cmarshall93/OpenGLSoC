@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import slug.soc.game.RandomProvider;
+import slug.soc.game.gameObjects.tileResources.AbstractResource;
+import slug.soc.game.gameObjects.tileResources.GoldResource;
 import slug.soc.game.gameObjects.tiles.GameTile;
 
 /**
@@ -22,7 +24,7 @@ public abstract class TerrainObject implements GameDrawable{
 	private int gameObjectIndex;
 
 	protected boolean hasResources;
-	protected int amountOfResources;
+	protected AbstractResource resource;
 	
 	private boolean isBiome;
 	private Biome biome;
@@ -40,6 +42,7 @@ public abstract class TerrainObject implements GameDrawable{
 		owner = null;
 		if(RandomProvider.getInstance().nextInt(20) == 1){
 			hasResources = true;
+			resource = new GoldResource();
 		}
 	}
 
@@ -141,10 +144,16 @@ public abstract class TerrainObject implements GameDrawable{
 	}
 	
 	public String getDesc(){
-		return "";
+		String out = "";
+		if(hasResources){
+			out += "This " + getTypeString() + " is said to contain " + resource.getDesc();
+		}
+		return out;
 	}
 
 	public boolean hasResources() {
 		return hasResources;
 	}
+	
+	public abstract String getTypeString();
 }

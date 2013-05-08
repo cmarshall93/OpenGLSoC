@@ -17,4 +17,8 @@ public class TerrainObjectDessert extends TerrainObject {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public String getTypeString(){
+		return "dessert";
+	}
 }

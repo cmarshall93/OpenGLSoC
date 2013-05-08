@@ -13,13 +13,8 @@ public class TerrainObjectWater extends TerrainObject {
 		return (getBiomeString() + "Water");
 	}
 
-	@Override
-	public String getDesc() {
-		String out = "";
-		if(hasResources){
-			out += "This body of water is said to contain rare fish.";
-		}
-		return out;
+	public String getTypeString(){
+		return "water";
 	}
 
 }
