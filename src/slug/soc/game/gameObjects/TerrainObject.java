@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import slug.soc.game.RandomProvider;
+import slug.soc.game.ResourceFactory;
 import slug.soc.game.gameObjects.tileResources.AbstractResource;
 import slug.soc.game.gameObjects.tileResources.GoldResource;
 import slug.soc.game.gameObjects.tiles.GameTile;
@@ -42,7 +43,7 @@ public abstract class TerrainObject implements GameDrawable{
 		owner = null;
 		if(RandomProvider.getInstance().nextInt(20) == 1){
 			hasResources = true;
-			resource = new GoldResource();
+			resource = ResourceFactory.getInstance().getRandomResource();
 		}
 	}
 

@@ -2,10 +2,10 @@ package slug.soc.game.gameObjects.tileResources;
 
 import slug.soc.game.RandomProvider;
 
-public class GoldResource extends AbstractResource {
+public class IronResource extends AbstractResource {
 
-	public GoldResource(){
-		super("Gold", RandomProvider.getInstance().nextInt(25000) + 1000);
+	public IronResource(){
+		super("Iron", RandomProvider.getInstance().nextInt(25000) + 1000);
 	}
 
 	@Override
@@ -25,8 +25,9 @@ public class GoldResource extends AbstractResource {
 			amount = "vast";
 		}
 		
-		out +=" a " + amount +" amount of gold";
+		out +=" a " + amount +" amount of iron";
 		return out;
 	}
 	
 }
+
