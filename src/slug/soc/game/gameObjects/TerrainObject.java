@@ -43,7 +43,7 @@ public abstract class TerrainObject implements GameDrawable{
 		owner = null;
 		if(RandomProvider.getInstance().nextInt(20) == 1){
 			hasResources = true;
-			resource = ResourceFactory.getInstance().getRandomResource();
+			resource = ResourceFactory.getInstance().getRandomLandResource();
 		}
 	}
 
