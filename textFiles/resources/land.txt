@@ -1,0 +1,9 @@
+Iron:25000
+Gold:17500
+Sapphires:5000
+Moose:5000
+Deer:5000
+Elk:5000
+Coal:25000
+
+

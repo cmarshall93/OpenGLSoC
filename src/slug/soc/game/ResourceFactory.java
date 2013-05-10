@@ -1,7 +1,10 @@
 package slug.soc.game;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import slug.soc.game.gameObjects.tileResources.AbstractResource;
 import slug.soc.game.gameObjects.tileResources.DeerResource;
@@ -15,19 +18,10 @@ public class ResourceFactory {
 
 	private static ResourceFactory instance;
 	
-	private ArrayList<AbstractResource> landResourceList;
-	private ArrayList<AbstractResource> seaResourceList;
-	
+	private File resourcesFile;
+
 	private ResourceFactory(){
-		landResourceList = new ArrayList<AbstractResource>();
-		landResourceList.add(new DeerResource());
-		landResourceList.add(new GoldResource());
-		landResourceList.add(new IronResource());
-		landResourceList.add(new SapphireResource());
-		
-		seaResourceList = new ArrayList<AbstractResource>();
-		seaResourceList.add(new FishResource());
-		seaResourceList.add(new LobsterResource());
+		resourcesFile = new File("resources/land.txt");
 	}
 	
 	public static ResourceFactory getInstance(){
@@ -38,21 +32,16 @@ public class ResourceFactory {
 	}
 	
 	public AbstractResource getRandomLandResource(){
-		AbstractResource r = landResourceList.get(RandomProvider.getInstance().nextInt(landResourceList.size()));
-		try {
-			return (AbstractResource) Class.forName(r.getClass().getName()).getConstructor().newInstance();
-		} catch (Exception e) {
-		} 
-		return r;
+		String resourceString = WordGenerator.getInstance().getRandomLandResource();
+		String resourceName = resourceString.substring(0, resourceString.indexOf(':'));
+		Integer resourceAmount = Integer.parseInt(resourceString.substring(resourceString.indexOf(':') + 1, resourceString.length()));
+		return new AbstractResource(resourceName, RandomProvider.getInstance().nextInt(resourceAmount), resourceAmount);
 	}
 	
 	public AbstractResource getRandomSeaResource(){
-		AbstractResource r = seaResourceList.get(RandomProvider.getInstance().nextInt(seaResourceList.size()));
-		try {
-			return (AbstractResource) Class.forName(r.getClass().getName()).getConstructor().newInstance();
-		} catch (Exception e) {
-		} 
-		return r;
-		}
-	
+		String resourceString = WordGenerator.getInstance().getRandomSeaResource();
+		String resourceName = resourceString.substring(0, resourceString.indexOf(':'));
+		Integer resourceAmount = Integer.parseInt(resourceString.substring(resourceString.indexOf(':') + 1, resourceString.length()));
+		return new AbstractResource(resourceName, RandomProvider.getInstance().nextInt(resourceAmount), resourceAmount);
+	}
 }

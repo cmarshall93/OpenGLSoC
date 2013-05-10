@@ -1,0 +1,3 @@
+fish:25000
+lobster:15000
+pearls:10000

@@ -1,26 +1,46 @@
 package slug.soc.game.gameObjects.tileResources;
 
-public abstract class AbstractResource {
+public class AbstractResource {
 
 	protected String name;
+	protected int averageCount;
 	protected int count;
-	
-	public AbstractResource(String name, int intialCount){
+
+	public AbstractResource(String name, int intialCount, int averageCount){
 		this.name = name;
+		this.averageCount = averageCount;
 		count = intialCount;
 	}
-	
+
 	public void decrementCount(int amount){
 		count -= amount;
 	}
-	
+
 	public String getName(){
 		return name;	
 	}
-	
+
 	public int getCount(){
 		return count;
 	}
-	
-	public abstract String getDesc();
+
+	public String getDesc(){
+		String out = "";
+		String amount;
+		if(count < averageCount/10){
+			amount = "small";
+		}
+		else if(count < averageCount/2){
+			amount = "average";
+		}
+		else if(count < averageCount - (averageCount/10)){
+			amount = "good";
+		}
+		else{
+			amount = "vast";
+		}
+
+		out +=" a " + amount +" amount of " + name + " (" + count +" / " + averageCount + ")" ;
+		return out;
+	}
 }

@@ -22,6 +22,8 @@ public class WordGenerator {
 	private File eyeColoursFile = new File("people/features/eyeColours.txt");
 	private File placeSuffixFile = new File("places/placeSuffix.txt");
 	private File placesPrefixFile = new File("places/placePrefix.txt");
+	private File landResourcesFile = new File("textFiles/resources/land.txt");
+	private File seaResourcesFile = new File("textFiles/resources/sea.txt");
 	
 	private Scanner scanner;
 	
@@ -112,5 +114,13 @@ public class WordGenerator {
 	
 	public String getRandomPlaceName(){
 		return getRandomWordFromFile(placesPrefixFile) + getRandomWordFromFile(placeSuffixFile);
+	}
+	
+	public String getRandomLandResource(){
+		return getRandomWordFromFile(landResourcesFile);
+	}
+	
+	public String getRandomSeaResource(){
+		return getRandomWordFromFile(seaResourcesFile);
 	}
 }
