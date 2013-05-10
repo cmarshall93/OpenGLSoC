@@ -307,6 +307,11 @@ public class GameModeState implements IGameState, Runnable {
 						Color color = map[y][x].getTile().getColor();
 						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
 					}
+					if(cursorActive && y ==  currentYPos && x == currentXPos){
+						Color color = map[y][x].getTile().getColor();
+						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
+						
+					}
 					//g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
 					//drawCharacter('a');
 					TextRenderer.getInstance().drawSymbol(getMap()[y][x].getTile().getSymbol(),

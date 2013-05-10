@@ -1,9 +1,16 @@
 Iron:25000
-Gold:17500
+Gold:10000
 Sapphires:5000
 Moose:5000
 Deer:5000
 Elk:5000
 Coal:25000
-
+Platinum:2500
+Diamond:7500
+Tin:25000
+Copper:25000
+Flax:25000
+Rubies:5000
+Silver:12500
+Boar:7000
 

@@ -4,10 +4,10 @@ import java.awt.Color;
 
 import slug.soc.game.gameObjects.tiles.roadAndRiver.TileTopTLine;
 
-public class TerrainObjectRiverTopT extends TerrainObject {
+public class TerrainObjectRiverTopT extends TerrainObjectAbstractRiver {
 
 	public TerrainObjectRiverTopT() {
-		super(new TileTopTLine(Color.BLUE), true);
+		super(new TileTopTLine(Color.BLUE));
 	}
 
 	public String toString(){

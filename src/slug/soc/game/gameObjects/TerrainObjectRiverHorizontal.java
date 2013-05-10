@@ -4,10 +4,10 @@ import java.awt.Color;
 
 import slug.soc.game.gameObjects.tiles.roadAndRiver.TileHorizontalLine;
 
-public class TerrainObjectRiverHorizontal extends TerrainObject {
+public class TerrainObjectRiverHorizontal extends TerrainObjectAbstractRiver {
 
 	public TerrainObjectRiverHorizontal() {
-		super(new TileHorizontalLine(Color.BLUE),true);
+		super(new TileHorizontalLine(Color.BLUE));
 	}
 
 	public String toString(){

@@ -4,10 +4,10 @@ import java.awt.Color;
 
 import slug.soc.game.gameObjects.tiles.roadAndRiver.TileVerticalLine;
 
-public class TerrainObjectRiverVertical extends TerrainObject {
+public class TerrainObjectRiverVertical extends TerrainObjectAbstractRiver {
 
 	public TerrainObjectRiverVertical() {
-		super(new TileVerticalLine(Color.BLUE), true);
+		super(new TileVerticalLine(Color.BLUE));
 	}
 	
 	public String toString(){

@@ -7,12 +7,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import slug.soc.game.gameObjects.tileResources.AbstractResource;
-import slug.soc.game.gameObjects.tileResources.DeerResource;
-import slug.soc.game.gameObjects.tileResources.FishResource;
-import slug.soc.game.gameObjects.tileResources.GoldResource;
-import slug.soc.game.gameObjects.tileResources.IronResource;
-import slug.soc.game.gameObjects.tileResources.LobsterResource;
-import slug.soc.game.gameObjects.tileResources.SapphireResource;
 
 public class ResourceFactory {
 
