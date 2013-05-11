@@ -26,16 +26,18 @@ public class ResourceFactory {
 	}
 	
 	public AbstractResource getRandomLandResource(){
-		String resourceString = WordGenerator.getInstance().getRandomLandResource();
-		String resourceName = resourceString.substring(0, resourceString.indexOf(':'));
-		Integer resourceAmount = Integer.parseInt(resourceString.substring(resourceString.indexOf(':') + 1, resourceString.length()));
-		return new AbstractResource(resourceName, RandomProvider.getInstance().nextInt(resourceAmount), resourceAmount);
+		String[] resourceString = WordGenerator.getInstance().getRandomLandResource().split(":");
+		String resourceName = resourceString[0];
+		Integer resourceAmount = Integer.parseInt(resourceString[1]);
+		String requiredBuilding = resourceString[2];
+		return new AbstractResource(resourceName, RandomProvider.getInstance().nextInt(resourceAmount), resourceAmount, requiredBuilding);
 	}
 	
 	public AbstractResource getRandomSeaResource(){
-		String resourceString = WordGenerator.getInstance().getRandomSeaResource();
-		String resourceName = resourceString.substring(0, resourceString.indexOf(':'));
-		Integer resourceAmount = Integer.parseInt(resourceString.substring(resourceString.indexOf(':') + 1, resourceString.length()));
-		return new AbstractResource(resourceName, RandomProvider.getInstance().nextInt(resourceAmount), resourceAmount);
+		String[] resourceString = WordGenerator.getInstance().getRandomSeaResource().split(":");
+		String resourceName = resourceString[0];
+		Integer resourceAmount = Integer.parseInt(resourceString[1]);
+		String requiredBuilding = resourceString[2];
+		return new AbstractResource(resourceName, RandomProvider.getInstance().nextInt(resourceAmount), resourceAmount, requiredBuilding);
 	}
 }

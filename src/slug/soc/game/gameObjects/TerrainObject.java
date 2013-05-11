@@ -155,5 +155,10 @@ public abstract class TerrainObject implements GameDrawable{
 		return hasResources;
 	}
 	
+	public GameTile getBaseTile() {
+		return baseTile;
+	}
+	
 	public abstract String getTypeString();
+
 }

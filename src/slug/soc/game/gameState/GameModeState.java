@@ -50,10 +50,12 @@ public class GameModeState implements IGameState, Runnable {
 	private boolean viewHoldings;
 	private boolean viewResources;
 	private boolean confirmNextTurnDialog;
+	private boolean fogOfWar;
 
 	private TerrainObject[][] map;
 	private ArrayList<GameObject> gameObjects;
 	private Faction faction;
+	private Faction secondFaction;
 
 	private TerrianGenerator terrianGenerator;
 	private GameObjectCursor cursor = new GameObjectCursor();
@@ -116,6 +118,23 @@ public class GameModeState implements IGameState, Runnable {
 		for(GameObject g : faction.getHoldings()){
 			addFactionObject(x,y,g);
 		}
+
+		secondFaction = new Faction();
+		x = 70;
+		y = 70;
+		while(!testBol){
+			if(!map[y][x].isBuildable()){
+				x = RandomProvider.getInstance().nextInt(map.length);
+				y = RandomProvider.getInstance().nextInt(map.length);
+			}
+			else{
+				testBol = true;
+			}
+		}
+		for(GameObject g : secondFaction.getHoldings()){
+			addFactionObject(x,y,g);
+		}
+		//************************************************/
 		for(int i = 0;i < 999; i++){
 			advanceStep();
 		}
@@ -242,6 +261,9 @@ public class GameModeState implements IGameState, Runnable {
 				confirmNextTurnDialog = !confirmNextTurnDialog;
 			}
 		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_F)){
+			fogOfWar = !fogOfWar;
+		}
 	}
 
 	public void createImage(){		
@@ -307,15 +329,38 @@ public class GameModeState implements IGameState, Runnable {
 						Color color = map[y][x].getTile().getColor();
 						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
 					}
+					if(fogOfWar){
+						if(getMap()[y][x].getOwner() != faction){
+							Color color = getMap()[y][x].getTile().getColor();
+							GL11.glColor3f(/*(color.getRed()/255.0f) -*/ 0.4f, /*(color.getGreen()/255.0f) -*/ 0.4f,
+									/*color.getBlue()/255.0f) -*/ 0.4f);
+						}
+					}
 					if(cursorActive && y ==  currentYPos && x == currentXPos){
 						Color color = map[y][x].getTile().getColor();
 						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
-						
+
 					}
 					//g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
 					//drawCharacter('a');
-					TextRenderer.getInstance().drawSymbol(getMap()[y][x].getTile().getSymbol(),
-							DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+					if(!fogOfWar){
+						TextRenderer.getInstance().drawSymbol(getMap()[y][x].getTile().getSymbol(),
+								DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+					}
+					else if(getMap()[y][x].getGameObjects().size() != 0){
+						if(getMap()[y][x].getCurrentGameObject().getOwner() ==  faction){
+							TextRenderer.getInstance().drawSymbol(getMap()[y][x].getTile().getSymbol(),
+									DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+						}
+						else{
+							TextRenderer.getInstance().drawSymbol(getMap()[y][x].getBaseTile().getSymbol(),
+									DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+						}
+					}
+					else{
+						TextRenderer.getInstance().drawSymbol(getMap()[y][x].getBaseTile().getSymbol(),
+								DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+					}
 				}
 				//gx += g.getFont().getSize();
 				GL11.glTranslatef(DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex], 0, 0);
@@ -390,7 +435,7 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 
-		GL11.glTranslatef(0, DEFAULT_TEXT_SIZE * 4, 0);
+		GL11.glTranslatef(0, DEFAULT_TEXT_SIZE * 5, 0);
 		GL11.glPushMatrix();
 		if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects()> 0 && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
 			GL11.glPushMatrix();
@@ -435,6 +480,9 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		if(viewResources){
 			TextRenderer.getInstance().drawString(" (Resources View)", DEFAULT_TEXT_SIZE, textSpace);
+		}
+		if(fogOfWar){
+			TextRenderer.getInstance().drawString(" (Fog Of War)", DEFAULT_TEXT_SIZE, textSpace);
 		}
 		//gy = 480;
 		//gx = 980;
@@ -543,7 +591,7 @@ public class GameModeState implements IGameState, Runnable {
 		status[3] = "test";
 		return status;
 	}
-	
+
 	private void addFactionObject(int x, int y, GameObject g){
 		map[y][x].addGameObject(g);
 		g.setXAndY(x, y);
@@ -552,12 +600,15 @@ public class GameModeState implements IGameState, Runnable {
 		int w = 7;
 		int h = 7;
 
+
 		for(int wi = (w/2) * -1 ;wi <= w/2 ;wi++){
 			for(int hi = (h/2) * -1;hi <= h/2;hi++){
-				if(map[y + hi][x + wi].getBiome() != null && map[y + hi][x + wi].getBiome().getContents() != null){
-					//if(hi != 3 || wi!= 3){
-					if((hi != ((h/2) * -1) || wi != ((w/2) * -1)) && (hi != h/2 || wi != w/2) && (hi != h/2 || wi != ((w/2) * -1)) && (hi != ((h/2) * -1) || wi != w/2)){
-						map[y + hi][x + wi].setOwner(g.getOwner());
+				if(y + hi >= 0 && y + hi <= map.length && x + wi >= 0 && x + wi <= map.length){
+					if(map[y + hi][x + wi].getBiome() != null && map[y + hi][x + wi].getBiome().getContents() != null){
+						//if(hi != 3 || wi!= 3){
+						if((hi != ((h/2) * -1) || wi != ((w/2) * -1)) && (hi != h/2 || wi != w/2) && (hi != h/2 || wi != ((w/2) * -1)) && (hi != ((h/2) * -1) || wi != w/2)){
+							map[y + hi][x + wi].setOwner(g.getOwner());
+						}
 					}
 				}
 			}

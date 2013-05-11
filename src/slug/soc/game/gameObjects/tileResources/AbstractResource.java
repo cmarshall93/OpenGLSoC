@@ -3,11 +3,13 @@ package slug.soc.game.gameObjects.tileResources;
 public class AbstractResource {
 
 	protected String name;
+	protected String requiredBuilding;
 	protected int averageCount;
 	protected int count;
 
-	public AbstractResource(String name, int intialCount, int averageCount){
+	public AbstractResource(String name, int intialCount, int averageCount, String requiredBuilding){
 		this.name = name;
+		this.requiredBuilding = requiredBuilding;
 		this.averageCount = averageCount;
 		count = intialCount;
 	}
@@ -40,7 +42,7 @@ public class AbstractResource {
 			amount = "vast";
 		}
 
-		out +=" a " + amount +" amount of " + name + " (" + count +" / " + averageCount + ")" ;
+		out +=" a " + amount +" amount of " + name + " (" + count +" / " + averageCount + ") " + " NEEDS A " + requiredBuilding.toUpperCase() ;
 		return out;
 	}
 }
