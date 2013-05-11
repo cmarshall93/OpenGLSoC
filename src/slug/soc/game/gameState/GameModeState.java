@@ -20,6 +20,7 @@ import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectCastle;
 import slug.soc.game.gameObjects.GameObjectCursor;
+import slug.soc.game.gameObjects.GameObjectPerson;
 import slug.soc.game.gameObjects.GameObjectVillage;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
@@ -118,7 +119,11 @@ public class GameModeState implements IGameState, Runnable {
 		for(GameObject g : faction.getHoldings()){
 			addFactionObject(x,y,g);
 		}
-
+		GameObject obj = faction.getHoldings().get(1);
+		map[obj.getY()][obj.getX()].removeGameObject(obj);
+		map[51][51].addGameObject(obj);
+		obj.setXAndY(51, 51);
+		
 		secondFaction = new Faction();
 		x = 70;
 		y = 70;
@@ -152,6 +157,8 @@ public class GameModeState implements IGameState, Runnable {
 		GameCalendar.getInstance().advanceDay();
 		for(GameObject o : gameObjects){
 			o.act();
+			faction.updateFov();
+			secondFaction.updateFov();
 		}
 	}
 
@@ -330,7 +337,7 @@ public class GameModeState implements IGameState, Runnable {
 						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
 					}
 					if(fogOfWar){
-						if(getMap()[y][x].getOwner() != faction){
+						if(faction.getFov()[y][x] == false){
 							Color color = getMap()[y][x].getTile().getColor();
 							GL11.glColor3f(/*(color.getRed()/255.0f) -*/ 0.4f, /*(color.getGreen()/255.0f) -*/ 0.4f,
 									/*color.getBlue()/255.0f) -*/ 0.4f);
@@ -347,8 +354,8 @@ public class GameModeState implements IGameState, Runnable {
 						TextRenderer.getInstance().drawSymbol(getMap()[y][x].getTile().getSymbol(),
 								DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 					}
-					else if(getMap()[y][x].getGameObjects().size() != 0){
-						if(getMap()[y][x].getCurrentGameObject().getOwner() ==  faction){
+					else{
+						if(faction.getFov()[y][x] == true){
 							TextRenderer.getInstance().drawSymbol(getMap()[y][x].getTile().getSymbol(),
 									DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 						}
@@ -357,10 +364,10 @@ public class GameModeState implements IGameState, Runnable {
 									DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 						}
 					}
-					else{
-						TextRenderer.getInstance().drawSymbol(getMap()[y][x].getBaseTile().getSymbol(),
-								DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
-					}
+//					else{
+//						TextRenderer.getInstance().drawSymbol(getMap()[y][x].getBaseTile().getSymbol(),
+//								DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+//					}
 				}
 				//gx += g.getFont().getSize();
 				GL11.glTranslatef(DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex], 0, 0);

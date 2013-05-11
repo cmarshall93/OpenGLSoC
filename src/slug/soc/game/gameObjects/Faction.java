@@ -3,6 +3,7 @@ package slug.soc.game.gameObjects;
 import java.util.ArrayList;
 
 import slug.soc.game.RandomProvider;
+import slug.soc.game.gameState.GameModeState;
 import slug.soc.game.worldBuilding.ColorFactory;
 import slug.soc.game.worldBuilding.FactionColor;
 import slug.soc.game.worldBuilding.HouseSigilGenerator;
@@ -16,6 +17,8 @@ public class Faction {
 	private String name;
 	private long money;
 
+	private boolean[][] fov;
+
 	private GameObjectPerson headOfFamily;
 
 	public Faction(){
@@ -24,6 +27,7 @@ public class Faction {
 		name = WordGenerator.getInstance().getRandomFactionName();
 		headOfFamily = new GameObjectPerson(factionColor.getColor(), this, null, null, 0, 0);
 		money = RandomProvider.getInstance().nextInt(100000);
+		fov = new boolean[GameModeState.getInstance().getMap().length][GameModeState.getInstance().getMap().length];
 
 		/*		 
 		 * This is faction testing stuff
@@ -60,9 +64,36 @@ public class Faction {
 	public GameObjectPerson getHeadOfFamily(){
 		return headOfFamily;
 	}
-	
+
 	public long getMoney(){
 		return money;
+	}
+
+	public boolean[][] getFov(){
+		return fov;
+	}
+
+	public void updateFov(){
+
+		fov = new boolean[fov.length][fov.length];
+
+		for(GameObject g : holdings){
+
+			int w = 7;
+			int h = 7;
+			int x = g.getX();
+			int y = g.getY();
+
+			for(int wi = (w/2) * -1 ;wi <= w/2 ;wi++){
+				for(int hi = (h/2) * -1;hi <= h/2;hi++){
+					if(y + hi >= 0 && y + hi <= fov.length && x + wi >= 0 && x + wi <= fov.length){
+						if((hi != ((h/2) * -1) || wi != ((w/2) * -1)) && (hi != h/2 || wi != w/2) && (hi != h/2 || wi != ((w/2) * -1)) && (hi != ((h/2) * -1) || wi != w/2)){
+							fov[y+hi][x+wi] = true;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public String toString(){
