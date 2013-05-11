@@ -119,11 +119,7 @@ public class GameModeState implements IGameState, Runnable {
 		for(GameObject g : faction.getHoldings()){
 			addFactionObject(x,y,g);
 		}
-		GameObject obj = faction.getHoldings().get(1);
-		map[obj.getY()][obj.getX()].removeGameObject(obj);
-		map[51][51].addGameObject(obj);
-		obj.setXAndY(51, 51);
-		
+		moveFactionObject(5,5,faction.getHoldings().get(1));
 		secondFaction = new Faction();
 		x = 70;
 		y = 70;
@@ -599,13 +595,21 @@ public class GameModeState implements IGameState, Runnable {
 		return status;
 	}
 
+	public void moveFactionObject(int dx, int dy, GameObject g){
+		int x = g.getX();
+		int y = g.getY();
+		map[y][x].removeGameObject(g);
+		map[y+dy][x+dx].addGameObject(g);
+		g.setXAndY(y+dy, x+dy);
+	}
+	
 	private void addFactionObject(int x, int y, GameObject g){
 		map[y][x].addGameObject(g);
 		g.setXAndY(x, y);
 		gameObjects.add(g);
 
-		int w = 7;
-		int h = 7;
+		int w = 12;
+		int h = 12;
 
 
 		for(int wi = (w/2) * -1 ;wi <= w/2 ;wi++){
