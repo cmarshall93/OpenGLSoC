@@ -23,6 +23,7 @@ import slug.soc.game.worldBuilding.WordGenerator;
 
 public class GameObjectPerson extends GameObject {
 
+	private static final int movementDistance = 5;
 
 	private GameObjectPerson mother;
 	private GameObjectPerson father;
@@ -30,6 +31,10 @@ public class GameObjectPerson extends GameObject {
 
 	private String firstName;
 	private String lastName;
+
+	private boolean hasOrders;
+	private int dx;
+	private int dy;
 
 	private ArrayList<AbstractPersonFeature> bodyFeatures;
 	private PersonFaceFeatureSet faceFeatures;
@@ -104,13 +109,28 @@ public class GameObjectPerson extends GameObject {
 	public ArrayList<AbstractPersonFeature> getBodyFeatures(){
 		return bodyFeatures;
 	}
-	
+
 	public PersonFaceFeatureSet getFaceFeatures(){
 		return faceFeatures;
 	}
 
-	public void act(){
+	public int getMovementDistance(){
+		return movementDistance;
+	}
 
+	public void act(){
+		if(hasOrders){
+			if(GameModeState.getInstance().getMap()[yPos + dy][xPos + dx].isBuildable()){
+				GameModeState.getInstance().moveFactionObject(dx, dy, this);
+				hasOrders = false;
+			}
+		}
+	}
+
+	public void giveOrders(int x, int y){
+		hasOrders = true;
+		dx = x;
+		dy = y;
 	}
 
 	public GameObjectPerson haveChild(GameObjectPerson person1, GameObjectPerson person2){
@@ -174,28 +194,28 @@ public class GameObjectPerson extends GameObject {
 			else{
 				faceFeatures.setNose(father.getFaceFeatures().getNose());
 			}
-			
+
 			if(RandomProvider.getInstance().nextBoolean()){
 				faceFeatures.setHair(mother.getFaceFeatures().getHair());
 			}
 			else{
 				faceFeatures.setHair(father.getFaceFeatures().getHair());
 			}
-			
+
 			if(RandomProvider.getInstance().nextBoolean()){
 				faceFeatures.setEyes(mother.getFaceFeatures().getEyes());
 			}
 			else{
 				faceFeatures.setEyes(father.getFaceFeatures().getEyes());
 			}
-			
+
 			if(RandomProvider.getInstance().nextBoolean()){
 				faceFeatures.setEars(mother.getFaceFeatures().getEars());
 			}
 			else{
 				faceFeatures.setEars(father.getFaceFeatures().getEars());
 			}
-			
+
 			if(RandomProvider.getInstance().nextBoolean()){
 				faceFeatures.setMouth(mother.getFaceFeatures().getMouth());
 			}

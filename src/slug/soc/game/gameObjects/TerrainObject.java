@@ -28,7 +28,7 @@ public abstract class TerrainObject implements GameDrawable{
 	
 	private boolean isBiome;
 	private Biome biome;
-	public boolean isBuildable;
+	private boolean isBuildable;
 	private Faction owner;
 
 	public TerrainObject(GameTile tile, boolean isBuildable){
@@ -74,6 +74,7 @@ public abstract class TerrainObject implements GameDrawable{
 		if(gameObjects.size() == 0 && o.getOwner() != null){
 			owner = null;
 		}
+		gameObjectIndex = 0;
 	}
 	
 	public GameObject getCurrentGameObject(){
