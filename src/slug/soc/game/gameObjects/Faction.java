@@ -86,7 +86,7 @@ public class Faction {
 
 			for(int wi = (w/2) * -1 ;wi <= w/2 ;wi++){
 				for(int hi = (h/2) * -1;hi <= h/2;hi++){
-					if(y + hi >= 0 && y + hi <= fov.length && x + wi >= 0 && x + wi <= fov.length){
+					if(y + hi >= 0 && y + hi < fov.length && x + wi >= 0 && x + wi < fov.length){
 						if((hi != ((h/2) * -1) || wi != ((w/2) * -1)) && (hi != h/2 || wi != w/2) && (hi != h/2 || wi != ((w/2) * -1)) && (hi != ((h/2) * -1) || wi != w/2)){
 							fov[y+hi][x+wi] = true;
 						}

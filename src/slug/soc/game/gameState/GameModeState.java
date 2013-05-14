@@ -22,6 +22,7 @@ import slug.soc.game.gameObjects.GameObjectCastle;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.GameObjectPerson;
 import slug.soc.game.gameObjects.GameObjectVillage;
+import slug.soc.game.gameObjects.MovementOrder;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
 import slug.soc.game.rendering.AsciiTextureGenerator;
@@ -59,9 +60,7 @@ public class GameModeState implements IGameState, Runnable {
 	private Faction faction;
 	private Faction secondFaction;
 	private GameObject objectOfFocus;
-	private int remainingMoveDistance;
-	private int moveY;
-	private int moveX;
+	private MovementOrder movementOrder;
 
 	private TerrianGenerator terrianGenerator;
 	private GameObjectCursor cursor = new GameObjectCursor();
@@ -164,63 +163,90 @@ public class GameModeState implements IGameState, Runnable {
 	}
 
 	public void checkInput(){
+		boolean canMoveCamera = false;
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
 			if(currentYPos > 0){
-				if(cursorActive){
-					map[currentYPos][currentXPos].removeGameObject(cursor);
-					currentYPos--;
-					map[currentYPos][currentXPos].addGameObject(cursor);
+				if(movingObject){
+					if(movementOrder.getDistanceTravelled() <= 5){
+						movementOrder.moveY(-1);
+						//currentYPos--;
+						canMoveCamera = true;
+					}
 				}
 				else{
-					currentYPos--;
+					canMoveCamera = true;
 				}
-				if(movingObject){
-					moveY--;
+			}
+			if(canMoveCamera){
+				currentYPos--;
+				if(cursorActive){
+					map[currentYPos + 1][currentXPos].removeGameObject(cursor);
+					map[currentYPos][currentXPos].addGameObject(cursor);
 				}
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){//down
 			if(currentYPos < getMap().length - 1){
-				if(cursorActive){
-					map[currentYPos][currentXPos].removeGameObject(cursor);
-					currentYPos++;
-					map[currentYPos][currentXPos].addGameObject(cursor);
+				if(movingObject){
+					if(movementOrder.getDistanceTravelled() <= 5){
+						movementOrder.moveY(1);
+						canMoveCamera = true;
+						//currentYPos++;
+					}
 				}
 				else{
-					currentYPos++;
+					canMoveCamera = true;
 				}
-				if(movingObject){
-					moveY++;
+			}
+			if(canMoveCamera){
+				currentYPos++;
+				if(cursorActive){
+					map[currentYPos - 1][currentXPos].removeGameObject(cursor);
+					map[currentYPos][currentXPos].addGameObject(cursor);
 				}
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-			if(currentXPos < getMap().length -1){ 
-				if(cursorActive){
-					map[currentYPos][currentXPos].removeGameObject(cursor);
-					currentXPos++;
-					map[currentYPos][currentXPos].addGameObject(cursor);
+			if(currentXPos < getMap().length -1){
+				if(movingObject){
+					if(movementOrder.getDistanceTravelled() <= 5){
+						movementOrder.moveX(1);
+						canMoveCamera = true;
+						//currentXPos++;
+					}else{
+						canMoveCamera = false;
+					}
 				}
 				else{
-					currentXPos++;
+					canMoveCamera = true;
 				}
-				if(movingObject){
-					moveX++;
+			}
+			if(canMoveCamera){
+				currentXPos++;
+				if(cursorActive){
+					map[currentYPos][currentXPos - 1].removeGameObject(cursor);
+					map[currentYPos][currentXPos].addGameObject(cursor);
 				}
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){//left
 			if(currentXPos > 0){
-				if(cursorActive){
-					map[currentYPos][currentXPos].removeGameObject(cursor);
-					currentXPos--;
-					map[currentYPos][currentXPos].addGameObject(cursor);
+				if(movingObject){
+					if(movementOrder.getDistanceTravelled() <= 5){
+						movementOrder.moveX(-1);
+						canMoveCamera = true;
+						//currentXPos--;
+					}
 				}
 				else{
-					currentXPos--;
+					canMoveCamera = true;
 				}
-				if(movingObject){
-					moveX--;
+			}
+			if(canMoveCamera){
+				currentXPos--;
+				if(cursorActive){
+					map[currentYPos][currentXPos + 1].removeGameObject(cursor);
+					map[currentYPos][currentXPos].addGameObject(cursor);
 				}
 			}
 		}
@@ -245,7 +271,12 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
-			Game.getInstance().changeToNextGameState(PauseGameState.getInstance());
+			if(movingObject){
+				movingObject = false;
+			}
+			else{
+				Game.getInstance().changeToNextGameState(PauseGameState.getInstance());
+			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_H)){//h
 			if(!viewResources){
@@ -285,20 +316,19 @@ public class GameModeState implements IGameState, Runnable {
 			fogOfWar = !fogOfWar;
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_M)){
-			if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
+			if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject){
 				if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
 					if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
 						movingObject = true;
 						objectOfFocus = getMap()[currentYPos][currentXPos].getCurrentGameObject();
-						moveY = 0;
-						moveX = 0;
+						movementOrder = new MovementOrder();
 					}
 				}
 			}
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
 			if(movingObject){
-				((GameObjectPerson) objectOfFocus).giveOrders(moveX,moveY);
+				((GameObjectPerson) objectOfFocus).giveOrders(movementOrder.getXDistance(),movementOrder.getYDistance());
 				movingObject = false;
 			}
 		}
@@ -531,9 +561,9 @@ public class GameModeState implements IGameState, Runnable {
 		//GL11.glTranslatef(-300f, DEFAULT_TEXT_SIZE, 0);
 		//TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
-		}
+	}
 
-		
+
 	private void drawGameObjectDetails(float textSpace){
 		GL11.glPushMatrix();
 		String out = (getMap()[currentYPos][currentXPos].getCurrentGameObject().toString() + " 1 of " 
@@ -554,7 +584,7 @@ public class GameModeState implements IGameState, Runnable {
 			GL11.glTranslatef(0, DEFAULT_TEXT_SIZE, 0);
 		}
 	}
-		
+
 	private void drawTopBar(){
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0,DEFAULT_TEXT_SIZE/2, 0);
