@@ -328,37 +328,37 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
 			if(movingObject){
-				((GameObjectPerson) objectOfFocus).giveOrders(movementOrder.getXDistance(),movementOrder.getYDistance());
+				objectOfFocus.giveOrders(movementOrder);
 				movingObject = false;
 			}
 		}
 
 	}
 
-	public void createImage(){		
-		mapFrameCounter++;
-		infoFrameCounter++;
-		if(loadedWorld){
-			drawMap();
-			//g.setColor(Color.WHITE);
-			GL11.glColor3f(1f, 1f, 1f);
-			//g.drawLine(500, 0, 500, 500);
-			drawInfo();
-			drawTopBar();
-			if(confirmNextTurnDialog){
-				drawConfirmBox();
+	public void createImage(){
+			mapFrameCounter++;
+			infoFrameCounter++;
+			if(loadedWorld){
+				drawMap();
+				//g.setColor(Color.WHITE);
+				GL11.glColor3f(1f, 1f, 1f);
+				//g.drawLine(500, 0, 500, 500);
+				drawInfo();
+				drawTopBar();
+				if(confirmNextTurnDialog){
+					drawConfirmBox();
+				}
 			}
-		}
-		else{
-			drawLoading();
-		}
+			else{
+				drawLoading();
+			}
 
-		if(mapFrameCounter >= MAP_UPDATE_RATE ){
-			mapFrameCounter = 0;
-		}
-		if(infoFrameCounter >= INFO_UPDATE_RATE){
-			infoFrameCounter = 0;
-		}
+			if(mapFrameCounter >= MAP_UPDATE_RATE ){
+				mapFrameCounter = 0;
+			}
+			if(infoFrameCounter >= INFO_UPDATE_RATE){
+				infoFrameCounter = 0;
+			}
 	}	
 
 	private void drawMap(){
@@ -369,6 +369,8 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glTranslatef(0f, 20 , 0f);
 		//g.setFont(FontProvider.getInstance().getFont());
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
+		int moveX = -1;
+		int moveY = -1;
 		for(int y = currentYPos - (DEFAULT_GRID_SIZE / 2) * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (DEFAULT_GRID_SIZE * 1/zoomScales[currentZoomIndex]); y++,my++){
 			//gx = 15;
 			GL11.glPushMatrix();
@@ -380,6 +382,12 @@ public class GameModeState implements IGameState, Runnable {
 					TextRenderer.getInstance().drawSymbol(" ", DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 				}
 				else{
+					if(map[currentYPos][currentXPos].getGameObjects().size() > 0){
+						if(map[currentYPos][currentXPos].getCurrentGameObject().hasOrders()){
+							moveX = currentXPos + map[currentYPos][currentXPos].getCurrentGameObject().getOrder().getXDistance();
+							moveY = currentYPos + map[currentYPos][currentXPos].getCurrentGameObject().getOrder().getYDistance();
+						}
+					}
 					if(mapFrameCounter >= MAP_UPDATE_RATE){
 						getMap()[y][x].nextTile();
 					}
@@ -407,6 +415,11 @@ public class GameModeState implements IGameState, Runnable {
 						Color color = map[y][x].getTile().getColor();
 						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
 
+					}
+					if(x == moveX && y == moveY){
+						GL11.glColor3f(0.5f,1f,1f);
+						moveX = -1;
+						moveY = -1;
 					}
 					//g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
 					//drawCharacter('a');
@@ -495,7 +508,7 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glPopMatrix();
 
 
-		if(infoFrameCounter >= INFO_UPDATE_RATE && getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
+		if(infoFrameCounter >= INFO_UPDATE_RATE && getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
 			getMap()[currentYPos][currentXPos].getNextGameObject();
 			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor){
 				getMap()[currentYPos][currentXPos].getNextGameObject();
@@ -504,7 +517,7 @@ public class GameModeState implements IGameState, Runnable {
 
 		GL11.glTranslatef(0, DEFAULT_TEXT_SIZE * 5, 0);
 		GL11.glPushMatrix();
-		if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects()> 0 && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
+		if(getMap()[currentYPos][currentXPos].getGameObjects().size() > 0 && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor) && !movingObject){
 			if(fogOfWar){
 				if(faction.getFov()[currentYPos][currentXPos] = true){
 					drawGameObjectDetails(textSpace);
@@ -513,6 +526,13 @@ public class GameModeState implements IGameState, Runnable {
 			else{
 				drawGameObjectDetails(textSpace);
 			}
+		}
+		else if(movingObject){
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0, DEFAULT_TEXT_SIZE, 0);
+			TextRenderer.getInstance().drawString("Moving object : " + objectOfFocus.toString(),
+					DEFAULT_TEXT_SIZE, textSpace);
+			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();

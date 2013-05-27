@@ -32,10 +32,6 @@ public class GameObjectPerson extends GameObject {
 	private String firstName;
 	private String lastName;
 
-	private boolean hasOrders;
-	private int dx;
-	private int dy;
-
 	private ArrayList<AbstractPersonFeature> bodyFeatures;
 	private PersonFaceFeatureSet faceFeatures;
 
@@ -48,7 +44,7 @@ public class GameObjectPerson extends GameObject {
 		faceFeatures = new PersonFaceFeatureSet();
 
 		lastName = owner.toString();
-		troopNumber = 1;
+		troopNumber= 1;
 		if(RandomProvider.getInstance().nextInt(2) == 0){
 			isFemale = true;
 			firstName = WordGenerator.getInstance().getRandomFemaleFirstName();
@@ -120,17 +116,17 @@ public class GameObjectPerson extends GameObject {
 
 	public void act(){
 		if(hasOrders){
+			int dx = order.getXDistance();
+			int dy = order.getYDistance();
 			if(GameModeState.getInstance().getMap()[yPos + dy][xPos + dx].isBuildable()){
 				GameModeState.getInstance().moveFactionObject(dx, dy, this);
 				hasOrders = false;
 			}
 		}
 	}
-
-	public void giveOrders(int x, int y){
-		hasOrders = true;
-		dx = x;
-		dy = y;
+	
+	public boolean hasOrders(){
+		return hasOrders;
 	}
 
 	public GameObjectPerson haveChild(GameObjectPerson person1, GameObjectPerson person2){

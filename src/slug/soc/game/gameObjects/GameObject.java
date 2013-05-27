@@ -20,6 +20,9 @@ public abstract class GameObject implements GameDrawable {
 	protected int xPos;
 	protected int yPos;
 	
+	protected boolean hasOrders;
+	protected MovementOrder order;
+	
 	public GameObject(GameTile tile, Faction owner, int x, int y){
 		this.tile = tile;	
 		this.owner = owner;
@@ -55,6 +58,19 @@ public abstract class GameObject implements GameDrawable {
 	
 	public int getY(){
 		return yPos;
+	}
+	
+	public boolean hasOrders(){
+		return hasOrders;
+	}
+	
+	public void giveOrders(MovementOrder order){
+		hasOrders = true;
+		this.order = order;
+	}
+	
+	public MovementOrder getOrder(){
+		return order;
 	}
 	
 	public abstract String[] getStringDesc();
