@@ -116,15 +116,17 @@ public class GameObjectPerson extends GameObject {
 
 	public void act(){
 		if(hasOrders){
-			int dx = order.getXDistance();
-			int dy = order.getYDistance();
-			if(GameModeState.getInstance().getMap()[yPos + dy][xPos + dx].isBuildable()){
-				GameModeState.getInstance().moveFactionObject(dx, dy, this);
-				hasOrders = false;
+			MovementOrderCoordinate mCoord = order.getFirstCoord();
+			while(mCoord != null){
+				if(GameModeState.getInstance().getMap()[yPos + mCoord.getY()][xPos + mCoord.getX()].isBuildable()){
+					GameModeState.getInstance().moveFactionObject(mCoord.getX(), mCoord.getY(), this);
+					hasOrders = false;
+				}
+				mCoord = mCoord.getNextCoord();
 			}
 		}
 	}
-	
+
 	public boolean hasOrders(){
 		return hasOrders;
 	}

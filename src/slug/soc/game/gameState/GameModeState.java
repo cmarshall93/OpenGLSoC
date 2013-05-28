@@ -168,7 +168,7 @@ public class GameModeState implements IGameState, Runnable {
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
 			if(currentYPos > 0){
 				if(movingObject){
-					if(movementOrder.getDistanceTravelled() <= 5){
+					if(movementOrder.canMove(0,-1)){
 						movementOrder.moveY(-1);
 						//currentYPos--;
 						canMoveCamera = true;
@@ -189,10 +189,9 @@ public class GameModeState implements IGameState, Runnable {
 		else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){//down
 			if(currentYPos < getMap().length - 1){
 				if(movingObject){
-					if(movementOrder.getDistanceTravelled() <= 5){
+					if(movementOrder.canMove(0,1)){
 						movementOrder.moveY(1);
 						canMoveCamera = true;
-						//currentYPos++;
 					}
 				}
 				else{
@@ -210,10 +209,9 @@ public class GameModeState implements IGameState, Runnable {
 		else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
 			if(currentXPos < getMap().length -1){
 				if(movingObject){
-					if(movementOrder.getDistanceTravelled() <= 5){
+					if(movementOrder.canMove(1,0)){
 						movementOrder.moveX(1);
 						canMoveCamera = true;
-						//currentXPos++;
 					}else{
 						canMoveCamera = false;
 					}
@@ -233,10 +231,9 @@ public class GameModeState implements IGameState, Runnable {
 		else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){//left
 			if(currentXPos > 0){
 				if(movingObject){
-					if(movementOrder.getDistanceTravelled() <= 5){
+					if(movementOrder.canMove(-1,0)){
 						movementOrder.moveX(-1);
 						canMoveCamera = true;
-						//currentXPos--;
 					}
 				}
 				else{
@@ -322,7 +319,7 @@ public class GameModeState implements IGameState, Runnable {
 					if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
 						movingObject = true;
 						objectOfFocus = getMap()[currentYPos][currentXPos].getCurrentGameObject();
-						movementOrder = new MovementOrder();
+						movementOrder = new MovementOrder(5);
 					}
 				}
 			}
@@ -375,8 +372,12 @@ public class GameModeState implements IGameState, Runnable {
 		if(map[currentYPos][currentXPos].getGameObjects().size() > 0){
 			if(map[currentYPos][currentXPos].getCurrentGameObject().hasOrders()){
 				MovementOrderCoordinate moveCoord = map[currentYPos][currentXPos].getCurrentGameObject().getOrder().getFirstCoord();
+				int xCoord = currentXPos;
+				int yCoord = currentYPos;
 				while(moveCoord != null){
-					movementCoords[currentYPos + moveCoord.getY()][currentXPos + moveCoord.getX()] = true;
+					xCoord = xCoord + moveCoord.getX();
+					yCoord = yCoord + moveCoord.getY();
+					movementCoords[yCoord][xCoord] = true;
 					moveCoord = moveCoord.getNextCoord();
 				}
 			}
