@@ -23,6 +23,7 @@ import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.GameObjectPerson;
 import slug.soc.game.gameObjects.GameObjectVillage;
 import slug.soc.game.gameObjects.MovementOrder;
+import slug.soc.game.gameObjects.MovementOrderCoordinate;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
 import slug.soc.game.rendering.AsciiTextureGenerator;
@@ -369,8 +370,17 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glTranslatef(0f, 20 , 0f);
 		//g.setFont(FontProvider.getInstance().getFont());
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
-		int moveX = -1;
-		int moveY = -1;
+
+		boolean[][] movementCoords = new boolean[map.length][map.length];
+		if(map[currentYPos][currentXPos].getGameObjects().size() > 0){
+			if(map[currentYPos][currentXPos].getCurrentGameObject().hasOrders()){
+				MovementOrderCoordinate moveCoord = map[currentYPos][currentXPos].getCurrentGameObject().getOrder().getFirstCoord();
+				while(moveCoord != null){
+					movementCoords[currentYPos + moveCoord.getY()][currentXPos + moveCoord.getX()] = true;
+					moveCoord = moveCoord.getNextCoord();
+				}
+			}
+		}
 		for(int y = currentYPos - (DEFAULT_GRID_SIZE / 2) * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (DEFAULT_GRID_SIZE * 1/zoomScales[currentZoomIndex]); y++,my++){
 			//gx = 15;
 			GL11.glPushMatrix();
@@ -382,12 +392,6 @@ public class GameModeState implements IGameState, Runnable {
 					TextRenderer.getInstance().drawSymbol(" ", DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 				}
 				else{
-					if(map[currentYPos][currentXPos].getGameObjects().size() > 0){
-						if(map[currentYPos][currentXPos].getCurrentGameObject().hasOrders()){
-							moveX = currentXPos + map[currentYPos][currentXPos].getCurrentGameObject().getOrder().getXDistance();
-							moveY = currentYPos + map[currentYPos][currentXPos].getCurrentGameObject().getOrder().getYDistance();
-						}
-					}
 					if(mapFrameCounter >= MAP_UPDATE_RATE){
 						getMap()[y][x].nextTile();
 					}
@@ -416,10 +420,8 @@ public class GameModeState implements IGameState, Runnable {
 						GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
 
 					}
-					if(x == moveX && y == moveY){
+					if(movementCoords[y][x] == true){
 						GL11.glColor3f(0.5f,1f,1f);
-						moveX = -1;
-						moveY = -1;
 					}
 					//g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
 					//drawCharacter('a');
