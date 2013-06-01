@@ -98,8 +98,9 @@ public class MovementOrder {
 	public MovementOrderCoordinate getFirstCoord(){
 		return firstCoord;
 	}
+	
 
-	private MovementOrderCoordinate getLastCoord(){
+	public MovementOrderCoordinate getLastCoord(){
 		boolean looking = true;
 		MovementOrderCoordinate coord = firstCoord;
 		while(looking){
@@ -110,5 +111,9 @@ public class MovementOrder {
 			coord = nextCoord;
 		}
 		return coord;
+	}
+	
+	public void removeFirst(){
+		firstCoord = firstCoord.getNextCoord();
 	}
 }

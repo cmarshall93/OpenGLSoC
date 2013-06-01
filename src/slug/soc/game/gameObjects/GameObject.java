@@ -13,6 +13,8 @@ import slug.soc.game.gameObjects.tiles.GameTile;
  */
 public abstract class GameObject implements GameDrawable {
 
+	public static final int MOVEMENT_DISTANCE = 5;
+	
 	protected GameTile tile;
 	protected Faction owner;
 	protected String location;

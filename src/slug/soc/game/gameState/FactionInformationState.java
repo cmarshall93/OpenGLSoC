@@ -16,7 +16,7 @@ import slug.soc.game.rendering.TextRenderer;
 
 public class FactionInformationState implements IGameState {
 
-	private static final float DEFAULT_TEXT_SIZE = 20;
+	private static final float DEFAULT_TEXT_SIZE = 16;
 	private static FactionInformationState instance;
 
 	private Faction faction;

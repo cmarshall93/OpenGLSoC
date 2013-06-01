@@ -17,13 +17,14 @@ import slug.soc.game.gameObjects.peopleFeatures.HairPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.MouthPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.NosePersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.PersonFaceFeatureSet;
+import slug.soc.game.gameObjects.tasks.AbstractTask;
 import slug.soc.game.gameObjects.tiles.faction.TilePerson;
 import slug.soc.game.gameState.GameModeState;
 import slug.soc.game.worldBuilding.WordGenerator;
 
 public class GameObjectPerson extends GameObject {
 
-	private static final int movementDistance = 5;
+	public static final int MOVEMENT_DISTANCE = 5;
 
 	private GameObjectPerson mother;
 	private GameObjectPerson father;
@@ -36,6 +37,9 @@ public class GameObjectPerson extends GameObject {
 	private PersonFaceFeatureSet faceFeatures;
 
 	private Integer troopNumber;
+
+	private AbstractTask task;
+	private boolean hasTask;
 
 	public GameObjectPerson(Color color, Faction owner, GameObjectPerson mother, GameObjectPerson father, int x, int y) {
 		super(new TilePerson(color), owner, x, y);
@@ -106,12 +110,17 @@ public class GameObjectPerson extends GameObject {
 		return bodyFeatures;
 	}
 
+	public void setTask(AbstractTask task){
+		this.task = task;
+		hasTask = true;
+	}
+
 	public PersonFaceFeatureSet getFaceFeatures(){
 		return faceFeatures;
 	}
 
 	public int getMovementDistance(){
-		return movementDistance;
+		return MOVEMENT_DISTANCE;
 	}
 
 	public void act(){
@@ -123,6 +132,12 @@ public class GameObjectPerson extends GameObject {
 					hasOrders = false;
 				}
 				mCoord = mCoord.getNextCoord();
+			}
+		}
+		if(hasTask){
+			task.act();
+			if(task.isCompleted()){
+				hasTask = false;
 			}
 		}
 	}

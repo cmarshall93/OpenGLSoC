@@ -26,6 +26,7 @@ import slug.soc.game.gameObjects.MovementOrder;
 import slug.soc.game.gameObjects.MovementOrderCoordinate;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
+import slug.soc.game.gameObjects.tasks.MoveTask;
 import slug.soc.game.rendering.AsciiTextureGenerator;
 import slug.soc.game.rendering.TextRenderer;
 import slug.soc.game.worldBuilding.HouseSigilGenerator;
@@ -68,7 +69,7 @@ public class GameModeState implements IGameState, Runnable {
 	private Integer currentXPos;
 	private Integer currentYPos;
 	private float[] zoomScales = {
-			1.0f, 0.5f	
+			1.0f, 0.5f, 0.3f
 	};
 
 	private boolean cursorActive = false;
@@ -164,199 +165,211 @@ public class GameModeState implements IGameState, Runnable {
 	}
 
 	public void checkInput(){
-		boolean canMoveCamera = false;
-		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
-			if(currentYPos > 0){
-				if(movingObject){
-					if(movementOrder.canMove(0,-1)){
-						movementOrder.moveY(-1);
-						//currentYPos--;
+		if(loadedWorld){
+			boolean canMoveCamera = false;
+			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
+				if(currentYPos > 0){
+					if(movingObject){
+						if(movementOrder.canMove(0,-1)){
+							movementOrder.moveY(-1);
+							//currentYPos--;
+							canMoveCamera = true;
+						}
+					}
+					else{
 						canMoveCamera = true;
 					}
 				}
-				else{
-					canMoveCamera = true;
+				if(canMoveCamera){
+					currentYPos--;
+					if(cursorActive){
+						map[currentYPos + 1][currentXPos].removeGameObject(cursor);
+						map[currentYPos][currentXPos].addGameObject(cursor);
+					}
 				}
 			}
-			if(canMoveCamera){
-				currentYPos--;
-				if(cursorActive){
-					map[currentYPos + 1][currentXPos].removeGameObject(cursor);
-					map[currentYPos][currentXPos].addGameObject(cursor);
-				}
-			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){//down
-			if(currentYPos < getMap().length - 1){
-				if(movingObject){
-					if(movementOrder.canMove(0,1)){
-						movementOrder.moveY(1);
+			else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){//down
+				if(currentYPos < getMap().length - 1){
+					if(movingObject){
+						if(movementOrder.canMove(0,1)){
+							movementOrder.moveY(1);
+							canMoveCamera = true;
+						}
+					}
+					else{
 						canMoveCamera = true;
 					}
 				}
-				else{
-					canMoveCamera = true;
-				}
-			}
-			if(canMoveCamera){
-				currentYPos++;
-				if(cursorActive){
-					map[currentYPos - 1][currentXPos].removeGameObject(cursor);
-					map[currentYPos][currentXPos].addGameObject(cursor);
-				}
-			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-			if(currentXPos < getMap().length -1){
-				if(movingObject){
-					if(movementOrder.canMove(1,0)){
-						movementOrder.moveX(1);
-						canMoveCamera = true;
-					}else{
-						canMoveCamera = false;
+				if(canMoveCamera){
+					currentYPos++;
+					if(cursorActive){
+						map[currentYPos - 1][currentXPos].removeGameObject(cursor);
+						map[currentYPos][currentXPos].addGameObject(cursor);
 					}
 				}
-				else{
-					canMoveCamera = true;
-				}
 			}
-			if(canMoveCamera){
-				currentXPos++;
-				if(cursorActive){
-					map[currentYPos][currentXPos - 1].removeGameObject(cursor);
-					map[currentYPos][currentXPos].addGameObject(cursor);
-				}
-			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){//left
-			if(currentXPos > 0){
-				if(movingObject){
-					if(movementOrder.canMove(-1,0)){
-						movementOrder.moveX(-1);
+			else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
+				if(currentXPos < getMap().length -1){
+					if(movingObject){
+						if(movementOrder.canMove(1,0)){
+							movementOrder.moveX(1);
+							canMoveCamera = true;
+						}else{
+							canMoveCamera = false;
+						}
+					}
+					else{
 						canMoveCamera = true;
 					}
 				}
-				else{
-					canMoveCamera = true;
+				if(canMoveCamera){
+					currentXPos++;
+					if(cursorActive){
+						map[currentYPos][currentXPos - 1].removeGameObject(cursor);
+						map[currentYPos][currentXPos].addGameObject(cursor);
+					}
 				}
 			}
-			if(canMoveCamera){
-				currentXPos--;
-				if(cursorActive){
-					map[currentYPos][currentXPos + 1].removeGameObject(cursor);
+			else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){//left
+				if(currentXPos > 0){
+					if(movingObject){
+						if(movementOrder.canMove(-1,0)){
+							movementOrder.moveX(-1);
+							canMoveCamera = true;
+						}
+					}
+					else{
+						canMoveCamera = true;
+					}
+				}
+				if(canMoveCamera){
+					currentXPos--;
+					if(cursorActive){
+						map[currentYPos][currentXPos + 1].removeGameObject(cursor);
+						map[currentYPos][currentXPos].addGameObject(cursor);
+					}
+				}
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_LBRACKET)){//open bracket
+				if(currentZoomIndex - 1 > -1){
+					currentZoomIndex--;
+				}
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_RBRACKET)){//close bracket
+				if(currentZoomIndex + 1 < zoomScales.length){
+					currentZoomIndex++;
+				}
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_C)){//c
+				if(!cursorActive){
 					map[currentYPos][currentXPos].addGameObject(cursor);
+					cursorActive = true;
+				}
+				else{
+					cursorActive = false;
+					map[currentYPos][currentXPos].removeGameObject(cursor);
 				}
 			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_LBRACKET)){//open bracket
-			if(currentZoomIndex - 1 > -1){
-				currentZoomIndex--;
+			else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
+				if(movingObject){
+					movingObject = false;
+				}
+				else{
+					Game.getInstance().changeToNextGameState(PauseGameState.getInstance());
+				}
 			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_RBRACKET)){//close bracket
-			if(currentZoomIndex + 1 < zoomScales.length){
-				currentZoomIndex++;
+			else if(Keyboard.isKeyDown(Keyboard.KEY_H)){//h
+				if(!viewResources){
+					viewHoldings = !viewHoldings;
+				}
 			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_C)){//c
-			if(!cursorActive){
-				map[currentYPos][currentXPos].addGameObject(cursor);
-				cursorActive = true;
+			else if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+				if(getMap()[currentYPos][currentXPos].getOwner() != null){
+					FactionInformationState.getInstance().setFactionToDispaly(getMap()[currentYPos][currentXPos].getOwner());
+					Game.getInstance().changeToNextGameState(FactionInformationState.getInstance());
+				}
 			}
-			else{
-				cursorActive = false;
-				map[currentYPos][currentXPos].removeGameObject(cursor);
+			else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+				if(getMap()[currentYPos][currentXPos].getCurrentGameObject() != null && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
+					GameObjectInformationState.getInstance().setObjectToDetail(getMap()[currentYPos][currentXPos].getCurrentGameObject());
+					Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
+				}
 			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){//esc
-			if(movingObject){
-				movingObject = false;
+			else if(Keyboard.isKeyDown(Keyboard.KEY_T)){
+				Game.getInstance().changeToNextGameState(DatesListState.getInstance());
 			}
-			else{
-				Game.getInstance().changeToNextGameState(PauseGameState.getInstance());
+			else if(Keyboard.isKeyDown(Keyboard.KEY_R)){
+				if(!viewHoldings){
+					viewResources = !viewResources;
+				}
 			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_H)){//h
-			if(!viewResources){
-				viewHoldings = !viewHoldings;
-			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_I)){
-			if(getMap()[currentYPos][currentXPos].getOwner() != null){
-				FactionInformationState.getInstance().setFactionToDispaly(getMap()[currentYPos][currentXPos].getOwner());
-				Game.getInstance().changeToNextGameState(FactionInformationState.getInstance());
-			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() != null && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
-				GameObjectInformationState.getInstance().setObjectToDetail(getMap()[currentYPos][currentXPos].getCurrentGameObject());
-				Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
-			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_T)){
-			Game.getInstance().changeToNextGameState(DatesListState.getInstance());
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_R)){
-			if(!viewHoldings){
-				viewResources = !viewResources;
-			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_N)){
-			confirmNextTurnDialog = !confirmNextTurnDialog;
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_Y)){
-			if(confirmNextTurnDialog){
-				advanceStep();
+			else if(Keyboard.isKeyDown(Keyboard.KEY_N)){
 				confirmNextTurnDialog = !confirmNextTurnDialog;
 			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_F)){
-			fogOfWar = !fogOfWar;
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_M)){
-			if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject){
-				if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
-					if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
-						movingObject = true;
-						objectOfFocus = getMap()[currentYPos][currentXPos].getCurrentGameObject();
-						movementOrder = new MovementOrder(5);
+			else if(Keyboard.isKeyDown(Keyboard.KEY_Y)){
+				if(confirmNextTurnDialog){
+					advanceStep();
+					confirmNextTurnDialog = !confirmNextTurnDialog;
+				}
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_F)){
+				fogOfWar = !fogOfWar;
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_M)){
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject){
+					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
+						if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
+							movingObject = true;
+							objectOfFocus = getMap()[currentYPos][currentXPos].getCurrentGameObject();
+							movementOrder = new MovementOrder(5);
+						}
 					}
 				}
 			}
-		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
-			if(movingObject){
-				objectOfFocus.giveOrders(movementOrder);
-				movingObject = false;
+			else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
+				if(movingObject){
+					objectOfFocus.giveOrders(movementOrder);
+					movingObject = false;
+				}
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_P)){
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject){
+					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
+						if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
+							((GameObjectPerson) getMap()[currentYPos][currentXPos].getCurrentGameObject()).setTask(new MoveTask(
+									getMap()[currentYPos][currentXPos].getCurrentGameObject(), secondFaction.getHeadOfFamily()));
+						}
+					}
+				}
 			}
 		}
 
 	}
 
 	public void createImage(){
-			mapFrameCounter++;
-			infoFrameCounter++;
-			if(loadedWorld){
-				drawMap();
-				//g.setColor(Color.WHITE);
-				GL11.glColor3f(1f, 1f, 1f);
-				//g.drawLine(500, 0, 500, 500);
-				drawInfo();
-				drawTopBar();
-				if(confirmNextTurnDialog){
-					drawConfirmBox();
-				}
+		mapFrameCounter++;
+		infoFrameCounter++;
+		if(loadedWorld){
+			drawMap();
+			//g.setColor(Color.WHITE);
+			GL11.glColor3f(1f, 1f, 1f);
+			//g.drawLine(500, 0, 500, 500);
+			drawInfo();
+			drawTopBar();
+			if(confirmNextTurnDialog){
+				drawConfirmBox();
 			}
-			else{
-				drawLoading();
-			}
+		}
+		else{
+			drawLoading();
+		}
 
-			if(mapFrameCounter >= MAP_UPDATE_RATE ){
-				mapFrameCounter = 0;
-			}
-			if(infoFrameCounter >= INFO_UPDATE_RATE){
-				infoFrameCounter = 0;
-			}
+		if(mapFrameCounter >= MAP_UPDATE_RATE ){
+			mapFrameCounter = 0;
+		}
+		if(infoFrameCounter >= INFO_UPDATE_RATE){
+			infoFrameCounter = 0;
+		}
 	}	
 
 	private void drawMap(){
