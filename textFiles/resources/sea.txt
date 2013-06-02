@@ -1,3 +1,5 @@
-fish:25000
-lobster:15000
-pearls:10000
+fish:25000:boat
+lobster:15000:boat
+pearls:10000:boat
+crabs:25000:boat
+
