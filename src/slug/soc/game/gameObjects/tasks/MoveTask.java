@@ -17,12 +17,13 @@ public class MoveTask extends AbstractTask{
 
 	@Override
 	public void act() {
-		owner.giveOrders(new MovementOrder(owner.MOVEMENT_DISTANCE));
-		for(int i = 0;i < owner.MOVEMENT_DISTANCE;i++){
-			MovementOrderCoordinate point = path.getFirstCoord();
-			path.removeFirst();
-			owner.getOrder().getLastCoord().setNextCoord(point);
-		}
+//		owner.giveOrders(new MovementOrder(owner.MOVEMENT_DISTANCE));
+//		for(int i = 0;i < owner.MOVEMENT_DISTANCE;i++){
+//			MovementOrderCoordinate point = path.getFirstCoord();
+//			path.removeFirst();
+//			owner.getOrder().getLastCoord().setNextCoord(point);
+//		}
+		owner.giveOrders(path);
 	}
 
 }

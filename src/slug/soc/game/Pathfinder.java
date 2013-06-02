@@ -36,32 +36,30 @@ public class Pathfinder {
 		//add them all to the open list
 		//take first item on the open list and look at it
 		//look at nodes and add them to the front of the list
+		
+		
 		Point node = new Point(firstObject.getX(), firstObject.getY());
 
-		while(node.getX() != secondObject.getX() && node.getY() != secondObject.getY()){
+		int i = 0;
+		while(i < 5){
+			System.out.println(node.getX() + " : " + node.getY());
 			scanNode(openNodes, node);
 			closedNodes.add(openNodes.getFirst());
 			node = openNodes.getFirst();
 			openNodes.removeFirst();
+			i++;
 		}
 
 		for(Point p: closedNodes){
 			path.getLastCoord().setNextCoord(new MovementOrderCoordinate((int)p.getX(),(int)p.getY(),path.getLastCoord()));
 		}
 		System.out.println("GENERATED PATH");
+		
 		return path;
 	}
 
 	private void scanNode(LinkedList<Point> openNodes, Point node){
-		int x = (int)node.getX();
-		int y = (int)node.getY();
-		for(int cx = x - 1;cx < x + 1; cx++){
-			for(int cy = y - 1; cy < y + 1; cy++){
-				if(x != 0 && y != 0){
-					openNodes.addFirst(new Point(x,y));
-				}
-			}
-		}
+		openNodes.addFirst(new Point(1, 0));
 	}
 
 }
