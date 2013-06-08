@@ -390,7 +390,9 @@ public class GameModeState implements IGameState, Runnable {
 				while(moveCoord != null){
 					xCoord = xCoord + moveCoord.getX();
 					yCoord = yCoord + moveCoord.getY();
-					movementCoords[yCoord][xCoord] = true;
+					if(xCoord < map.length && yCoord < map.length){
+						movementCoords[yCoord][xCoord] = true;
+					}
 					moveCoord = moveCoord.getNextCoord();
 				}
 			}
