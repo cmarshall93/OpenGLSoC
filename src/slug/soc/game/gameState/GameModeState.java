@@ -337,7 +337,7 @@ public class GameModeState implements IGameState, Runnable {
 					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
 						if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
 							((GameObjectPerson) getMap()[currentYPos][currentXPos].getCurrentGameObject()).setTask(new MoveTask(
-									getMap()[currentYPos][currentXPos].getCurrentGameObject(), secondFaction.getHeadOfFamily()));
+									getMap()[currentYPos][currentXPos].getCurrentGameObject(), faction.getHoldings().get(0)));
 						}
 					}
 				}
