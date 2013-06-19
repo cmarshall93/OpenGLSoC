@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import slug.soc.game.Game;
 import slug.soc.game.gameObjects.GameObject;
+import slug.soc.game.gameObjects.GameObjectPerson;
 import slug.soc.game.rendering.TextRenderer;
 
 public class GameObjectInformationState implements IGameState {
@@ -34,8 +35,18 @@ public class GameObjectInformationState implements IGameState {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0, 20, 0);
 		if(gameObject != null){
+			GL11.glPushMatrix();
 			TextRenderer.getInstance().drawString(gameObject.getDetailedDesc(), 16, Display.getDisplayMode().getWidth() - 16);
-			GL11.glTranslatef(0, 16, 0);
+			GL11.glPopMatrix();
+			GL11.glTranslatef(0, 112, 0);
+			if(gameObject.hasOrders() && gameObject.getClass().equals(GameObjectPerson.class)){
+				GL11.glPushMatrix();
+				GL11.glColor3f(1f, 1f, 0f);
+				TextRenderer.getInstance().drawString((gameObject.getStringDesc()[0] + " is fosuced on " + ((GameObjectPerson) gameObject).getTask().getDesc()),
+						16, Display.getDisplayMode().getWidth());
+				GL11.glColor3f(1f,1f,1f);
+				GL11.glPopMatrix();
+			}
 			//TextRenderer.getInstance().drawString(gameObject.getX() + " : " + gameObject.getY(), 16, Display.getDisplayMode().getWidth() - 16);
 		}
 		GL11.glPopMatrix();

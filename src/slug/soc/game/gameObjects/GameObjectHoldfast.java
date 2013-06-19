@@ -23,8 +23,9 @@ public class GameObjectHoldfast extends GameObject {
 
 	@Override
 	public String[] getStringDesc() {
-		String[] desc = new String[1];
-		desc[0] = "Property of the " + owner.toString() + " family";
+		String[] desc = new String[2];
+		desc[0] = owner.toString() + " holdfast";
+		desc[1] = "Property of the " + owner.toString() + " family";
 		return desc;
 	}
 	

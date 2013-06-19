@@ -33,6 +33,8 @@ public class MoveTask extends AbstractTask{
 									, path.getLastCoord()));
 				}
 			}
+		}else{
+			isCompleted = true;
 		}
 	}
 
@@ -44,7 +46,16 @@ public class MoveTask extends AbstractTask{
 		//			path.removeFirst();
 		//			owner.getOrder().getLastCoord().setNextCoord(point);
 		//		}
-		owner.giveOrders(path);
+		if(target.getX() == path.getLastCoord().getX() && target.getY() == path.getLastCoord().getY()){
+			isCompleted = true;
+		}
+		else{
+			owner.giveOrders(path);
+		}
+	}
+	
+	public String getDesc(){
+		return "travelling to " + target.getStringDesc()[0];
 	}
 
 }

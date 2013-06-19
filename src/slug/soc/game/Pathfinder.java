@@ -8,6 +8,9 @@ import org.newdawn.slick.util.pathfinding.Path;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 import org.newdawn.slick.util.pathfinding.heuristics.ClosestHeuristic;
 
+import slug.soc.game.gameObjects.TerrainObjectWater;
+import slug.soc.game.gameState.GameModeState;
+
 /**
  * A path finder implementation that uses the AStar heuristic based algorithm
  * to determine a path. 
@@ -70,8 +73,8 @@ public class Pathfinder{
 	public Path findPath(int sx, int sy, int tx, int ty) {
 		// easy first check, if the destination is blocked, we can't get there
 		System.out.println("target is at " + tx + " : " + ty);
-		if (!GameModeState.getInstance().getMap()[ty][tx].isBuildable()) {
-			System.out.println("Unreachable");
+		if(GameModeState.getInstance().getMap()[ty][tx].getClass().equals(TerrainObjectWater.class)) {
+			System.out.println(GameModeState.getInstance().getMap()[ty][tx].toString() + " , unreachable");
 			return null;
 		}
 		
@@ -89,6 +92,7 @@ public class Pathfinder{
 		// while we haven'n't exceeded our max search depth
 		int maxDepth = 0;
 		while ((maxDepth < maxSearchDistance) && (open.size() != 0)) {
+			System.out.println(maxDepth);
 			// pull out the first node in our open list, this is determined to 
 
 			// be the most likely to be the next step based on our heuristic
@@ -176,7 +180,7 @@ public class Pathfinder{
 		// there was no path. Just return null
 
 		if (nodes[tx][ty].parent == null) {
-			System.out.println("No path");
+			System.out.println(GameModeState.getInstance().getMap()[ty][tx].toString() + " , no path");
 			return null;
 		}
 		
@@ -195,7 +199,7 @@ public class Pathfinder{
 		path.prependStep(sx,sy);
 		
 		for(int i = 0 ; i < path.getLength(); i++){
-			System.out.println(path.getStep(i).getX() + " :::: " + path.getStep(i).getY());
+			System.out.println(path.getStep(i).getX() + " - " + path.getStep(i).getY());
 		}
 		// thats it, we have our path 
 
@@ -283,8 +287,10 @@ public class Pathfinder{
 				(y >= GameModeState.getInstance().getMap().length);
 		
 		if ((!invalid) && ((sx != x) || (sy != y))) {
-			invalid = !GameModeState.getInstance().getMap()[y][x].isBuildable();
+			invalid = GameModeState.getInstance().getMap()[y][x].getClass().equals(TerrainObjectWater.class);
 		}
+					
+					//!GameModeState.getInstance().getTravelMap()[y][x];}
 		
 		return !invalid;
 	}

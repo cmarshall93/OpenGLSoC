@@ -24,4 +24,6 @@ public abstract class AbstractTask {
 	}
 	
 	public abstract void act();
+	
+	public abstract String getDesc();
 }

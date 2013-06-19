@@ -58,6 +58,7 @@ public class GameModeState implements IGameState, Runnable {
 	private boolean movingObject;
 
 	private TerrainObject[][] map;
+	private boolean[][] travelMap;
 	private ArrayList<GameObject> gameObjects;
 	private Faction faction;
 	private Faction secondFaction;
@@ -148,11 +149,28 @@ public class GameModeState implements IGameState, Runnable {
 
 		long end = System.nanoTime();
 		System.out.println("GenTime: " + (end - start)/1000000);
+		
+		travelMap = new boolean[map.length][map.length];
+		for(int x2 = 0;x < map.length;x++){
+			for(int y2 = 0;y < map.length;y++){
+				if(map[y2][x2] instanceof TerrainObjectWater){
+					travelMap[y2][x2] = false;
+				}
+				else{
+					travelMap[y2][x2] = true;
+				}
+			}
+		}
+		
 		loadedWorld = true;		
 	}
 
 	public TerrainObject[][] getMap(){
 		return map;
+	}
+	
+	public boolean[][] getTravelMap(){
+		return travelMap;
 	}
 
 	public void advanceStep(){
@@ -336,8 +354,11 @@ public class GameModeState implements IGameState, Runnable {
 				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject){
 					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
 						if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
-							((GameObjectPerson) getMap()[currentYPos][currentXPos].getCurrentGameObject()).setTask(new MoveTask(
-									getMap()[currentYPos][currentXPos].getCurrentGameObject(), faction.getHoldings().get(0)));
+							MoveTask task = new MoveTask(getMap()[currentYPos][currentXPos].getCurrentGameObject(), faction.getHoldings().get(0));
+							if(!task.isCompleted()){
+								((GameObjectPerson) getMap()[currentYPos][currentXPos].getCurrentGameObject()).setTask(task);
+								task.act();
+							}
 						}
 					}
 				}
@@ -381,6 +402,7 @@ public class GameModeState implements IGameState, Runnable {
 		//g.setFont(FontProvider.getInstance().getFont());
 		//g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
 
+		//build a list of coords that are part of a path if there is one to display
 		boolean[][] movementCoords = new boolean[map.length][map.length];
 		if(map[currentYPos][currentXPos].getGameObjects().size() > 0){
 			if(map[currentYPos][currentXPos].getCurrentGameObject().hasOrders()){
@@ -402,10 +424,7 @@ public class GameModeState implements IGameState, Runnable {
 			GL11.glPushMatrix();
 			for(int x = currentXPos - (DEFAULT_GRID_SIZE / 2) * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (DEFAULT_GRID_SIZE * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
 				if(x < 0 || y < 0 || x >= getMap().length || y >= getMap().length ){
-					//g.setColor(Color.BLACK);
-					GL11.glColor3f(1f,1f,1f);
-					//g.drawString(" ", gx, gy);
-					TextRenderer.getInstance().drawSymbol(" ", DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
+
 				}
 				else{
 					if(mapFrameCounter >= MAP_UPDATE_RATE){
@@ -455,10 +474,6 @@ public class GameModeState implements IGameState, Runnable {
 									DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
 						}
 					}
-					//					else{
-					//						TextRenderer.getInstance().drawSymbol(getMap()[y][x].getBaseTile().getSymbol(),
-					//								DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex]);
-					//					}
 				}
 				//gx += g.getFont().getSize();
 				GL11.glTranslatef(DEFAULT_TILE_SIZE * zoomScales[currentZoomIndex], 0, 0);
