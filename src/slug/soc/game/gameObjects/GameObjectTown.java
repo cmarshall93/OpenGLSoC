@@ -10,6 +10,11 @@ import slug.soc.game.worldBuilding.WordGenerator;
 
 public class GameObjectTown extends GameObject {
 
+	//represented as 1 in X
+	private static final int CHANGE_OF_PLAGUE = 1000;
+	
+	private boolean hasPlague;
+	
 	private int troops;
 	private int population;
 	private String name;
@@ -46,8 +51,32 @@ public class GameObjectTown extends GameObject {
 
 	@Override
 	public void act() {
-		// TODO Auto-generated method stub
+		if(hasPlague){
+			if(population > 10){
+				population -= 10;
+			}
+			if(RandomProvider.getInstance().nextInt(100) == 1){
+				hasPlague = false;
+				hasSpecialCondition = false;
+				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("End of plague in " + name, this));
+				GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
+			}
+		}
+		else if(RandomProvider.getInstance().nextInt(1000) == 1){
+			hasPlague = true;
+			hasSpecialCondition = true;
+			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("Outbreak of plague in " + name,this));
+			GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
+		}
+	}
 
+	@Override
+	public String getSpecialCondition() {
+		String out ="";
+		if(hasPlague){
+			out += "This town is currently suffering from a plague outbreak.";
+		}
+		return out;
 	}
 
 }

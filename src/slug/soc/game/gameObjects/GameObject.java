@@ -15,6 +15,8 @@ public abstract class GameObject implements GameDrawable {
 
 	public static final int MOVEMENT_DISTANCE = 5;
 	
+	protected boolean hasSpecialCondition;
+	
 	protected GameTile tile;
 	protected Faction owner;
 	protected String location;
@@ -80,5 +82,11 @@ public abstract class GameObject implements GameDrawable {
 	public abstract String getDetailedDesc();
 	
 	public abstract void act();
+
+	public boolean hasSpecialCondition() {
+		return hasSpecialCondition;
+	}
+	
+	public abstract String getSpecialCondition();
 }
 

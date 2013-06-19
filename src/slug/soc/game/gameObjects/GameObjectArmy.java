@@ -28,4 +28,10 @@ public class GameObjectArmy extends GameObject {
 		
 	}
 
+	@Override
+	public String getSpecialCondition() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

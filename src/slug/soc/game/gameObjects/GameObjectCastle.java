@@ -46,4 +46,10 @@ public class GameObjectCastle extends GameObject {
 				" soilders and " + civPopulation + " peasants.";
 	}
 
+	@Override
+	public String getSpecialCondition() {
+		// TODO Auto-generated method stub
+		return "";
+	}
+
 }
