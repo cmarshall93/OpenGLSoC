@@ -13,4 +13,9 @@ public class TerrainObjectRoadCross extends TerrainObject {
 	public String toString(){
 		return "Road";
 	}
+
+	@Override
+	public String getTypeString() {
+		return "road";
+	}
 }

@@ -14,4 +14,9 @@ public class TerrainObjectRoadBottomRightCorner extends TerrainObject {
 		return "Road";
 	}
 
+	@Override
+	public String getTypeString() {
+		return "road";
+	}
+
 }

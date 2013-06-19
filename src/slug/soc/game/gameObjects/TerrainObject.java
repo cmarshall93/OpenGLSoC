@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import slug.soc.game.RandomProvider;
-import slug.soc.game.ResourceFactory;
 import slug.soc.game.gameObjects.tileResources.AbstractResource;
 import slug.soc.game.gameObjects.tiles.GameTile;
+import slug.soc.game.worldBuilding.ResourceFactory;
 
 /**
  * 

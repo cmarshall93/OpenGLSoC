@@ -6,8 +6,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import org.newdawn.slick.util.pathfinding.Path;
+import org.newdawn.slick.util.pathfinding.Path.Step;
+
+import slug.soc.game.Pathfinder;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.*;
+import slug.soc.game.gameState.GameModeState;
 
 
 public class TerrianGenerator {
@@ -422,5 +427,61 @@ public class TerrianGenerator {
 			}
 		}
 
+	}
+
+	public void buildRoad(GameObject g, GameObject g2){
+		Pathfinder pathFinder = new Pathfinder(1000, false);
+		Path path = pathFinder.findPath(g.getX(), g.getY(),
+				g2.getX(), g2.getY());
+		if(path != null){
+			//go through each point and the path and change the point on the map to a road tile
+			for(int i = 0;i < path.getLength();i++){
+				Step prev = null;
+				Step next = null;
+				if(i > 0){
+					prev = path.getStep(i -1);
+				}
+				if(i + 1 < path.getLength()){
+					next = path.getStep(i + 1);
+				}
+				Step current = path.getStep(i);
+				
+				if(prev != null && next != null){
+					if(prev.getY() != current.getY() && next.getY() != current.getY()){	//if next and previous are above and below.
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadVertical();
+					}
+
+					if(prev.getY() < current.getY() && next.getY() == current.getY() && next.getX() < current.getX()){//if previous is lower and next is to the left
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadBottomRightCorner();
+					}
+					if(prev.getY() < current.getY() && next.getY() == current.getY() && next.getX() > current.getX()){//if previous is lower and next is to the right
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadBottomLeftCorner();
+					}
+					if(prev.getY() > current.getY() && next.getY() == current.getY() && next.getX() < current.getX()){//if previous is higher and next is to the left
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadTopRightCorner();
+					}
+					if(prev.getY() > current.getY() && next.getY() == current.getY() && next.getX() > current.getX()){//if previous is higher and next is to the right
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadTopLeftCorner();
+					}
+
+					if(next.getY() < current.getY() && prev.getY() == current.getY() && prev.getX() < current.getX()){//if next is lower and previous is to the left
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadBottomRightCorner();
+					}
+					if(next.getY() < current.getY() && prev.getY() == current.getY() && prev.getX() > current.getX()){//if next is lower and previous is to the right
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadBottomLeftCorner();
+					}
+					if(next.getY() > current.getY() && prev.getY() == current.getY() && prev.getX() < current.getX()){//if next is higher and previous is to the left
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadTopRightCorner();
+					}
+					if(next.getY() > current.getY() && prev.getY() == current.getY() && prev.getX() > current.getX()){//if next is higher and previous is to the right
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadTopLeftCorner();
+					}			
+
+					if(prev.getX() != current.getX() && next.getX() != current.getX()){
+						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadHorizontal();
+					}
+				}
+			}
+		}
 	}
 }

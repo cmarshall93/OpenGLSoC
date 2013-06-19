@@ -31,6 +31,9 @@ public class WordGenerator {
 	private File placeSuffixFile = new File("textFiles/places/placeSuffix.txt");
 	private File placesPrefixFile = new File("textFiles/places/placePrefix.txt");
 	
+	private File landResourceFile = new File("textFiles/resources/land.txt");
+	private File seaResourceFile = new File("textFiles/resources/sea.txt");
+	
 	private Scanner scanner;
 	
 	protected WordGenerator(){
@@ -128,5 +131,13 @@ public class WordGenerator {
 	
 	public String getRandomBeard(){
 		return getRandomWordFromFile(beardTypesFile);
+	}
+
+	public String getRandomLandResource() {
+		return getRandomWordFromFile(landResourceFile);
+	}
+	
+	public String getRandomSeaResource(){
+		return getRandomWordFromFile(seaResourceFile);
 	}
 }

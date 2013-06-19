@@ -38,22 +38,27 @@ public class MoveTask extends AbstractTask{
 		}
 	}
 
+	//give the owner a path to travel along in the following turn
 	@Override
 	public void act() {
-		//		owner.giveOrders(new MovementOrder(owner.MOVEMENT_DISTANCE));
-		//		for(int i = 0;i < owner.MOVEMENT_DISTANCE;i++){
-		//			MovementOrderCoordinate point = path.getFirstCoord();
-		//			path.removeFirst();
-		//			owner.getOrder().getLastCoord().setNextCoord(point);
-		//		}
-		if(target.getX() == path.getLastCoord().getX() && target.getY() == path.getLastCoord().getY()){
+//		owner.giveOrders(new MovementOrder(owner.MOVEMENT_DISTANCE));
+//		for(int i = 0;i < owner.MOVEMENT_DISTANCE;i++){
+//			MovementOrderCoordinate point = path.getFirstCoord();
+//			path.removeFirst();
+//			owner.getOrder().getLastCoord().setNextCoord(point);
+//		}
+		
+		//crap to ensure that people stop moving, as atm the whole path if travelled in one go
+		//people will always stop moving after one go
+		owner.giveOrders(path);
+		if(path.getLastCoord().getNextCoord() == null){
 			isCompleted = true;
 		}
 		else{
 			owner.giveOrders(path);
 		}
 	}
-	
+
 	public String getDesc(){
 		return "travelling to " + target.getStringDesc()[0];
 	}

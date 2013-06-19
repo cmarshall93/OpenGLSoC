@@ -12,19 +12,35 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.util.pathfinding.Path;
+import org.newdawn.slick.util.pathfinding.Path.Step;
 
 import slug.soc.game.Game;
 import slug.soc.game.GameCalendar;
+import slug.soc.game.Pathfinder;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectCastle;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.GameObjectPerson;
+import slug.soc.game.gameObjects.GameObjectTown;
 import slug.soc.game.gameObjects.GameObjectVillage;
 import slug.soc.game.gameObjects.MovementOrder;
 import slug.soc.game.gameObjects.MovementOrderCoordinate;
 import slug.soc.game.gameObjects.TerrainObject;
+import slug.soc.game.gameObjects.TerrainObjectRiverBottomLeftCorner;
+import slug.soc.game.gameObjects.TerrainObjectRiverBottomRightCorner;
+import slug.soc.game.gameObjects.TerrainObjectRiverHorizontal;
+import slug.soc.game.gameObjects.TerrainObjectRiverTopLeftCorner;
+import slug.soc.game.gameObjects.TerrainObjectRiverTopRightCorner;
+import slug.soc.game.gameObjects.TerrainObjectRiverVertical;
+import slug.soc.game.gameObjects.TerrainObjectRoadBottomLeftCorner;
+import slug.soc.game.gameObjects.TerrainObjectRoadBottomRightCorner;
+import slug.soc.game.gameObjects.TerrainObjectRoadHorizontal;
+import slug.soc.game.gameObjects.TerrainObjectRoadTopLeftCorner;
+import slug.soc.game.gameObjects.TerrainObjectRoadTopRightCorner;
+import slug.soc.game.gameObjects.TerrainObjectRoadVertical;
 import slug.soc.game.gameObjects.TerrainObjectWater;
 import slug.soc.game.gameObjects.tasks.MoveTask;
 import slug.soc.game.rendering.AsciiTextureGenerator;
@@ -149,7 +165,7 @@ public class GameModeState implements IGameState, Runnable {
 
 		long end = System.nanoTime();
 		System.out.println("GenTime: " + (end - start)/1000000);
-		
+
 		travelMap = new boolean[map.length][map.length];
 		for(int x2 = 0;x < map.length;x++){
 			for(int y2 = 0;y < map.length;y++){
@@ -161,14 +177,14 @@ public class GameModeState implements IGameState, Runnable {
 				}
 			}
 		}
-		
+
 		loadedWorld = true;		
 	}
 
 	public TerrainObject[][] getMap(){
 		return map;
 	}
-	
+
 	public boolean[][] getTravelMap(){
 		return travelMap;
 	}
@@ -361,6 +377,17 @@ public class GameModeState implements IGameState, Runnable {
 							}
 						}
 					}
+				}
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_B)){
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() == 0){
+					addNewFactionObject(currentXPos,currentYPos,new GameObjectTown(faction.getFactionColor().getColor()
+							,faction,currentXPos,currentYPos));
+				}
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_V)){
+				if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectTown){
+					terrianGenerator.buildRoad(getMap()[currentYPos][currentXPos].getCurrentGameObject(), faction.getHoldings().get(0));
 				}
 			}
 		}
@@ -755,5 +782,10 @@ public class GameModeState implements IGameState, Runnable {
 				}
 			}
 		}
+	}
+
+	public void addNewFactionObject(int x, int y, GameObject g){
+		g.getOwner().getHoldings().add(g);
+		addFactionObject(x,y,g);
 	}
 }

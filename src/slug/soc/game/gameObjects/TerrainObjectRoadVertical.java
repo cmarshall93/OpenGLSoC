@@ -13,4 +13,9 @@ public class TerrainObjectRoadVertical extends TerrainObject {
 	public String toString(){
 		return "Road";
 	}
+
+	@Override
+	public String getTypeString() {
+		return "road";
+	}
 }

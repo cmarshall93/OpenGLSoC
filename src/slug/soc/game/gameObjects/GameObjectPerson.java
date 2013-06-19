@@ -128,15 +128,6 @@ public class GameObjectPerson extends GameObject {
 	}
 
 	public void act(){
-		if(hasTask){
-			if(task.isCompleted()){
-				hasTask = false;
-				hasOrders = false;
-			}
-			else{
-				task.act();
-			}
-		}
 		if(hasOrders){
 			MovementOrderCoordinate mCoord = order.getFirstCoord();
 			while(mCoord != null){
@@ -145,6 +136,16 @@ public class GameObjectPerson extends GameObject {
 					hasOrders = false;
 				}
 				mCoord = mCoord.getNextCoord();
+			}
+		}
+		if(hasTask){
+			if(task.isCompleted()){
+				hasTask = false;
+				hasOrders = false;
+			}
+			else{
+				System.out.println("task acted");
+				task.act();
 			}
 		}
 	}
