@@ -6,6 +6,7 @@ import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.tiles.faction.TileTown;
+import slug.soc.game.gameState.GameModeState;
 import slug.soc.game.worldBuilding.WordGenerator;
 
 public class GameObjectTown extends GameObject {
@@ -67,6 +68,7 @@ public class GameObjectTown extends GameObject {
 			hasSpecialCondition = true;
 			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("Outbreak of plague in " + name,this));
 			GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
+			GameModeState.getInstance().addNotification("The town of " + name+ " has had an outbreak of plague.");
 		}
 	}
 
@@ -78,5 +80,4 @@ public class GameObjectTown extends GameObject {
 		}
 		return out;
 	}
-
 }

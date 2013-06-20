@@ -20,33 +20,15 @@ public class Faction {
 	private boolean[][] fov;
 
 	private GameObjectPerson headOfFamily;
+	private GameObjectCastle capital;
 
 	public Faction(){
 		factionColor = ColorFactory.getInstance().getRandomFactionColor();
 		sigil = HouseSigilGenerator.getInstance().createNewSigilString(factionColor);
 		name = WordGenerator.getInstance().getRandomFactionName();
-		headOfFamily = new GameObjectPerson(factionColor.getColor(), this, null, null, 0, 0);
 		money = RandomProvider.getInstance().nextInt(100000);
 		fov = new boolean[GameModeState.getInstance().getMap().length][GameModeState.getInstance().getMap().length];
-
-		/*		 
-		 * This is faction testing stuff
-		 * ----------------------------------------------------------------------------------------------
-		 * */
 		holdings = new ArrayList<GameObject>();
-		GameObjectPerson person = new GameObjectPerson(factionColor.getColor(), this, null, null, 0, 0);
-		holdings.add(new GameObjectHoldfast(factionColor.getColor(), this, 0, 0));
-		holdings.add(headOfFamily);
-		holdings.add(new GameObjectTown(factionColor.getColor(), this, 0 ,0));
-		holdings.add(person);
-
-		GameObjectPerson child =headOfFamily.haveChild(headOfFamily, person); 
-		if(child != null){
-			holdings.add(child);
-		}
-		/*
-		 * ----------------------------------------------------------------------------------------------
-		 */
 	}
 
 	public ArrayList<GameObject> getHoldings(){
@@ -60,9 +42,21 @@ public class Faction {
 	public FactionColor getFactionColor(){
 		return factionColor;
 	}
+	
+	public GameObjectCastle getCapital(){
+		return capital;
+	}
+	
+	public void setCapital(GameObjectCastle c){
+		capital = c;
+	}
 
 	public GameObjectPerson getHeadOfFamily(){
 		return headOfFamily;
+	}
+	
+	public void setHeadOfFamily(GameObjectPerson p){
+		headOfFamily = p;
 	}
 
 	public long getMoney(){

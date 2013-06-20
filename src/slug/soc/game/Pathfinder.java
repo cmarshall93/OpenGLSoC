@@ -73,7 +73,7 @@ public class Pathfinder{
 	public Path findPath(int sx, int sy, int tx, int ty) {
 		// easy first check, if the destination is blocked, we can't get there
 		System.out.println("target is at " + tx + " : " + ty);
-		if(GameModeState.getInstance().getMap()[ty][tx].getClass().equals(TerrainObjectWater.class)) {
+		if(!GameModeState.getInstance().getMap()[ty][tx].isBuildable()) {
 			System.out.println(GameModeState.getInstance().getMap()[ty][tx].toString() + " , unreachable");
 			return null;
 		}
@@ -287,7 +287,7 @@ public class Pathfinder{
 				(y >= GameModeState.getInstance().getMap().length);
 		
 		if ((!invalid) && ((sx != x) || (sy != y))) {
-			invalid = GameModeState.getInstance().getMap()[y][x].getClass().equals(TerrainObjectWater.class);
+			invalid = !GameModeState.getInstance().getMap()[y][x].isBuildable();
 		}
 					
 					//!GameModeState.getInstance().getTravelMap()[y][x];}

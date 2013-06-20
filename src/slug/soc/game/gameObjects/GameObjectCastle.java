@@ -37,11 +37,15 @@ public class GameObjectCastle extends GameObject {
 	public String toString(){
 		return "Castle";
 	}
+	
+	public String getName(){
+		return "Castle " + owner.toString(); 
+	}
 
 	@Override
 	public String getDetailedDesc() {
 		return "Castle " + owner.toString() + " belongs to the " + owner.toString() + " family(i). " +
-				"It is lcoated in " + location + ". " +
+				"It is located in " + location + ". " +
 				"Work was completed on " + dateCreated.toString() + ". The caste has a total population of " + (troopPopulation + civPopulation) + ", consisting of " + troopPopulation +
 				" soilders and " + civPopulation + " peasants.";
 	}
