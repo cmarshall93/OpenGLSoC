@@ -15,8 +15,8 @@ public class GameObjectCastle extends GameObject {
 
 	public GameObjectCastle(Color color, Faction owner, int x, int y) {
 		super(new TileCastle(color), owner, x, y);
-		troopPopulation = RandomProvider.getInstance().nextInt(201);
-		civPopulation = RandomProvider.getInstance().nextInt(601);
+		troopPopulation = RandomProvider.getInstance().nextInt(5000) + 1000;
+		civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
 		
 		dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(), this));
 		GameCalendar.getInstance().addKeyDate(dateCreated);

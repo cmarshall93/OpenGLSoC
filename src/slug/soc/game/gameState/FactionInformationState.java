@@ -57,7 +57,7 @@ public class FactionInformationState implements IGameState {
 		
 		String out = "The great house of " + faction.toString() + " flys " + faction.getSigil().toLowerCase() + " as their sigil.";
 		out += " The head of the family is " + faction.getHeadOfFamily().getName() + ".";
-		TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE - 2, Display.getDisplayMode().getWidth());
+		TextRenderer.getInstance().drawString(out, DEFAULT_TEXT_SIZE , Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
 		//return gameImage;
 		GL11.glPopMatrix();

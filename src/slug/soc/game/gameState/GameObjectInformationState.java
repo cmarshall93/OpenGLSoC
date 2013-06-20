@@ -52,6 +52,7 @@ public class GameObjectInformationState implements IGameState {
 				GL11.glPushMatrix();
 				GL11.glColor3f(0,0,1f);
 				TextRenderer.getInstance().drawString(gameObject.getSpecialCondition(), 16, Display.getDisplayMode().getWidth());
+				GL11.glColor3f(1f,1f,1f);
 				GL11.glPopMatrix();
 			}
 			//TextRenderer.getInstance().drawString(gameObject.getX() + " : " + gameObject.getY(), 16, Display.getDisplayMode().getWidth() - 16);

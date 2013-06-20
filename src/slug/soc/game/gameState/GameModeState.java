@@ -29,6 +29,7 @@ import slug.soc.game.gameObjects.GameObjectVillage;
 import slug.soc.game.gameObjects.MovementOrder;
 import slug.soc.game.gameObjects.MovementOrderCoordinate;
 import slug.soc.game.gameObjects.TerrainObject;
+import slug.soc.game.gameObjects.TerrainObjectGrassPlain;
 import slug.soc.game.gameObjects.TerrainObjectRiverBottomLeftCorner;
 import slug.soc.game.gameObjects.TerrainObjectRiverBottomRightCorner;
 import slug.soc.game.gameObjects.TerrainObjectRiverHorizontal;
@@ -74,7 +75,7 @@ public class GameModeState implements IGameState, Runnable {
 	private boolean movingObject;
 
 	private TerrainObject[][] map;
-	private boolean[][] travelMap;
+	private TerrainObject[][] miniMap;
 	private ArrayList<GameObject> gameObjects;
 	private Faction faction;
 	private Faction secondFaction;
@@ -88,6 +89,7 @@ public class GameModeState implements IGameState, Runnable {
 	private float[] zoomScales = {
 			1.0f, 0.5f, 0.3f
 	};
+	private boolean zoomedOut;
 
 	private boolean cursorActive = false;
 	private boolean loadedWorld = false;
@@ -163,30 +165,45 @@ public class GameModeState implements IGameState, Runnable {
 			advanceStep();
 		}
 
-		long end = System.nanoTime();
-		System.out.println("GenTime: " + (end - start)/1000000);
+		miniMap = new TerrainObject[25][25];
+		for(int x2 = 0, miniX = 0;x2 < map.length;x2+=4, miniX++){
+			for(int y2 = 0, miniY = 0; y2 < map.length;y2+=4, miniY++){
+				
+				System.out.println(x2 + " : " + y2);
+				
+				int landCount = 0;
+				int seaCount = 0;
 
-		travelMap = new boolean[map.length][map.length];
-		for(int x2 = 0;x < map.length;x++){
-			for(int y2 = 0;y < map.length;y++){
-				if(map[y2][x2] instanceof TerrainObjectWater){
-					travelMap[y2][x2] = false;
+				for(int a = 0; a < 4;a++){
+					for(int b = 0; b < 4;b++){
+						if(map[y2 + a][x2 + b] instanceof TerrainObjectWater){
+							seaCount += 1;
+						}
+						else{
+							landCount += 1;
+						}
+					}
+				}
+
+				if(seaCount >= landCount){
+					miniMap[miniY][miniX] = new TerrainObjectWater();
 				}
 				else{
-					travelMap[y2][x2] = true;
+					miniMap[miniY][miniX] = new TerrainObjectGrassPlain();
 				}
+				//miniY++;
 			}
+			//miniX++;
 		}
+		System.out.println("|||||" + miniMap.length);
 
+		long end = System.nanoTime();
+		System.out.println("GenTime: " + (end - start)/1000000);
 		loadedWorld = true;		
 	}
 
 	public TerrainObject[][] getMap(){
 		return map;
-	}
-
-	public boolean[][] getTravelMap(){
-		return travelMap;
 	}
 
 	public void advanceStep(){
@@ -285,13 +302,14 @@ public class GameModeState implements IGameState, Runnable {
 				}
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_LBRACKET)){//open bracket
-				if(currentZoomIndex - 1 > -1){
-					currentZoomIndex--;
-				}
+				
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_RBRACKET)){//close bracket
-				if(currentZoomIndex + 1 < zoomScales.length){
-					currentZoomIndex++;
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
+				getMap()[currentYPos][currentXPos].getNextGameObject();
+				if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor){
+					getMap()[currentYPos][currentXPos].getNextGameObject();
+				}
 				}
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_C)){//c
@@ -390,6 +408,9 @@ public class GameModeState implements IGameState, Runnable {
 					terrianGenerator.buildRoad(getMap()[currentYPos][currentXPos].getCurrentGameObject(), faction.getHoldings().get(0));
 				}
 			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+				zoomedOut = !zoomedOut;
+			}
 		}
 
 	}
@@ -398,7 +419,12 @@ public class GameModeState implements IGameState, Runnable {
 		mapFrameCounter++;
 		infoFrameCounter++;
 		if(loadedWorld){
-			drawMap();
+			if(!zoomedOut){
+				drawMap();
+			}
+			else{
+				drawMiniMap();
+			}
 			//g.setColor(Color.WHITE);
 			GL11.glColor3f(1f, 1f, 1f);
 			//g.drawLine(500, 0, 500, 500);
@@ -515,6 +541,29 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glPopMatrix();
 	}
 
+	private void drawMiniMap(){
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0f, 20 , 0f);
+		for(int y = 0;y < miniMap.length; y++){
+			GL11.glPushMatrix();
+			for(int x = 0; x < miniMap.length; x++){
+				if(x < 0 || y < 0 || x >= miniMap.length || y >= miniMap.length){
+				}
+				else{
+					Color color = miniMap[y][x].getTile().getColor();
+					GL11.glColor3f(color.getRed()/255.0f, color.getGreen()/255.0f, color.getBlue()/255.0f);
+					TextRenderer.getInstance().drawSymbol(miniMap[y][x].getBaseTile().getSymbol(),
+							DEFAULT_TILE_SIZE);
+				}
+				GL11.glTranslatef(DEFAULT_TILE_SIZE, 0, 0);
+
+			}
+			GL11.glPopMatrix();
+			GL11.glTranslatef(0, DEFAULT_TILE_SIZE, 0);
+		}
+		GL11.glPopMatrix();
+	}
+
 	private void drawInfo(){
 
 		float textSpace = Display.getWidth() - (DEFAULT_TILE_SIZE * DEFAULT_GRID_SIZE);
@@ -566,14 +615,6 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glTranslatef(0,DEFAULT_TEXT_SIZE * 2,0);
 		TextRenderer.getInstance().drawString(getMap()[currentYPos][currentXPos].getDesc(), DEFAULT_TEXT_SIZE, textSpace);
 		GL11.glPopMatrix();
-
-
-		if(infoFrameCounter >= INFO_UPDATE_RATE && getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
-			getMap()[currentYPos][currentXPos].getNextGameObject();
-			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor){
-				getMap()[currentYPos][currentXPos].getNextGameObject();
-			}
-		}
 
 		GL11.glTranslatef(0, DEFAULT_TEXT_SIZE * 5, 0);
 		GL11.glPushMatrix();

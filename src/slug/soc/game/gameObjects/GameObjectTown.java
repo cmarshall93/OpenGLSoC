@@ -21,8 +21,8 @@ public class GameObjectTown extends GameObject {
 
 	public GameObjectTown(Color color, Faction owner, int x, int y) {
 		super(new TileTown(color), owner, x, y);
-		troops = RandomProvider.getInstance().nextInt(100) +30;
-		population = RandomProvider.getInstance().nextInt(2000) + 200;
+		troops = RandomProvider.getInstance().nextInt(1000) +300;
+		population = RandomProvider.getInstance().nextInt(100000) + 10000;
 		name = WordGenerator.getInstance().getRandomPlaceName();
 		
 		dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));

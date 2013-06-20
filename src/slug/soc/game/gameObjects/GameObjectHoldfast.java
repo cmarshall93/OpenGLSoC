@@ -14,8 +14,8 @@ public class GameObjectHoldfast extends GameObject {
 
 	public GameObjectHoldfast(Color color, Faction owner, int x, int y){
 		super(new TileHoldfast(color), owner, x, y);
-		troopPopulation = RandomProvider.getInstance().nextInt(101);
-		civPopulation = RandomProvider.getInstance().nextInt(301);
+		troopPopulation = RandomProvider.getInstance().nextInt(1000) + 200;
+		civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
 		
 		dateCreated.addEvent(new GameCalendarEvent("The completion of work on " + owner.toString() + " holdfast.", this));
 		GameCalendar.getInstance().addKeyDate(dateCreated);

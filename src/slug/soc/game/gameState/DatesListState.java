@@ -37,9 +37,9 @@ public class DatesListState implements IGameState {
 		GL11.glTranslatef(0, 20, 0);
 		GL11.glPushMatrix();
 			GL11.glColor3f(1f, 1f, 1f);
-			TextRenderer.getInstance().drawString("A History Of Events", 20, Display.getDisplayMode().getWidth());
+			TextRenderer.getInstance().drawString("A History Of Events", 16, Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
-		GL11.glTranslatef(0, 20f, 0);
+		GL11.glTranslatef(0, 32f, 0);
 		int i = 0;
 			for(GameCalendarDate date: GameCalendar.getInstance().getKeyDates().keySet()){
 				GL11.glPushMatrix();
