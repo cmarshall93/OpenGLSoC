@@ -27,7 +27,7 @@ public class GameObjectTown extends GameObject {
 		name = WordGenerator.getInstance().getRandomPlaceName();
 		
 		dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));
-		GameCalendar.getInstance().addKeyDate(dateCreated);
+		//GameCalendar.getInstance().addKeyDate(dateCreated);
 	}
 
 	@Override
@@ -60,14 +60,14 @@ public class GameObjectTown extends GameObject {
 				hasPlague = false;
 				hasSpecialCondition = false;
 				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("End of plague in " + name, this));
-				GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
+				//GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
 			}
 		}
 		else if(RandomProvider.getInstance().nextInt(1000) == 1){
 			hasPlague = true;
 			hasSpecialCondition = true;
 			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("Outbreak of plague in " + name,this));
-			GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
+			//GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
 			GameModeState.getInstance().addNotification("The town of " + name+ " has had an outbreak of plague.");
 		}
 	}

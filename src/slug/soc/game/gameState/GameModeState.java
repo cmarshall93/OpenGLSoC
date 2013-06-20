@@ -195,7 +195,6 @@ public class GameModeState implements IGameState, Runnable {
 	}
 
 	public void advanceStep(){
-		GameCalendar.getInstance().advanceDay();
 		for(GameObject o : gameObjects){
 			o.act();
 		}
@@ -204,6 +203,10 @@ public class GameModeState implements IGameState, Runnable {
 		if(notifications.size() > 0){
 			showingNotifications = true;
 		}
+		if(GameCalendar.getInstance().getCurrentDate().getEvents().size() > 0){
+			GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
+		}
+		GameCalendar.getInstance().advanceDay();
 	}
 	
 	public void addNotification(String n){
@@ -355,7 +358,9 @@ public class GameModeState implements IGameState, Runnable {
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_Y)){
 				if(confirmNextTurnDialog){
+					for(int i = 0;i < 500;i++){
 					advanceStep();
+					}
 					confirmNextTurnDialog = !confirmNextTurnDialog;
 				}
 			}

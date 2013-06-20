@@ -14,6 +14,12 @@ public class GameCalendarMonth {
 		this.name = name;
 	}
 	
+	public GameCalendarMonth(GameCalendarMonth month){
+		DAYS_IN_MONTH = 31;
+		currentDay = month.currentDay;
+		name = month.name;
+	}
+	
 	public void setNext(GameCalendarMonth nextMonth){
 		this.nextMonth =  nextMonth;
 	}

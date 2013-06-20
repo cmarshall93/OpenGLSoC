@@ -16,8 +16,19 @@ public class GameCalendarDate {
 		
 	}
 	
+	public GameCalendarDate(GameCalendarDate date){
+		this.date = new GameCalendarMonth(date.getMonth());
+		events = new ArrayList<GameCalendarEvent>();
+		events = date.getEvents();
+		year = date.getYear();
+	}
+	
 	public int getYear(){
 		return year;
+	}
+	
+	public GameCalendarMonth getMonth(){
+		return date;
 	}
 	
 	public void addEvent(GameCalendarEvent event){

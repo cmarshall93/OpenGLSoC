@@ -83,7 +83,8 @@ public class GameCalendar {
 	}
 
 	public void addKeyDate(GameCalendarDate date){
-		keyDates.put(date, date);
+		GameCalendarDate eventDate = new GameCalendarDate(date);
+		keyDates.put(eventDate, eventDate);
 	}
 
 	public HashMap<GameCalendarDate, GameCalendarDate> getKeyDates(){

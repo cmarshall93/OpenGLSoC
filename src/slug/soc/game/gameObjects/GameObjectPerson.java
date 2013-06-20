@@ -79,7 +79,7 @@ public class GameObjectPerson extends GameObject {
 		calculateFeatues();
 
 		dateCreated.addEvent(new GameCalendarEvent("The birth of " + getName() + ".", this));
-		GameCalendar.getInstance().addKeyDate(dateCreated);
+		//GameCalendar.getInstance().addKeyDate(dateCreated);
 	}
 
 	@Override
