@@ -80,4 +80,9 @@ public class GameObjectTown extends GameObject {
 		}
 		return out;
 	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
 }

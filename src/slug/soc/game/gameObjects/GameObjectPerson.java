@@ -8,6 +8,7 @@ import slug.soc.game.GameCalendarDate;
 import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.GameCalendarMonth;
 import slug.soc.game.RandomProvider;
+import slug.soc.game.gameObjects.interaction.HaveChildInteraction;
 import slug.soc.game.gameObjects.peopleFeatures.AbstractPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.BeardPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.BodyPersonFeature;
@@ -28,6 +29,8 @@ public class GameObjectPerson extends GameObject {
 
 	private GameObjectPerson mother;
 	private GameObjectPerson father;
+	private ArrayList<GameObjectPerson> children;
+	
 	private boolean isFemale;
 
 	private String firstName;
@@ -44,6 +47,10 @@ public class GameObjectPerson extends GameObject {
 	public GameObjectPerson(Color color, Faction owner, GameObjectPerson mother, GameObjectPerson father, int x, int y) {
 		super(new TilePerson(color), owner, x, y);
 
+		interactions.add(new HaveChildInteraction(this));
+		
+		children = new ArrayList<GameObjectPerson>();
+		
 		bodyFeatures = new ArrayList<AbstractPersonFeature>();
 		faceFeatures = new PersonFaceFeatureSet();
 
@@ -79,7 +86,6 @@ public class GameObjectPerson extends GameObject {
 		calculateFeatues();
 
 		dateCreated.addEvent(new GameCalendarEvent("The birth of " + getName() + ".", this));
-		//GameCalendar.getInstance().addKeyDate(dateCreated);
 	}
 
 	@Override
@@ -156,10 +162,14 @@ public class GameObjectPerson extends GameObject {
 
 	public GameObjectPerson haveChild(GameObjectPerson person1, GameObjectPerson person2){
 		if(person1.isFemale() && !person2.isFemale()){
-			return new GameObjectPerson(owner.getFactionColor().getColor(), owner, person1, person2, xPos, yPos);
+			GameObjectPerson child = new GameObjectPerson(owner.getFactionColor().getColor(), owner, person1, person2, xPos, yPos);
+			children.add(child);
+			return child;
 		}
 		else if(person2.isFemale() && !person1.isFemale()){
-			return new GameObjectPerson(owner.getFactionColor().getColor(), owner, person2, person1, xPos, yPos);
+			GameObjectPerson child = new GameObjectPerson(owner.getFactionColor().getColor(), owner, person2, person1, xPos, yPos);
+			children.add(child);
+			return child;
 		}
 		else return null;
 	}

@@ -52,4 +52,9 @@ public class GameObjectHoldfast extends GameObject {
 		return "";
 	}
 
+	@Override
+	public String getName() {
+		return owner.toString() + " holdfast";
+	}
+
 }

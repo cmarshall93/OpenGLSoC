@@ -54,4 +54,9 @@ public class GameObjectVillage extends GameObject {
 		return "";
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
 }

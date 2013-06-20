@@ -1,9 +1,12 @@
 package slug.soc.game.gameObjects;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarDate;
+import slug.soc.game.gameObjects.interaction.AbstractInteraction;
+import slug.soc.game.gameObjects.interaction.MoveInteraction;
 import slug.soc.game.gameObjects.tiles.GameTile;
 
 /**
@@ -27,16 +30,25 @@ public abstract class GameObject implements GameDrawable {
 	protected boolean hasOrders;
 	protected MovementOrder order;
 	
+	protected ArrayList<AbstractInteraction> interactions;
+	
 	public GameObject(GameTile tile, Faction owner, int x, int y){
 		this.tile = tile;	
 		this.owner = owner;
 		dateCreated = GameCalendar.getInstance().getCurrentDate();
 		xPos = x;
 		yPos = y;
+		
+		interactions = new ArrayList<AbstractInteraction>();
+		interactions.add(new MoveInteraction(this));
 	}
 	
 	public GameCalendarDate getDateCreated(){
 		return dateCreated;
+	}
+	
+	public ArrayList<AbstractInteraction> getInteractions(){
+		return interactions;
 	}
 	
 	public GameTile getTile(){
@@ -76,6 +88,8 @@ public abstract class GameObject implements GameDrawable {
 	public MovementOrder getOrder(){
 		return order;
 	}
+	
+	public abstract String getName();
 	
 	public abstract String[] getStringDesc();
 	

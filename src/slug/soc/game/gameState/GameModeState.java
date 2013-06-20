@@ -1,23 +1,14 @@
 package slug.soc.game.gameState;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.util.pathfinding.Path;
-import org.newdawn.slick.util.pathfinding.Path.Step;
 
 import slug.soc.game.Game;
 import slug.soc.game.GameCalendar;
-import slug.soc.game.Pathfinder;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
@@ -25,28 +16,13 @@ import slug.soc.game.gameObjects.GameObjectCastle;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.GameObjectPerson;
 import slug.soc.game.gameObjects.GameObjectTown;
-import slug.soc.game.gameObjects.GameObjectVillage;
 import slug.soc.game.gameObjects.MovementOrder;
 import slug.soc.game.gameObjects.MovementOrderCoordinate;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectGrassPlain;
-import slug.soc.game.gameObjects.TerrainObjectRiverBottomLeftCorner;
-import slug.soc.game.gameObjects.TerrainObjectRiverBottomRightCorner;
-import slug.soc.game.gameObjects.TerrainObjectRiverHorizontal;
-import slug.soc.game.gameObjects.TerrainObjectRiverTopLeftCorner;
-import slug.soc.game.gameObjects.TerrainObjectRiverTopRightCorner;
-import slug.soc.game.gameObjects.TerrainObjectRiverVertical;
-import slug.soc.game.gameObjects.TerrainObjectRoadBottomLeftCorner;
-import slug.soc.game.gameObjects.TerrainObjectRoadBottomRightCorner;
-import slug.soc.game.gameObjects.TerrainObjectRoadHorizontal;
-import slug.soc.game.gameObjects.TerrainObjectRoadTopLeftCorner;
-import slug.soc.game.gameObjects.TerrainObjectRoadTopRightCorner;
-import slug.soc.game.gameObjects.TerrainObjectRoadVertical;
 import slug.soc.game.gameObjects.TerrainObjectWater;
 import slug.soc.game.gameObjects.tasks.MoveTask;
-import slug.soc.game.rendering.AsciiTextureGenerator;
 import slug.soc.game.rendering.TextRenderer;
-import slug.soc.game.worldBuilding.HouseSigilGenerator;
 import slug.soc.game.worldBuilding.TerrianGenerator;
 
 /**
@@ -104,6 +80,7 @@ public class GameModeState implements IGameState, Runnable {
 
 	private int mapFrameCounter;
 	private int infoFrameCounter;
+	private boolean interactObject;
 
 	public static GameModeState getInstance(){
 		if(instance == null){
@@ -324,6 +301,9 @@ public class GameModeState implements IGameState, Runnable {
 				if(movingObject){
 					movingObject = false;
 				}
+				if(interactObject){
+					interactObject = false;
+				}
 				else{
 					Game.getInstance().changeToNextGameState(PauseGameState.getInstance());
 				}
@@ -358,9 +338,7 @@ public class GameModeState implements IGameState, Runnable {
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_Y)){
 				if(confirmNextTurnDialog){
-					for(int i = 0;i < 500;i++){
 					advanceStep();
-					}
 					confirmNextTurnDialog = !confirmNextTurnDialog;
 				}
 			}
@@ -368,7 +346,7 @@ public class GameModeState implements IGameState, Runnable {
 				fogOfWar = !fogOfWar;
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_M)){
-				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject){
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject && !interactObject){
 					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
 						if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
 							movingObject = true;
@@ -382,6 +360,12 @@ public class GameModeState implements IGameState, Runnable {
 				if(movingObject){
 					objectOfFocus.giveOrders(movementOrder);
 					movingObject = false;
+				}
+				if(interactObject && getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
+					InteractState.getInstance().setInteractions(getMap()[currentYPos][currentXPos].getCurrentGameObject().getInteractions(),
+							objectOfFocus, getMap()[currentYPos][currentXPos].getCurrentGameObject());
+					Game.getInstance().changeToNextGameState(InteractState.getInstance());
+					interactObject = false;
 				}
 				if(showingNotifications){
 					if(notifications.size() > 0){
@@ -412,6 +396,14 @@ public class GameModeState implements IGameState, Runnable {
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
 				zoomedOut = !zoomedOut;
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_E)){
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject && !interactObject){
+					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson){
+						objectOfFocus =  getMap()[currentYPos][currentXPos].getCurrentGameObject();
+						interactObject = true;
+					}
+				}
 			}
 			
 			//----------------------TESTING STUFF-----------------------------
@@ -693,6 +685,9 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		if(movingObject){
 			TextRenderer.getInstance().drawString(" (Moving Object)", DEFAULT_TEXT_SIZE, textSpace);
+		}
+		if(interactObject){
+			TextRenderer.getInstance().drawString(" (Interacting)", DEFAULT_TEXT_SIZE, textSpace);
 		}
 		//gy = 480;
 		//gx = 980;
