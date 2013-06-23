@@ -1,6 +1,8 @@
 package slug.soc.game.rendering;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.newdawn.slick.SlickException;
@@ -14,48 +16,29 @@ public class AsciiTextureGenerator {
 	private static AsciiTextureGenerator instance ;
 
 	private SpriteSheet sheet;
+	
+	private ArrayList<String> characters;
+	private ArrayList<String> symbols;
+	
 	private HashMap<String, Texture> charMap;
 	private HashMap<String, Texture> tileMap;
-	
-	private String[] chars = {"a","b", "c", "d", "e", "f", "g", "h", "i", "j"
-			,"k", "l", "m", "n" ,"o" ,"p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", 
-			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"
-			,"R", "S", "T", "U", "V", "W" ,"X" ,"Y", "Z",".", "(", "?",")","1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ","
-	};
-	
-	private String[] tiles = {"forest", "hill","u2500", "u2502", "u250c", "u2510"
-			,"u2514", "u2518","mountain","person", "plains", "water","town","castle","holdfast","village","cursor","source"	
-			,"bridge_horizontal", "bridge_vertical", "boat", "mine"
-	};
 
 	private AsciiTextureGenerator(){
 		charMap = new HashMap<String, Texture>();
 		tileMap = new HashMap<String, Texture>();
-		try {
-			sheet = new SpriteSheet("sheet",new ResourceLoader().getResourceAsStream("spritesheet.png"), 16, 16);
-		} catch (SlickException e1) {
-			e1.printStackTrace();
-		}
-		/**
-		int charIndex = 0;
-		for(int y = 0; y < sheet.getVerticalCount(); y++){
-			for(int x = 0; x < sheet.getHorizontalCount(); x++){
-				map.put(chars[charIndex], sheet.getSubImage(x, y).getTexture());
-				charIndex++;
-				System.out.println(charIndex);
-			}
-		}**/
-		for(String s : chars){
+		FileReadCharacters();
+		FileReadSymbols();
+		for(String s : characters){
 			try {
-				charMap.put(s, new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/"+s+".png"), true));
+				charMap.put(s.substring(0,s.lastIndexOf('.')), new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/"+s), true));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		for(String s : tiles){
+		for(String s : symbols){
 			try{
-				tileMap.put(s, new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/tiles/"+s+".png"), true));
+				tileMap.put(s.substring(0,s.lastIndexOf('.')), new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/tiles/"+s), true));
 			}catch(Exception e){
 				
 			}
@@ -76,4 +59,33 @@ public class AsciiTextureGenerator {
 	public Texture getTileTexture(String c){
 		return tileMap.get(c);
 	}
+	
+	private void FileReadCharacters(){
+		characters = new ArrayList<String>();
+		
+		File folder = new File("sprites");
+		File[] listOfFiles = folder.listFiles();
+		
+		for(int i = 0; i < listOfFiles.length; i++){
+			if(listOfFiles[i].isFile()){
+				characters.add(listOfFiles[i].getName());
+			}
+		}
+		
+	}
+	
+	private void FileReadSymbols(){
+		symbols = new ArrayList<String>();
+		
+		File folder = new File("sprites/tiles");
+		File[] listOfFiles = folder.listFiles();
+		
+		for(int i = 0; i < listOfFiles.length; i++){
+			if(listOfFiles[i].isFile()){
+				symbols.add(listOfFiles[i].getName());
+			}
+		}
+	}
+	
+	
 }

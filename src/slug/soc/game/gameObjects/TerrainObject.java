@@ -184,10 +184,10 @@ public abstract class TerrainObject implements GameDrawable{
 				possibleBuildings.add(new GameObjectMine(null,null,0,0));
 			}
 			else if(resource.getBuilding().equals("lodge")){
-				possibleBuildings.add(new GameObjectBoat(null,null,0,0));
+				possibleBuildings.add(new GameObjectLodge(null,null,0,0));
 			}
 			else if(resource.getBuilding().equals("farm")){
-				possibleBuildings.add(new GameObjectBoat(null,null,0,0));
+				possibleBuildings.add(new GameObjectFarm(null,null,0,0));
 			}
 		}
 		return possibleBuildings;

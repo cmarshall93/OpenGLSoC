@@ -3,23 +3,23 @@ package slug.soc.game.gameObjects;
 import java.awt.Color;
 
 import slug.soc.game.gameObjects.tiles.GameTile;
-import slug.soc.game.gameObjects.tiles.faction.TileBoat;
+import slug.soc.game.gameObjects.tiles.faction.TileLodge;
 
-public class GameObjectBoat extends GameObject {
+public class GameObjectLodge extends GameObject {
 
-	public GameObjectBoat(Color c, Faction owner, int x, int y) {
-		super(new TileBoat(c), owner, x, y);
+	public GameObjectLodge(Color c, Faction owner, int x, int y) {
+		super(new TileLodge(c), owner, x, y);
 	}
 
 	@Override
 	public String getName() {
-		return "fishing boat";
+		return "Hunting lodge";
 	}
 
 	@Override
 	public String[] getStringDesc() {
 		String[] out = new String[1];
-		out[0] = "fishing boat";
+		out[0] = "Hunting lodge";
 		return out;
 	}
 
@@ -31,7 +31,7 @@ public class GameObjectBoat extends GameObject {
 	@Override
 	public void act() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -40,8 +40,7 @@ public class GameObjectBoat extends GameObject {
 	}
 	
 	public String toString(){
-		return "Fishing boat";
+		return "Hunting lodge";
 	}
-	
 
 }
