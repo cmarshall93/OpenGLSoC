@@ -14,17 +14,23 @@ public class AsciiTextureGenerator {
 	private static AsciiTextureGenerator instance ;
 
 	private SpriteSheet sheet;
-	private HashMap<String, Texture> map;
+	private HashMap<String, Texture> charMap;
+	private HashMap<String, Texture> tileMap;
 	
 	private String[] chars = {"a","b", "c", "d", "e", "f", "g", "h", "i", "j"
 			,"k", "l", "m", "n" ,"o" ,"p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", 
 			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"
-			,"R", "S", "T", "U", "V", "W" ,"X" ,"Y", "Z",".", "(", ")","u2500", "u2502", "u250c", "u2510"
-			,"u2514", "u2518","mountain", "1", "person", "plains", "water", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ","
+			,"R", "S", "T", "U", "V", "W" ,"X" ,"Y", "Z",".", "(", "?",")","1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ","
+	};
+	
+	private String[] tiles = {"forest", "hill","u2500", "u2502", "u250c", "u2510"
+			,"u2514", "u2518","mountain","person", "plains", "water","town","castle","holdfast","village","cursor","source"	
+			,"bridge_horizontal", "bridge_vertical", "boat", "mine"
 	};
 
 	private AsciiTextureGenerator(){
-		map = new HashMap<String, Texture>();
+		charMap = new HashMap<String, Texture>();
+		tileMap = new HashMap<String, Texture>();
 		try {
 			sheet = new SpriteSheet("sheet",new ResourceLoader().getResourceAsStream("spritesheet.png"), 16, 16);
 		} catch (SlickException e1) {
@@ -41,12 +47,19 @@ public class AsciiTextureGenerator {
 		}**/
 		for(String s : chars){
 			try {
-				map.put(s, new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/"+s+".png"), true));
+				charMap.put(s, new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/"+s+".png"), true));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(map.size());
+		
+		for(String s : tiles){
+			try{
+				tileMap.put(s, new TextureLoader().getTexture("PNG", new ResourceLoader().getResourceAsStream("sprites/tiles/"+s+".png"), true));
+			}catch(Exception e){
+				
+			}
+		}
 	}
 
 	public static AsciiTextureGenerator getInstance(){
@@ -57,6 +70,10 @@ public class AsciiTextureGenerator {
 	}
 	
 	public Texture getCharacterTexture(String c){
-		return map.get(c);
+		return charMap.get(c);
+	}
+	
+	public Texture getTileTexture(String c){
+		return tileMap.get(c);
 	}
 }

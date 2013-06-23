@@ -4,13 +4,13 @@ import java.awt.Color;
 
 import slug.soc.game.gameObjects.tiles.roadAndRiver.TileHorizontalLine;
 
-public class TerrainObjectRoadHorizontal extends TerrainObject {
+public class TerrainObjectRoadHorizontal extends TerrainObjectAbstractRoad {
 
 	public TerrainObjectRoadHorizontal() {
-		super(new TileHorizontalLine(new Color(99,33,00)), true);
+		super(new TileHorizontalLine(new Color(99, 33, 00)));
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return "Road";
 	}
 

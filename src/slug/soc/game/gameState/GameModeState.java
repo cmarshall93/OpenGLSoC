@@ -38,6 +38,7 @@ public class GameModeState implements IGameState, Runnable {
 	private static final float DEFAULT_TILE_SIZE = 19;
 	private static final float DEFAULT_TEXT_SIZE = 10;
 	private static final int DEFAULT_GRID_SIZE = 25;
+	private static final int MINIMAP_RATIO = 4;
 	private static GameModeState instance;
 
 	private long lastFPS;
@@ -57,7 +58,7 @@ public class GameModeState implements IGameState, Runnable {
 	private TerrainObject[][] miniMap;
 	private ArrayList<GameObject> gameObjects;
 	private Faction faction;
-	private Faction secondFaction;
+
 	private GameObject objectOfFocus;
 	private MovementOrder movementOrder;
 
@@ -108,36 +109,17 @@ public class GameModeState implements IGameState, Runnable {
 		currentYPos = 50;
 		
 		faction = new Faction();
-		//**************faction testing*******************	
-		secondFaction = new Faction();
-		int x = 70;
-		int y = 70;
-		boolean testBol = false;
-		while(!testBol){
-			if(!map[y][x].isBuildable()){
-				x = RandomProvider.getInstance().nextInt(map.length);
-				y = RandomProvider.getInstance().nextInt(map.length);
-			}
-			else{
-				testBol = true;
-			}
-		}
-		for(GameObject g : secondFaction.getHoldings()){
-			addFactionObject(x,y,g);
-		}
-		//************************************************/
 		
-		miniMap = new TerrainObject[25][25];
-		for(int x2 = 0, miniX = 0;x2 < map.length;x2+=4, miniX++){
-			for(int y2 = 0, miniY = 0; y2 < map.length;y2+=4, miniY++){
-
-				System.out.println(x2 + " : " + y2);
-
+		
+		miniMap = new TerrainObject[map.length/ MINIMAP_RATIO][map.length / MINIMAP_RATIO];
+		for(int x2 = 0, miniX = 0;x2 < map.length;x2+=MINIMAP_RATIO, miniX++){
+			for(int y2 = 0, miniY = 0; y2 < map.length;y2+=MINIMAP_RATIO, miniY++){
+				
 				int landCount = 0;
 				int seaCount = 0;
 
-				for(int a = 0; a < 4;a++){
-					for(int b = 0; b < 4;b++){
+				for(int a = 0; a < MINIMAP_RATIO;a++){
+					for(int b = 0; b < MINIMAP_RATIO;b++){
 						if(map[y2 + a][x2 + b] instanceof TerrainObjectWater){
 							seaCount += 1;
 						}
@@ -153,9 +135,7 @@ public class GameModeState implements IGameState, Runnable {
 				else{
 					miniMap[miniY][miniX] = new TerrainObjectGrassPlain();
 				}
-				//miniY++;
 			}
-			//miniX++;
 		}
 
 		for(int i = 0;i < 999; i++){
@@ -171,12 +151,23 @@ public class GameModeState implements IGameState, Runnable {
 		return map;
 	}
 
+	public Integer getCurrentXPos() {
+		return currentXPos;
+	}
+
+	public Integer getCurrentYPos() {
+		return currentYPos;
+	}
+	
+	public Faction getFaction() {
+		return faction;
+	}
+
 	public void advanceStep(){
 		for(GameObject o : gameObjects){
 			o.act();
 		}
 		faction.updateFov();
-		secondFaction.updateFov();
 		if(notifications.size() > 0){
 			showingNotifications = true;
 		}
@@ -376,24 +367,15 @@ public class GameModeState implements IGameState, Runnable {
 					}
 				}
 			}
-			else if(Keyboard.isKeyDown(Keyboard.KEY_P)){
-				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject){
-					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
-						if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
-							MoveTask task = new MoveTask(getMap()[currentYPos][currentXPos].getCurrentGameObject(), faction.getHoldings().get(0));
-							if(!task.isCompleted()){
-								((GameObjectPerson) getMap()[currentYPos][currentXPos].getCurrentGameObject()).setTask(task);
-								task.act();
-							}
-						}
-					}
-				}
-			}
+			
+			//here for testing
 			else if(Keyboard.isKeyDown(Keyboard.KEY_V)){
 				if(faction.getCapital() != null && getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
 					terrianGenerator.buildRoad(getMap()[currentYPos][currentXPos].getCurrentGameObject(), faction.getCapital());
 				}
 			}
+			//
+			
 			else if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
 				zoomedOut = !zoomedOut;
 			}
@@ -403,6 +385,12 @@ public class GameModeState implements IGameState, Runnable {
 						objectOfFocus =  getMap()[currentYPos][currentXPos].getCurrentGameObject();
 						interactObject = true;
 					}
+				}
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_B)){
+				if(getMap()[currentYPos][currentXPos].isBuildable()){
+					BuildModeState.getInstance().setTerrainObject(getMap()[currentYPos][currentXPos]);
+					Game.getInstance().changeToNextGameState(BuildModeState.getInstance());
 				}
 			}
 			

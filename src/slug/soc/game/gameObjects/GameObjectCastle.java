@@ -9,17 +9,19 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 import slug.soc.game.gameObjects.tiles.faction.TileCastle;
 
 public class GameObjectCastle extends GameObject {
-	
+
 	private int troopPopulation;
 	private int civPopulation;
 
 	public GameObjectCastle(Color color, Faction owner, int x, int y) {
 		super(new TileCastle(color), owner, x, y);
-		troopPopulation = RandomProvider.getInstance().nextInt(5000) + 1000;
-		civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
-		
-		dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(), this));
-		//GameCalendar.getInstance().addKeyDate(dateCreated);
+		if(owner != null){
+			troopPopulation = RandomProvider.getInstance().nextInt(5000) + 1000;
+			civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
+
+			dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(), this));
+			//GameCalendar.getInstance().addKeyDate(dateCreated);
+		}
 	}
 
 	public String[] getStringDesc(){
@@ -29,15 +31,15 @@ public class GameObjectCastle extends GameObject {
 		desc[2] = "Number of troops : " + troopPopulation;
 		return desc;
 	}
-	
+
 	public void act(){
-		
+
 	}
-	
+
 	public String toString(){
 		return "Castle";
 	}
-	
+
 	public String getName(){
 		return "Castle " + owner.toString(); 
 	}

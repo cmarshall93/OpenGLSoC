@@ -13,9 +13,9 @@ public class GameObjectTown extends GameObject {
 
 	//represented as 1 in X
 	private static final int CHANGE_OF_PLAGUE = 1000;
-	
+
 	private boolean hasPlague;
-	
+
 	private int troops;
 	private int population;
 	private String name;
@@ -25,9 +25,10 @@ public class GameObjectTown extends GameObject {
 		troops = RandomProvider.getInstance().nextInt(1000) +300;
 		population = RandomProvider.getInstance().nextInt(100000) + 10000;
 		name = WordGenerator.getInstance().getRandomPlaceName();
-		
-		dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));
-		//GameCalendar.getInstance().addKeyDate(dateCreated);
+		if(owner != null){
+			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));
+			//GameCalendar.getInstance().addKeyDate(dateCreated);
+		}
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class GameObjectTown extends GameObject {
 		desc[2] = "Population : " + (population + troops);
 		return desc;
 	}
-	
+
 	public String toString(){
 		return "Town";
 	}

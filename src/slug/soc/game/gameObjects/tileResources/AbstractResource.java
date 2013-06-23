@@ -25,6 +25,10 @@ public class AbstractResource {
 	public int getCount(){
 		return count;
 	}
+	
+	public String getBuilding(){
+		return requiredBuilding;
+	}
 
 	public String getDesc(){
 		String out = "";

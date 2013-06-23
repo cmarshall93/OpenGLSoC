@@ -73,7 +73,7 @@ public class Pathfinder{
 	public Path findPath(int sx, int sy, int tx, int ty) {
 		// easy first check, if the destination is blocked, we can't get there
 		System.out.println("target is at " + tx + " : " + ty);
-		if(!GameModeState.getInstance().getMap()[ty][tx].isBuildable()) {
+		if(!GameModeState.getInstance().getMap()[ty][tx].isTravelable()) {
 			System.out.println(GameModeState.getInstance().getMap()[ty][tx].toString() + " , unreachable");
 			return null;
 		}
@@ -92,7 +92,6 @@ public class Pathfinder{
 		// while we haven'n't exceeded our max search depth
 		int maxDepth = 0;
 		while ((maxDepth < maxSearchDistance) && (open.size() != 0)) {
-			System.out.println(maxDepth);
 			// pull out the first node in our open list, this is determined to 
 
 			// be the most likely to be the next step based on our heuristic
@@ -287,7 +286,7 @@ public class Pathfinder{
 				(y >= GameModeState.getInstance().getMap().length);
 		
 		if ((!invalid) && ((sx != x) || (sy != y))) {
-			invalid = !GameModeState.getInstance().getMap()[y][x].isBuildable();
+			invalid = !GameModeState.getInstance().getMap()[y][x].isTravelable();
 		}
 					
 					//!GameModeState.getInstance().getTravelMap()[y][x];}

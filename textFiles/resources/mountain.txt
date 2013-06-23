@@ -1,0 +1,10 @@
+Iron:25000:mine
+Gold:10000:mine
+Sapphires:5000:mine
+Coal:25000:mine
+Platinum:2500:mine
+Diamond:7500:mine
+Tin:25000:mine
+Copper:25000:mine
+Rubies:5000:mine
+Silver:12500:mine

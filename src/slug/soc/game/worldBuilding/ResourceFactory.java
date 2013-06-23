@@ -12,11 +12,8 @@ import slug.soc.game.gameObjects.tileResources.AbstractResource;
 public class ResourceFactory {
 
 	private static ResourceFactory instance;
-	
-	private File resourcesFile;
 
 	private ResourceFactory(){
-		resourcesFile = new File("resources/land.txt");
 	}
 	
 	public static ResourceFactory getInstance(){
@@ -40,5 +37,14 @@ public class ResourceFactory {
 		Integer resourceAmount = Integer.parseInt(resourceString[1]);
 		String requiredBuilding = resourceString[2];
 		return new AbstractResource(resourceName, RandomProvider.getInstance().nextInt(resourceAmount), resourceAmount, requiredBuilding);
+	}
+	
+	public AbstractResource getRandomMountainResource(){
+		String[] resourceString = WordGenerator.getInstance().getRandomMountainResource().split(":");
+		String resourceName = resourceString[0];
+		Integer resourceAmount = Integer.parseInt(resourceString[1]);
+		String requiredBuilding = resourceString[2];
+		return new AbstractResource(resourceName, RandomProvider.getInstance().nextInt(resourceAmount), resourceAmount, requiredBuilding);
+	
 	}
 }

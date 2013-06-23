@@ -4,13 +4,13 @@ import java.awt.Color;
 
 import slug.soc.game.gameObjects.tiles.roadAndRiver.TileBottomLeftCornerLine;
 
-public class TerrainObjectRoadBottomLeftCorner extends TerrainObject {
+public class TerrainObjectRoadBottomLeftCorner extends TerrainObjectAbstractRoad {
 
 	public TerrainObjectRoadBottomLeftCorner() {
-		super(new TileBottomLeftCornerLine(new Color(99,33,00)), true);
+		super(new TileBottomLeftCornerLine(new Color(99, 33, 00)));
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return "Road";
 	}
 

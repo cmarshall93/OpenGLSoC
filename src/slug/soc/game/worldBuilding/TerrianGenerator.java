@@ -446,6 +446,8 @@ public class TerrianGenerator {
 				}
 				Step current = path.getStep(i);
 				
+				ArrayList<GameObject> gObj = GameModeState.getInstance().getMap()[current.getY()][current.getX()].getGameObjects();
+				
 				if(prev != null && next != null){
 					if(prev.getY() != current.getY() && next.getY() != current.getY()){	//if next and previous are above and below.
 						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadVertical();
@@ -479,6 +481,11 @@ public class TerrianGenerator {
 
 					if(prev.getX() != current.getX() && next.getX() != current.getX()){
 						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadHorizontal();
+					}
+					
+					if(gObj.size() > 0){
+						for(GameObject o : gObj)
+						GameModeState.getInstance().getMap()[current.getY()][current.getX()].addGameObject(o);
 					}
 				}
 			}

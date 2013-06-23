@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileCastle extends GameTile {
 	
 	public TileCastle(Color color){
-		super("C", color);
+		super("castle", color);
 	}
 
 }

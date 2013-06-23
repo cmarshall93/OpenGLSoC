@@ -68,7 +68,7 @@ public class TextRenderer {
 	}
 	
 	public void drawSymbol(String symbol, float size){
-		Texture tex = AsciiTextureGenerator.getInstance().getCharacterTexture(symbol);
+		Texture tex = AsciiTextureGenerator.getInstance().getTileTexture(symbol);
 		if(tex != null){
 			tex.bind();
 			GL11.glBegin(GL11.GL_QUADS);

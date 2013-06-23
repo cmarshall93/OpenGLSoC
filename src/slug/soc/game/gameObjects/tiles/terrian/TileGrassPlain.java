@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileGrassPlain extends GameTile {
 
 	public TileGrassPlain(){
-		super("plains", Color.GREEN);
+		super("plains",Color.GREEN);
 	}
 	
 }

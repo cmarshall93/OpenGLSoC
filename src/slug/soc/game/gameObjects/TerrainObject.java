@@ -18,27 +18,32 @@ public abstract class TerrainObject implements GameDrawable{
 	private int tileIndex;
 	private GameTile baseTile;
 	private GameTile currentTile;
-	
+
 	private ArrayList<GameObject> gameObjects;
 	private int numberOfGameObjects;
 	private int gameObjectIndex;
 
 	protected boolean hasResources;
 	protected AbstractResource resource;
-	
+
 	private boolean isBiome;
 	private Biome biome;
 	private boolean isBuildable;
+	private boolean isTravelable;
+
 	private Faction owner;
 
-	public TerrainObject(GameTile tile, boolean isBuildable){
+	public TerrainObject(GameTile tile, boolean isBuildable, boolean isTravelable){
 		baseTile = tile;	
 		currentTile = baseTile;
 		tileIndex = 0;
 		isBiome = false;
 		gameObjects = new ArrayList<GameObject>();
 		gameObjectIndex = 0;
+
 		this.isBuildable = isBuildable;
+		this.isTravelable = isTravelable;
+
 		owner = null;
 		if(RandomProvider.getInstance().nextInt(20) == 1){
 			hasResources = true;
@@ -62,7 +67,7 @@ public abstract class TerrainObject implements GameDrawable{
 				gameObjects.add(o);
 			}
 			o.setLocation(toString());
-			
+
 			if(!(o instanceof GameObjectCursor)){
 				numberOfGameObjects = gameObjects.size();
 			}
@@ -76,15 +81,15 @@ public abstract class TerrainObject implements GameDrawable{
 		}
 		gameObjectIndex = 0;
 	}
-	
+
 	public GameObject getCurrentGameObject(){
 		return gameObjects.get(gameObjectIndex);
 	}
-	
+
 	public ArrayList<GameObject> getGameObjects(){
 		return gameObjects;
 	}
-	
+
 	public GameObject getNextGameObject(){
 		if(gameObjectIndex + 1 < gameObjects.size()){
 			gameObjectIndex += 1;
@@ -105,7 +110,7 @@ public abstract class TerrainObject implements GameDrawable{
 			currentTile = baseTile;
 		}
 	}
-	
+
 	public int getNumberOfGameObjects(){
 		return numberOfGameObjects;
 	}
@@ -122,7 +127,7 @@ public abstract class TerrainObject implements GameDrawable{
 	public Biome getBiome(){
 		return biome;
 	}
-	
+
 	public String getBiomeString(){
 		if(isBiome){
 			return biome.toString();
@@ -139,11 +144,15 @@ public abstract class TerrainObject implements GameDrawable{
 	public Faction getOwner(){
 		return owner;
 	}
-	
+
 	public boolean isBuildable(){
 		return isBuildable;
 	}
 	
+	public boolean isTravelable() {
+		return isTravelable;
+	}
+
 	public String getDesc(){
 		String out = "";
 		if(hasResources){
@@ -156,10 +165,34 @@ public abstract class TerrainObject implements GameDrawable{
 		return hasResources;
 	}
 	
+	public AbstractResource getResource(){
+		return resource;
+	}
+
 	public GameTile getBaseTile() {
 		return baseTile;
 	}
-	
+
+	public ArrayList<GameObject> getPossibleBuildings(){
+		ArrayList<GameObject> possibleBuildings = new ArrayList<GameObject>();
+		possibleBuildings.add(new GameObjectTown(null,null,0,0));
+		possibleBuildings.add(new GameObjectCastle(null,null,0,0));
+		possibleBuildings.add(new GameObjectHoldfast(null,null,0,0));
+		possibleBuildings.add(new GameObjectVillage(null,null,0,0));
+		if(hasResources){
+			if(resource.getBuilding().equals("mine")){
+				possibleBuildings.add(new GameObjectMine(null,null,0,0));
+			}
+			else if(resource.getBuilding().equals("lodge")){
+				possibleBuildings.add(new GameObjectBoat(null,null,0,0));
+			}
+			else if(resource.getBuilding().equals("farm")){
+				possibleBuildings.add(new GameObjectBoat(null,null,0,0));
+			}
+		}
+		return possibleBuildings;
+	}
+
 	public abstract String getTypeString();
 
 }
