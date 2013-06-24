@@ -9,7 +9,11 @@ public class TerrainObjectSnowHill extends TerrainObject {
 	}
 	
 	public String toString(){
-		return "Hills";
+		return "The " + getBiomeString() + "hills";
 	}
 
+	@Override
+	public String getTypeString() {
+		return "Hills";
+	}
 }

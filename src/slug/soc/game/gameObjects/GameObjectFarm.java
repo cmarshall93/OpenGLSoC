@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import slug.soc.game.gameObjects.tiles.GameTile;
 import slug.soc.game.gameObjects.tiles.faction.TileFarm;
+import slug.soc.game.gameState.GameModeState;
 
 public class GameObjectFarm extends GameObject {
 
@@ -25,13 +26,16 @@ public class GameObjectFarm extends GameObject {
 
 	@Override
 	public String getDetailedDesc() {
-		return "";
-	}
+		String out = "This is a fishing farm. It is owned by the " + owner.toString() + " family. It produces 100 gold each turn.";
+		out += " There is a" + GameModeState.getInstance().getMap()[yPos][xPos].getResource().getDesc();
+		return out;}
 
 	@Override
 	public void act() {
-		// TODO Auto-generated method stub
-		
+		if(GameModeState.getInstance().getMap()[yPos][xPos].getResource().getCount() > 0){
+			owner.changeMoney(100);
+			GameModeState.getInstance().getMap()[yPos][xPos].getResource().decrementCount(1);
+		}
 	}
 
 	@Override

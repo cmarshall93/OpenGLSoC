@@ -46,7 +46,7 @@ public class AbstractResource {
 			amount = "vast";
 		}
 
-		out +=" a " + amount +" amount of " + name + " (" + count +" / " + averageCount + ") " + " NEEDS A " + requiredBuilding.toUpperCase() ;
+		out +=" a " + amount +" amount of " + name + " (" + count +" / " + averageCount + ") ";
 		return out;
 	}
 }

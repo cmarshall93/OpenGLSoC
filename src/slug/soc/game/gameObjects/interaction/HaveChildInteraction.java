@@ -13,11 +13,14 @@ public class HaveChildInteraction extends AbstractInteraction {
 
 	@Override
 	public void interact(GameObjectPerson other) {
-		GameModeState.getInstance().addNewFactionObject(other.getX(), other.getY(),other.haveChild(other, (GameObjectPerson)owner));
+		GameObjectPerson child = other.haveChild(other, (GameObjectPerson)owner);
+		if(child != null){
+			GameModeState.getInstance().addNewFactionObject(other.getX(), other.getY(), child);
+		}
 	}
-	
+
 	public String toString(){
-		return "Have child with";
+		return "Try for child with";
 	}
 
 }

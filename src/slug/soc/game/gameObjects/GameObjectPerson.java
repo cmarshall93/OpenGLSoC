@@ -8,6 +8,7 @@ import slug.soc.game.GameCalendarDate;
 import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.GameCalendarMonth;
 import slug.soc.game.RandomProvider;
+import slug.soc.game.gameObjects.interaction.DuelInteraction;
 import slug.soc.game.gameObjects.interaction.HaveChildInteraction;
 import slug.soc.game.gameObjects.peopleFeatures.AbstractPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.BeardPersonFeature;
@@ -30,7 +31,7 @@ public class GameObjectPerson extends GameObject {
 	private GameObjectPerson mother;
 	private GameObjectPerson father;
 	private ArrayList<GameObjectPerson> children;
-	
+
 	private boolean isFemale;
 
 	private String firstName;
@@ -44,13 +45,28 @@ public class GameObjectPerson extends GameObject {
 	private AbstractTask task;
 	private boolean hasTask;
 
+	private int fightingSkill;
+	private String fightingSkillString;
+
+	private boolean isDead;
+	private int ageAtDeath;
+
 	public GameObjectPerson(Color color, Faction owner, GameObjectPerson mother, GameObjectPerson father, int x, int y) {
 		super(new TilePerson(color), owner, x, y);
 
 		interactions.add(new HaveChildInteraction(this));
-		
+		interactions.add(new DuelInteraction(this));
+
+		fightingSkill = RandomProvider.getInstance().nextInt(101);
+		if(fightingSkill < 50){
+			fightingSkillString = "bad";
+		}
+		else{
+			fightingSkillString = "good";
+		}
+
 		children = new ArrayList<GameObjectPerson>();
-		
+
 		bodyFeatures = new ArrayList<AbstractPersonFeature>();
 		faceFeatures = new PersonFaceFeatureSet();
 
@@ -120,7 +136,7 @@ public class GameObjectPerson extends GameObject {
 		this.task = task;
 		hasTask = true;
 	}
-	
+
 	public AbstractTask getTask(){
 		return task;
 	}
@@ -131,6 +147,16 @@ public class GameObjectPerson extends GameObject {
 
 	public int getMovementDistance(){
 		return MOVEMENT_DISTANCE;
+	}
+
+	public void kill(){
+		GameModeState.getInstance().removeGameObject(this);
+		isDead = true;
+		ageAtDeath = GameCalendar.getInstance().getCurrentYear() - dateCreated.getYear();
+	}
+
+	public int getFightingSkill(){
+		return fightingSkill;
 	}
 
 	public void act(){
@@ -159,6 +185,7 @@ public class GameObjectPerson extends GameObject {
 	public boolean hasOrders(){
 		return hasOrders;
 	}
+
 
 	public GameObjectPerson haveChild(GameObjectPerson person1, GameObjectPerson person2){
 		if(person1.isFemale() && !person2.isFemale()){
@@ -204,7 +231,14 @@ public class GameObjectPerson extends GameObject {
 		}
 		int currentYear = GameCalendar.getInstance().getCurrentYear();
 		String out = firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
-				+ secondPerson.toLowerCase() + " was born on " + dateCreated.toString()  +" (b) and is " + (currentYear - dateCreated.getYear()) + " years old.  " + seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
+				+ secondPerson.toLowerCase() + " was born on " + dateCreated.toString()  +" (b)" ;
+		if(!isDead){
+			out +=" and is " + (currentYear - dateCreated.getYear()) + " years old.  " ;
+		}
+		else{
+			out += ". " + secondPerson + " died at the age of " + ageAtDeath +". ";
+		}
+		out += seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
 				+ fatherString + ". ";
 		for(AbstractPersonFeature a : bodyFeatures){
 			out += secondPerson + " has " + a.getDesc();
@@ -214,6 +248,7 @@ public class GameObjectPerson extends GameObject {
 		out += secondPerson + " has " + faceFeatures.getEyes().getDesc();
 		out += secondPerson + " has " + faceFeatures.getEars().getDesc();
 		out += secondPerson + " has " + faceFeatures.getMouth().getDesc();
+		out += secondPerson + " is said to be a " + fightingSkillString + " figher.";
 		return out;
 	}
 

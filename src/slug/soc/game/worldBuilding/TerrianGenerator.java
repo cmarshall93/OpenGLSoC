@@ -50,7 +50,7 @@ public class TerrianGenerator {
 
 		for(int y = 0; y < map.length; y++){
 			for(int x = 0; x < map.length; x++){
-				if(y < map.length/101 || y > map.length - (map.length/101)){
+				if(y < map.length/10 + RandomProvider.getInstance().nextInt(4) || y > map.length - (map.length/10)  + RandomProvider.getInstance().nextInt(4)){
 					try {
 						if(intMap[y][x] < articTerrain.length){
 							map[y][x] = articTerrain[intMap[y][x]].getClass().newInstance();

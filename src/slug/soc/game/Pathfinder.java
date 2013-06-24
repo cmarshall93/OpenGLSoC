@@ -8,6 +8,7 @@ import org.newdawn.slick.util.pathfinding.Path;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 import org.newdawn.slick.util.pathfinding.heuristics.ClosestHeuristic;
 
+import slug.soc.game.gameObjects.TerrainObjectAbstractRoad;
 import slug.soc.game.gameObjects.TerrainObjectWater;
 import slug.soc.game.gameState.GameModeState;
 
@@ -305,7 +306,10 @@ public class Pathfinder{
 	 * @return The cost of movement through the given tile
 	 */
 	public float getMovementCost(int sx, int sy, int tx, int ty) {
-		return 1;
+		if(GameModeState.getInstance().getMap()[sy][sx] instanceof TerrainObjectAbstractRoad){
+			return 0.5f;
+		}
+		return 1f;
 	}
 
 	/**

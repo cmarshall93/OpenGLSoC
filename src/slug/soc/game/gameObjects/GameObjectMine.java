@@ -32,11 +32,16 @@ public class GameObjectMine extends GameObject {
 	public String getDetailedDesc() {
 		String out = " This is a " + name + ".";
 		out += "It is owned by the" + owner.toString() + " family.";
+		out += "It produces 100 gold each turn.";
 		return out;
 	}
 
 	@Override
 	public void act() {
+		if(GameModeState.getInstance().getMap()[yPos][xPos].getResource().getCount() > 0){
+			owner.changeMoney(100);
+			GameModeState.getInstance().getMap()[yPos][xPos].getResource().decrementCount(1);
+		}
 	}
 
 	@Override

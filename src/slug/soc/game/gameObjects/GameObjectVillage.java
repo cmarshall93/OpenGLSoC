@@ -35,13 +35,14 @@ public class GameObjectVillage extends GameObject {
 	}
 
 	public void act(){
-
+		owner.changeMoney(population/100);
 	}
 
 	@Override
 	public String getDetailedDesc() {
 		String string = "The village of " + name + " is owned by the " + owner + " family(i)." + " It is located in " + location + ". " +
-				"The village was founded on " + dateCreated.toString() +". It has a population of " + (population + troops) + " with a militia of " + troops + ".";
+				"The village was founded on " + dateCreated.toString() +". It has a population of " + (population + troops) + " with a militia of " + troops + "."
+				+ " About " + population/100 + " gold is collected in taxes each day";
 		return string;
 	}
 
@@ -51,7 +52,7 @@ public class GameObjectVillage extends GameObject {
 
 	@Override
 	public String getSpecialCondition() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stu
 		return "";
 	}
 

@@ -8,8 +8,13 @@ public class TerrainObjectSnowPlain extends TerrainObject {
 		super(new TileSnowPlain(), true, true);
 	}
 	
-	public String totring(){
-		return "Plains"; 
+	public String toString(){
+		return "The " + getBiomeString() + "plains";
+	}
+
+	@Override
+	public String getTypeString() {
+		return "Plains";
 	}
 
 }

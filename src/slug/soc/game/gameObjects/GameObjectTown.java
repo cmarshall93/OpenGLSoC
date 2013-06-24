@@ -47,8 +47,9 @@ public class GameObjectTown extends GameObject {
 	@Override
 	public String getDetailedDesc() {
 		String string = "The town of " + name + " is owned by the " + owner + " family(i)." + " It is located in " + location + ". " +
-				"The town was founded on " + dateCreated.toString() + "(b). It has a population of " + (population + troops) + " with a militia of " + troops + ".";
-		return string;
+				"The town was founded on " + dateCreated.toString() + "(b). It has a population of " + (population + troops) + " with a militia of " + troops + "."
+				+ " About " + population/100 + " gold is colelcted in taxes each day.";
+				return string;
 	}
 
 	@Override
@@ -71,6 +72,7 @@ public class GameObjectTown extends GameObject {
 			//GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
 			GameModeState.getInstance().addNotification("The town of " + name+ " has had an outbreak of plague.");
 		}
+		owner.changeMoney(population / 100);
 	}
 
 	@Override

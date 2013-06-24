@@ -50,9 +50,11 @@ public class GameModeState implements IGameState, Runnable {
 	private boolean confirmNextTurnDialog;
 	private boolean fogOfWar;
 	private boolean movingObject;
-	
+
 	private ArrayList<String> notifications;
 	private boolean showingNotifications;
+
+	private boolean buildingRoad;
 
 	private TerrainObject[][] map;
 	private TerrainObject[][] miniMap;
@@ -107,14 +109,14 @@ public class GameModeState implements IGameState, Runnable {
 		map = terrianGenerator.testGenerateMapMultiCont(100, 100);
 		currentXPos = 50;
 		currentYPos = 50;
-		
+
 		faction = new Faction();
-		
-		
+
+
 		miniMap = new TerrainObject[map.length/ MINIMAP_RATIO][map.length / MINIMAP_RATIO];
 		for(int x2 = 0, miniX = 0;x2 < map.length;x2+=MINIMAP_RATIO, miniX++){
 			for(int y2 = 0, miniY = 0; y2 < map.length;y2+=MINIMAP_RATIO, miniY++){
-				
+
 				int landCount = 0;
 				int seaCount = 0;
 
@@ -141,7 +143,7 @@ public class GameModeState implements IGameState, Runnable {
 		for(int i = 0;i < 999; i++){
 			advanceStep();
 		}
-		
+
 		long end = System.nanoTime();
 		System.out.println("GenTime: " + (end - start)/1000000);
 		loadedWorld = true;		
@@ -158,7 +160,7 @@ public class GameModeState implements IGameState, Runnable {
 	public Integer getCurrentYPos() {
 		return currentYPos;
 	}
-	
+
 	public Faction getFaction() {
 		return faction;
 	}
@@ -176,7 +178,7 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		GameCalendar.getInstance().advanceDay();
 	}
-	
+
 	public void addNotification(String n){
 		notifications.add(n);
 	}
@@ -295,6 +297,9 @@ public class GameModeState implements IGameState, Runnable {
 				if(interactObject){
 					interactObject = false;
 				}
+				if(buildingRoad){
+					buildingRoad = false;
+				}
 				else{
 					Game.getInstance().changeToNextGameState(PauseGameState.getInstance());
 				}
@@ -337,7 +342,7 @@ public class GameModeState implements IGameState, Runnable {
 				fogOfWar = !fogOfWar;
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_M)){
-				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject && !interactObject){
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject && !interactObject && !buildingRoad){
 					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson && !movingObject){
 						if(getMap()[currentYPos][currentXPos].getCurrentGameObject().getOwner().equals(faction)){
 							movingObject = true;
@@ -366,21 +371,28 @@ public class GameModeState implements IGameState, Runnable {
 						showingNotifications = false;
 					}
 				}
+				if(buildingRoad){
+					if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
+						buildingRoad = false;
+						terrianGenerator.buildRoad(objectOfFocus, getMap()[currentYPos][currentXPos].getCurrentGameObject());
+					}
+				}
 			}
-			
+
 			//here for testing
 			else if(Keyboard.isKeyDown(Keyboard.KEY_V)){
-				if(faction.getCapital() != null && getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
-					terrianGenerator.buildRoad(getMap()[currentYPos][currentXPos].getCurrentGameObject(), faction.getCapital());
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject && !interactObject  && !buildingRoad){
+					buildingRoad = true;
+					objectOfFocus = getMap()[currentYPos][currentXPos].getCurrentGameObject();
 				}
 			}
 			//
-			
+
 			else if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
 				zoomedOut = !zoomedOut;
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_E)){
-				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject && !interactObject){
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !movingObject && !interactObject  && !buildingRoad){
 					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectPerson){
 						objectOfFocus =  getMap()[currentYPos][currentXPos].getCurrentGameObject();
 						interactObject = true;
@@ -393,7 +405,7 @@ public class GameModeState implements IGameState, Runnable {
 					Game.getInstance().changeToNextGameState(BuildModeState.getInstance());
 				}
 			}
-			
+
 			//----------------------TESTING STUFF-----------------------------
 			else if(Keyboard.isKeyDown(Keyboard.KEY_1)){
 				if(getMap()[currentYPos][currentXPos].isBuildable()){
@@ -403,19 +415,6 @@ public class GameModeState implements IGameState, Runnable {
 					}
 					addNewFactionObject(currentXPos,currentYPos,p);
 				}
-			}
-			else if(Keyboard.isKeyDown(Keyboard.KEY_2)){
-				if(getMap()[currentYPos][currentXPos].isBuildable()){
-					addNewFactionObject(currentXPos,currentYPos,
-							new GameObjectTown(faction.getFactionColor().getColor(), faction,currentXPos,currentYPos));
-				}
-			}
-			else if(Keyboard.isKeyDown(Keyboard.KEY_3)){
-				GameObjectCastle c = new GameObjectCastle(faction.getFactionColor().getColor(), faction, currentXPos, currentYPos);
-				if(faction.getCapital() == null){
-					faction.setCapital(c);
-				}
-				addNewFactionObject(currentXPos,currentYPos,c);
 			}
 		}
 
@@ -677,6 +676,9 @@ public class GameModeState implements IGameState, Runnable {
 		if(interactObject){
 			TextRenderer.getInstance().drawString(" (Interacting)", DEFAULT_TEXT_SIZE, textSpace);
 		}
+		if(buildingRoad){
+			TextRenderer.getInstance().drawString(" (Building Road)", DEFAULT_TEXT_SIZE, textSpace);
+		}
 		//gy = 480;
 		//gx = 980;
 		if(System.currentTimeMillis() - lastFPS > 1000){
@@ -732,14 +734,14 @@ public class GameModeState implements IGameState, Runnable {
 		GL11.glVertex3f(0, 20, 0);
 		GL11.glEnd();
 		GL11.glPopMatrix();
-		
+
 		GL11.glPushMatrix();
 		GL11.glTranslatef(Display.getDisplayMode().getWidth() - (GameCalendar.getInstance().getCurrentDateAsString().length() * DEFAULT_TEXT_SIZE) - 50
 				, DEFAULT_TEXT_SIZE/2, 0);
 		TextRenderer.getInstance().drawString(GameCalendar.getInstance().getCurrentDateAsString(), 12,
 				Display.getDisplayMode().getWidth());
 		GL11.glPopMatrix();
-		
+
 		GL11.glPushMatrix();
 		String familyName = faction.toString();
 		GL11.glTranslatef(Display.getDisplayMode().getWidth()/2 - (familyName.length() * 12),
@@ -757,14 +759,14 @@ public class GameModeState implements IGameState, Runnable {
 
 		GL11.glPopMatrix();
 	}
-	
+
 	private void drawNotificationBox(String notification){
 		GL11.glPushMatrix();
 		drawBox();
 		TextRenderer.getInstance().drawString(notification, DEFAULT_TEXT_SIZE, 260);
 		GL11.glPopMatrix();
 	}
-	
+
 	private void drawBox(){
 		GL11.glTranslatef((DEFAULT_TILE_SIZE * DEFAULT_GRID_SIZE)/2 - 120, Display.getDisplayMode().getHeight()/2 - 35, 0);
 		GL11.glColor3f(1f,1f,1f);
@@ -858,5 +860,10 @@ public class GameModeState implements IGameState, Runnable {
 	public void addNewFactionObject(int x, int y, GameObject g){
 		g.getOwner().getHoldings().add(g);
 		addFactionObject(x,y,g);
+	}
+	
+	public void removeGameObject(GameObject g){
+		g.getOwner().getHoldings().remove(g);
+		map[g.getY()][g.getX()].removeGameObject(g);
 	}
 }

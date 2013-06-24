@@ -26,7 +26,7 @@ public class Faction {
 		factionColor = ColorFactory.getInstance().getRandomFactionColor();
 		sigil = HouseSigilGenerator.getInstance().createNewSigilString(factionColor);
 		name = WordGenerator.getInstance().getRandomFactionName();
-		money = RandomProvider.getInstance().nextInt(100000);
+		money = 0;//RandomProvider.getInstance().nextInt(100000);
 		fov = new boolean[GameModeState.getInstance().getMap().length][GameModeState.getInstance().getMap().length];
 		holdings = new ArrayList<GameObject>();
 	}
@@ -61,6 +61,10 @@ public class Faction {
 
 	public long getMoney(){
 		return money;
+	}
+	
+	public void changeMoney(long amount){
+		money += amount;
 	}
 
 	public boolean[][] getFov(){
