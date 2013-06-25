@@ -2,6 +2,7 @@ package slug.soc.game.gameObjects.interaction;
 
 import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectPerson;
+import slug.soc.game.gameObjects.tasks.HaveChildTask;
 import slug.soc.game.gameState.GameModeState;
 
 //maily for testing
@@ -13,10 +14,8 @@ public class HaveChildInteraction extends AbstractInteraction {
 
 	@Override
 	public void interact(GameObjectPerson other) {
-		GameObjectPerson child = other.haveChild(other, (GameObjectPerson)owner);
-		if(child != null){
-			GameModeState.getInstance().addNewFactionObject(other.getX(), other.getY(), child);
-		}
+		other.setTask(new HaveChildTask(other, owner));
+		other.getTask().act();
 	}
 
 	public String toString(){

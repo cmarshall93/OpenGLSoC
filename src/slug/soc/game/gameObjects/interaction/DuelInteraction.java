@@ -4,6 +4,7 @@ import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectPerson;
+import slug.soc.game.gameObjects.tasks.DuelTask;
 
 public class DuelInteraction extends AbstractInteraction {
 
@@ -13,16 +14,8 @@ public class DuelInteraction extends AbstractInteraction {
 
 	@Override
 	public void interact(GameObjectPerson other) {
-		if(((GameObjectPerson) owner).getFightingSkill() > other.getFightingSkill()){
-			other.kill();
-			String out = owner.getName() + " fought and killed " + other.getName();
-			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out, owner));
-		}
-		else{
-			((GameObjectPerson) owner).kill();
-			String out = owner.getName() + " fought and was killed by " + other.getName();
-			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,owner));
-		}
+		((GameObjectPerson) other).setTask(new DuelTask(other, owner));
+		other.getTask().act();
 	}
 	
 	public String toString(){

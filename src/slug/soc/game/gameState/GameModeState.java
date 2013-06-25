@@ -59,6 +59,7 @@ public class GameModeState implements IGameState, Runnable {
 	private TerrainObject[][] map;
 	private TerrainObject[][] miniMap;
 	private ArrayList<GameObject> gameObjects;
+	private ArrayList<GameObject> queuedObjects;
 	private Faction faction;
 
 	private GameObject objectOfFocus;
@@ -96,6 +97,7 @@ public class GameModeState implements IGameState, Runnable {
 		terrianGenerator = new TerrianGenerator();
 		lastFPS = System.currentTimeMillis();
 		gameObjects = new ArrayList<GameObject>();
+		queuedObjects = new ArrayList<GameObject>();
 		notifications = new ArrayList<String>();
 	}
 
@@ -169,6 +171,10 @@ public class GameModeState implements IGameState, Runnable {
 		for(GameObject o : gameObjects){
 			o.act();
 		}
+		for(GameObject o : queuedObjects){
+			addNewFactionObject(o.getX(),o.getY(),o);
+		}
+		queuedObjects.clear();
 		faction.updateFov();
 		if(notifications.size() > 0){
 			showingNotifications = true;
@@ -177,6 +183,10 @@ public class GameModeState implements IGameState, Runnable {
 			GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
 		}
 		GameCalendar.getInstance().advanceDay();
+	}
+
+	public void addObjectToQueue(GameObject o){
+		queuedObjects.add(o);
 	}
 
 	public void addNotification(String n){
@@ -316,9 +326,11 @@ public class GameModeState implements IGameState, Runnable {
 				}
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-				if(getMap()[currentYPos][currentXPos].getCurrentGameObject() != null && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
-					GameObjectInformationState.getInstance().setObjectToDetail(getMap()[currentYPos][currentXPos].getCurrentGameObject());
-					Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
+				if(getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
+					if(getMap()[currentYPos][currentXPos].getCurrentGameObject() != null && !(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor)){
+						GameObjectInformationState.getInstance().setObjectToDetail(getMap()[currentYPos][currentXPos].getCurrentGameObject());
+						Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
+					}
 				}
 			}
 			else if(Keyboard.isKeyDown(Keyboard.KEY_T)){
@@ -861,7 +873,7 @@ public class GameModeState implements IGameState, Runnable {
 		g.getOwner().getHoldings().add(g);
 		addFactionObject(x,y,g);
 	}
-	
+
 	public void removeGameObject(GameObject g){
 		g.getOwner().getHoldings().remove(g);
 		map[g.getY()][g.getX()].removeGameObject(g);

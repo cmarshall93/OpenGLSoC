@@ -35,7 +35,7 @@ public abstract class GameObject implements GameDrawable {
 	public GameObject(GameTile tile, Faction owner, int x, int y){
 		this.tile = tile;	
 		this.owner = owner;
-		dateCreated = GameCalendar.getInstance().getCurrentDate();
+		dateCreated = new GameCalendarDate(GameCalendar.getInstance().getCurrentDate());
 		xPos = x;
 		yPos = y;
 		

@@ -48,6 +48,7 @@ public class GameObjectPerson extends GameObject {
 	private int fightingSkill;
 	private String fightingSkillString;
 
+	private int age;
 	private boolean isDead;
 	private int ageAtDeath;
 
@@ -57,6 +58,8 @@ public class GameObjectPerson extends GameObject {
 		interactions.add(new HaveChildInteraction(this));
 		interactions.add(new DuelInteraction(this));
 
+		age = 0;
+		
 		fightingSkill = RandomProvider.getInstance().nextInt(101);
 		if(fightingSkill < 50){
 			fightingSkillString = "bad";
@@ -176,9 +179,12 @@ public class GameObjectPerson extends GameObject {
 				hasOrders = false;
 			}
 			else{
-				System.out.println("task acted");
 				task.act();
 			}
+		}
+		if(GameCalendar.getInstance().getCurrentDate().getMonth().equals(dateCreated.getMonth()) 
+				&& GameCalendar.getInstance().getCurrentYear() == dateCreated.getYear() + 1){
+			age++;
 		}
 	}
 
@@ -233,7 +239,7 @@ public class GameObjectPerson extends GameObject {
 		String out = firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
 				+ secondPerson.toLowerCase() + " was born on " + dateCreated.toString()  +" (b)" ;
 		if(!isDead){
-			out +=" and is " + (currentYear - dateCreated.getYear()) + " years old.  " ;
+			out +=" and is " + age + " years old.  " ;
 		}
 		else{
 			out += ". " + secondPerson + " died at the age of " + ageAtDeath +". ";
