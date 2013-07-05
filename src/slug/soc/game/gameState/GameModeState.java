@@ -417,6 +417,9 @@ public class GameModeState implements IGameState, Runnable {
 					Game.getInstance().changeToNextGameState(BuildModeState.getInstance());
 				}
 			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_A)){
+				Game.getInstance().changeToNextGameState(FamilyTreeState.getInstance());
+			}
 
 			//----------------------TESTING STUFF-----------------------------
 			else if(Keyboard.isKeyDown(Keyboard.KEY_1)){

@@ -13,7 +13,7 @@ public class HaveChildTask extends AbstractTask {
 
 	private MovementOrder path;
 	private boolean readyToChild;
-	
+
 	public HaveChildTask(GameObject owner, GameObject target) {
 		super(owner, target);
 		Pathfinder finder = new Pathfinder(10000,false);
@@ -42,11 +42,16 @@ public class HaveChildTask extends AbstractTask {
 	@Override
 	public void act() {
 		if(readyToChild){
-			GameObjectPerson child = ((GameObjectPerson) target).haveChild((GameObjectPerson) target, (GameObjectPerson)owner);
-			if(child != null){
-				GameModeState.getInstance().addObjectToQueue(child);
-				GameModeState.getInstance().addNotification(owner.getName() + " and " + target.getName() + " have had a child.");
+			if(!((GameObjectPerson) owner).isFemale() && !((GameObjectPerson) target).isFemale()){
+				((GameObjectPerson) owner).addRumor("It is rumored he prefers the company of men.");
+				GameModeState.getInstance().addNotification(" Rumors are spreading that " + owner.getName() + " likes the male interest.");
 			}
+			else{
+				GameObjectPerson child = ((GameObjectPerson) target).haveChild((GameObjectPerson) target, (GameObjectPerson)owner);
+				if(child != null){
+					GameModeState.getInstance().addObjectToQueue(child);
+					GameModeState.getInstance().addNotification(owner.getName() + " and " + target.getName() + " have had a child.");
+				}}
 			isCompleted = true;
 		}
 		else{

@@ -31,6 +31,8 @@ public class GameObjectPerson extends GameObject {
 	private GameObjectPerson mother;
 	private GameObjectPerson father;
 	private ArrayList<GameObjectPerson> children;
+	
+	private ArrayList<String> rumors;
 
 	private boolean isFemale;
 
@@ -58,7 +60,7 @@ public class GameObjectPerson extends GameObject {
 		interactions.add(new HaveChildInteraction(this));
 		interactions.add(new DuelInteraction(this));
 
-		age = 0;
+		rumors = new ArrayList<String>();
 		
 		fightingSkill = RandomProvider.getInstance().nextInt(101);
 		if(fightingSkill < 50){
@@ -67,12 +69,14 @@ public class GameObjectPerson extends GameObject {
 		else{
 			fightingSkillString = "good";
 		}
+		
+		age = 0;
 
 		children = new ArrayList<GameObjectPerson>();
 
 		bodyFeatures = new ArrayList<AbstractPersonFeature>();
 		faceFeatures = new PersonFaceFeatureSet();
-
+		
 		lastName = owner.toString();
 		troopNumber= 1;
 		if(RandomProvider.getInstance().nextInt(2) == 0){
@@ -121,6 +125,10 @@ public class GameObjectPerson extends GameObject {
 
 	public String toString(){
 		return "Family Member";
+	}
+	
+	public ArrayList<GameObjectPerson> getChildren(){
+		return children;
 	}
 
 	public void setIsFemale(boolean isFemale){
@@ -197,14 +205,21 @@ public class GameObjectPerson extends GameObject {
 		if(person1.isFemale() && !person2.isFemale()){
 			GameObjectPerson child = new GameObjectPerson(owner.getFactionColor().getColor(), owner, person1, person2, xPos, yPos);
 			children.add(child);
+			person2.children.add(child);
 			return child;
 		}
 		else if(person2.isFemale() && !person1.isFemale()){
 			GameObjectPerson child = new GameObjectPerson(owner.getFactionColor().getColor(), owner, person2, person1, xPos, yPos);
 			children.add(child);
+			person2.children.add(child);
 			return child;
 		}
 		else return null;
+	}
+	
+	public void addRumor(String s){
+		rumors.add(s);
+		hasSpecialCondition = true;
 	}
 
 	@Override
@@ -235,7 +250,6 @@ public class GameObjectPerson extends GameObject {
 		}else{
 			fatherString = father.getName();
 		}
-		int currentYear = GameCalendar.getInstance().getCurrentYear();
 		String out = firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
 				+ secondPerson.toLowerCase() + " was born on " + dateCreated.toString()  +" (b)" ;
 		if(!isDead){
@@ -245,7 +259,11 @@ public class GameObjectPerson extends GameObject {
 			out += ". " + secondPerson + " died at the age of " + ageAtDeath +". ";
 		}
 		out += seconderPerson + " mother is " + motherString + " . " + seconderPerson + " father is " 
-				+ fatherString + ". ";
+				+ fatherString + ".";
+		if(children.size() > 0){
+			out += secondPerson + " has " + children.size() + " children. ";
+		}
+		
 		for(AbstractPersonFeature a : bodyFeatures){
 			out += secondPerson + " has " + a.getDesc();
 		}
@@ -309,8 +327,11 @@ public class GameObjectPerson extends GameObject {
 
 	@Override
 	public String getSpecialCondition() {
-		// TODO Auto-generated method stub
-		return "";
+		String out = "";
+		for(String s : rumors){
+			out += s;
+		}
+		return out;
 	}
 
 }
