@@ -7,6 +7,7 @@ public class PersonFaceFeatureSet {
 	private AbstractPersonFeature hair;
 	private AbstractPersonFeature nose;
 	private AbstractPersonFeature mouth;
+	private AbstractPersonFeature arms;
 	
 	public PersonFaceFeatureSet(){
 		
@@ -51,4 +52,5 @@ public class PersonFaceFeatureSet {
 	public void setMouth(AbstractPersonFeature mouth) {
 		this.mouth = mouth;
 	}
+
 }

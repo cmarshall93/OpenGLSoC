@@ -3,21 +3,20 @@ package slug.soc.game.gameObjects.peopleFeatures;
 import slug.soc.game.RandomProvider;
 import slug.soc.game.worldBuilding.WordGenerator;
 
-public class BodyPersonFeature implements AbstractPersonFeature {
+public class ArmsPersonFeature implements AbstractPersonFeature {
 
 	private String desc;
 	private String tattoo;
 	
-	public BodyPersonFeature(){
-		desc = "a " + WordGenerator.getInstance().getRandomBodyType() + " body.";
+	public ArmsPersonFeature(){
+		desc = WordGenerator.getInstance().getRandomBodyType() + " arms.";
 		tattoo = null;
 		if(RandomProvider.getInstance().nextInt(50) == 1){ 
 			tattoo = WordGenerator.getInstance().getRandomNoun();
 		}
 	}
 	
-	@Override
-	public String getDesc() {
+	public String getDesc(){
 		String out = desc;
 		if(tattoo != null){
 			out.toCharArray()[out.length() -1] = ' ';
@@ -25,5 +24,4 @@ public class BodyPersonFeature implements AbstractPersonFeature {
 		}
 		return out;
 	}
-
 }

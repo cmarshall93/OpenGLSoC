@@ -11,6 +11,7 @@ import slug.soc.game.RandomProvider;
 import slug.soc.game.gameObjects.interaction.DuelInteraction;
 import slug.soc.game.gameObjects.interaction.HaveChildInteraction;
 import slug.soc.game.gameObjects.peopleFeatures.AbstractPersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.ArmsPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.BeardPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.BodyPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.EarPersonFeature;
@@ -319,10 +320,10 @@ public class GameObjectPerson extends GameObject {
 			faceFeatures.setEyes(new EyePersonFeature());
 			faceFeatures.setEars(new EarPersonFeature());
 			faceFeatures.setMouth(new MouthPersonFeature());
-
-			bodyFeatures.add(new BodyPersonFeature());
-
 		}
+
+		bodyFeatures.add(new BodyPersonFeature());
+		bodyFeatures.add(new ArmsPersonFeature());
 	}
 
 	@Override
