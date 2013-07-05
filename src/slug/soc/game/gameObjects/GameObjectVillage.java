@@ -21,7 +21,6 @@ public class GameObjectVillage extends GameObject {
 		name = WordGenerator.getInstance().getRandomPlaceName();
 		if(owner != null){
 			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));
-			GameCalendar.getInstance().addKeyDate(dateCreated);
 		}
 	}
 

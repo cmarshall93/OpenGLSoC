@@ -46,6 +46,10 @@ public class HaveChildTask extends AbstractTask {
 				((GameObjectPerson) owner).addRumor("It is rumored he prefers the company of men.");
 				GameModeState.getInstance().addNotification(" Rumors are spreading that " + owner.getName() + " likes the male interest.");
 			}
+			else if(((GameObjectPerson) owner).isFemale() && ((GameObjectPerson) target).isFemale()){
+				((GameObjectPerson) owner).addRumor("It is rumored she prefers the company of women.");
+				GameModeState.getInstance().addNotification(" Rumors are spreading that " + owner.getName() + " likes the female touch.");
+			}
 			else{
 				GameObjectPerson child = ((GameObjectPerson) target).haveChild((GameObjectPerson) target, (GameObjectPerson)owner);
 				if(child != null){

@@ -18,7 +18,6 @@ public class GameObjectHoldfast extends GameObject {
 		civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
 		if(owner != null){
 			dateCreated.addEvent(new GameCalendarEvent("The completion of work on " + owner.toString() + " holdfast.", this));
-			GameCalendar.getInstance().addKeyDate(dateCreated);
 		}
 	}
 

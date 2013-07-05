@@ -20,7 +20,6 @@ public class GameObjectCastle extends GameObject {
 			civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
 
 			dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(), this));
-			//GameCalendar.getInstance().addKeyDate(dateCreated);
 		}
 	}
 
