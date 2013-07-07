@@ -1,11 +1,10 @@
 package slug.soc.game.gameObjects;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
-import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.RandomProvider;
-import slug.soc.game.gameObjects.tiles.GameTile;
 import slug.soc.game.gameObjects.tiles.faction.TileCastle;
 
 public class GameObjectCastle extends GameObject {
@@ -18,8 +17,9 @@ public class GameObjectCastle extends GameObject {
 		if(owner != null){
 			troopPopulation = RandomProvider.getInstance().nextInt(5000) + 1000;
 			civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
-
-			dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(), this));
+			ArrayList<GameObject> obj = new ArrayList<GameObject>();
+			obj.add(this);
+			dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(),"TEST", obj));
 		}
 	}
 

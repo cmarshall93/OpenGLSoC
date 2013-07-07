@@ -1,5 +1,7 @@
 package slug.soc.game;
 
+import java.util.ArrayList;
+
 import slug.soc.game.gameObjects.GameObject;
 /**
  * Models an event in a calendar, such as the death of a character.
@@ -8,20 +10,26 @@ import slug.soc.game.gameObjects.GameObject;
  */
 public class GameCalendarEvent {
 
-	private GameObject gameObj;
-	private String desc;
+	private ArrayList<GameObject> gameObjs;
+	private String shortDesc;
+	private String longDesc;
 	
-	public GameCalendarEvent(String desc, GameObject obj){
-		this.desc = desc;
-		this.gameObj = obj;
+	public GameCalendarEvent(String shrotDesc,String longDesc, ArrayList<GameObject> objs){
+		this.shortDesc = shortDesc;
+		this.longDesc = longDesc;
+		this.gameObjs = objs;
 	}
 	
-	public GameObject getGameObject(){
-		return gameObj;
+	public ArrayList<GameObject> getGameObjects(){
+		return gameObjs;
+	}
+	
+	public String getDesc(){
+		return longDesc;
 	}
 	
 	public String toString(){
-		return desc;
+		return shortDesc;
 	}
 	
 }

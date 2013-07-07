@@ -60,7 +60,7 @@ public class HaveChildTask extends AbstractTask {
 		}
 		else{
 			owner.giveOrders(path);
-			if(path.getLastCoord().getNextCoord() == null){
+			if(path.getLastCoord().getNextCoord() == null || path == null){
 				readyToChild = true;
 			}
 			else{

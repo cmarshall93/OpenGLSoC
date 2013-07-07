@@ -369,7 +369,7 @@ public class GameModeState implements IGameState, Runnable {
 					objectOfFocus.giveOrders(movementOrder);
 					movingObject = false;
 				}
-				if(interactObject && getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0){
+				if(interactObject && getMap()[currentYPos][currentXPos].getNumberOfGameObjects() > 0 && !objectOfFocus.equals(getMap()[currentYPos][currentXPos].getCurrentGameObject())){
 					InteractState.getInstance().setInteractions(getMap()[currentYPos][currentXPos].getCurrentGameObject().getInteractions(),
 							objectOfFocus, getMap()[currentYPos][currentXPos].getCurrentGameObject());
 					Game.getInstance().changeToNextGameState(InteractState.getInstance());

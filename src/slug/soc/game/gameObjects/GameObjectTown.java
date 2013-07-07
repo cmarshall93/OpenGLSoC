@@ -1,6 +1,7 @@
 package slug.soc.game.gameObjects;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
@@ -26,7 +27,9 @@ public class GameObjectTown extends GameObject {
 		population = RandomProvider.getInstance().nextInt(100000) + 10000;
 		name = WordGenerator.getInstance().getRandomPlaceName();
 		if(owner != null){
-			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));
+			ArrayList<GameObject> obj = new ArrayList<GameObject>();
+			obj.add(this);
+			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name,"TESTS", obj));
 		}
 	}
 
@@ -60,14 +63,18 @@ public class GameObjectTown extends GameObject {
 			if(RandomProvider.getInstance().nextInt(100) == 1){
 				hasPlague = false;
 				hasSpecialCondition = false;
-				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("End of plague in " + name, this));
+				ArrayList<GameObject> obj = new ArrayList<GameObject>();
+				obj.add(this);
+				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("End of plague in " + name,"TEST", obj));
 				//GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
 			}
 		}
 		else if(RandomProvider.getInstance().nextInt(1000) == 1){
 			hasPlague = true;
 			hasSpecialCondition = true;
-			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("Outbreak of plague in " + name,this));
+			ArrayList<GameObject> obj = new ArrayList<GameObject>();
+			obj.add(this);
+			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent("Outbreak of plague in " + name, "TEST",obj));
 			//GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
 			GameModeState.getInstance().addNotification("The town of " + name+ " has had an outbreak of plague.");
 		}

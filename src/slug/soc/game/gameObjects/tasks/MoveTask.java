@@ -51,7 +51,7 @@ public class MoveTask extends AbstractTask{
 		//crap to ensure that people stop moving, as atm the whole path if travelled in one go
 		//people will always stop moving after one go
 		owner.giveOrders(path);
-		if(path.getLastCoord().getNextCoord() == null){
+		if(path.getLastCoord().getNextCoord() == null || path == null){
 			isCompleted = true;
 		}
 		else{

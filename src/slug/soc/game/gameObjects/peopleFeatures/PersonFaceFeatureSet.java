@@ -1,18 +1,22 @@
 package slug.soc.game.gameObjects.peopleFeatures;
 
+import slug.soc.game.gameObjects.GameObjectPerson;
+
 public class PersonFaceFeatureSet {
-	
+
 	private AbstractPersonFeature ears;
 	private AbstractPersonFeature eyes;
 	private AbstractPersonFeature hair;
 	private AbstractPersonFeature nose;
 	private AbstractPersonFeature mouth;
-	private AbstractPersonFeature arms;
-	
-	public PersonFaceFeatureSet(){
-		
+	private AbstractPersonFeature beard;
+
+	private GameObjectPerson owner;
+
+	public PersonFaceFeatureSet(GameObjectPerson owner){
+		this.owner = owner;
 	}
-	
+
 	public AbstractPersonFeature getEars() {
 		return ears;
 	}
@@ -51,6 +55,32 @@ public class PersonFaceFeatureSet {
 
 	public void setMouth(AbstractPersonFeature mouth) {
 		this.mouth = mouth;
+	}
+
+	public void setBeard(AbstractPersonFeature beard){
+		this.beard = beard;
+	}
+
+	public AbstractPersonFeature getBeard(){
+		return beard;
+	}
+
+	public String getDesc(){
+		String out = "";
+		String secondPerson = "He";
+		if(owner.isFemale()){
+			secondPerson = "She";
+		}
+		out += secondPerson + " has " + getNose().getDesc();
+		out += secondPerson + " has " + getHair().getDesc();
+		out += secondPerson + " has " + getEyes().getDesc();
+		out += secondPerson + " has " + getEars().getDesc();
+		out += secondPerson + " has " + getMouth().getDesc();
+		if(beard != null){
+			out += secondPerson + " has " + getBeard().getDesc();
+		}
+
+		return out;
 	}
 
 }

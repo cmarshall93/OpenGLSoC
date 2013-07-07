@@ -1,6 +1,7 @@
 package slug.soc.game.gameObjects;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
@@ -17,7 +18,9 @@ public class GameObjectHoldfast extends GameObject {
 		troopPopulation = RandomProvider.getInstance().nextInt(1000) + 200;
 		civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
 		if(owner != null){
-			dateCreated.addEvent(new GameCalendarEvent("The completion of work on " + owner.toString() + " holdfast.", this));
+			ArrayList<GameObject> obj = new ArrayList<GameObject>();
+			obj.add(this);
+			dateCreated.addEvent(new GameCalendarEvent("The completion of work on " + owner.toString() + " holdfast.","THIS", obj));
 		}
 	}
 

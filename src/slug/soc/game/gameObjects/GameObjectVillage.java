@@ -1,6 +1,7 @@
 package slug.soc.game.gameObjects;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
@@ -20,7 +21,9 @@ public class GameObjectVillage extends GameObject {
 		population = RandomProvider.getInstance().nextInt(1000) + 200;
 		name = WordGenerator.getInstance().getRandomPlaceName();
 		if(owner != null){
-			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name, this));
+			ArrayList<GameObject> obj = new ArrayList<GameObject>();
+			obj.add(this);
+			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name,"TEST", obj));
 		}
 	}
 

@@ -19,6 +19,7 @@ import slug.soc.game.gameObjects.peopleFeatures.EyePersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.HairPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.MouthPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.NosePersonFeature;
+import slug.soc.game.gameObjects.peopleFeatures.PersonBodyFeatureSet;
 import slug.soc.game.gameObjects.peopleFeatures.PersonFaceFeatureSet;
 import slug.soc.game.gameObjects.tasks.AbstractTask;
 import slug.soc.game.gameObjects.tiles.faction.TilePerson;
@@ -40,7 +41,7 @@ public class GameObjectPerson extends GameObject {
 	private String firstName;
 	private String lastName;
 
-	private ArrayList<AbstractPersonFeature> bodyFeatures;
+	private PersonBodyFeatureSet bodyFeatures;
 	private PersonFaceFeatureSet faceFeatures;
 
 	private Integer troopNumber;
@@ -75,8 +76,8 @@ public class GameObjectPerson extends GameObject {
 
 		children = new ArrayList<GameObjectPerson>();
 
-		bodyFeatures = new ArrayList<AbstractPersonFeature>();
-		faceFeatures = new PersonFaceFeatureSet();
+		bodyFeatures = new PersonBodyFeatureSet(this);
+		faceFeatures = new PersonFaceFeatureSet(this);
 		
 		lastName = owner.toString();
 		troopNumber= 1;
@@ -87,7 +88,7 @@ public class GameObjectPerson extends GameObject {
 		else{
 			isFemale = false;
 			firstName =  WordGenerator.getInstance().getRandomMaleFirstName(); 
-			bodyFeatures.add(new BeardPersonFeature());
+			faceFeatures.setBeard(new BeardPersonFeature());
 		}
 
 		if(mother != null){
@@ -109,7 +110,9 @@ public class GameObjectPerson extends GameObject {
 
 		calculateFeatues();
 
-		dateCreated.addEvent(new GameCalendarEvent("The birth of " + getName() + ".", this));
+		ArrayList<GameObject> obj = new ArrayList<GameObject>();
+		obj.add(this);
+		dateCreated.addEvent(new GameCalendarEvent("The birth of " + getName() + ".","TESTST", obj));
 	}
 
 	@Override
@@ -140,7 +143,7 @@ public class GameObjectPerson extends GameObject {
 		return isFemale;
 	}
 
-	public ArrayList<AbstractPersonFeature> getBodyFeatures(){
+	public PersonBodyFeatureSet getBodyFeatures(){
 		return bodyFeatures;
 	}
 
@@ -165,6 +168,10 @@ public class GameObjectPerson extends GameObject {
 		GameModeState.getInstance().removeGameObject(this);
 		isDead = true;
 		ageAtDeath = GameCalendar.getInstance().getCurrentYear() - dateCreated.getYear();
+	}
+	
+	public void wound(){
+		bodyFeatures.wound();
 	}
 
 	public int getFightingSkill(){
@@ -251,7 +258,12 @@ public class GameObjectPerson extends GameObject {
 		}else{
 			fatherString = father.getName();
 		}
-		String out = firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
+		String out = "";
+		if(isDead){
+			out += "(DEAD) ";
+		}
+		
+		out += firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
 				+ secondPerson.toLowerCase() + " was born on " + dateCreated.toString()  +" (b)" ;
 		if(!isDead){
 			out +=" and is " + age + " years old.  " ;
@@ -265,14 +277,10 @@ public class GameObjectPerson extends GameObject {
 			out += secondPerson + " has " + children.size() + " children. ";
 		}
 		
-		for(AbstractPersonFeature a : bodyFeatures){
-			out += secondPerson + " has " + a.getDesc();
-		}
-		out += secondPerson + " has " + faceFeatures.getNose().getDesc();
-		out += secondPerson + " has " + faceFeatures.getHair().getDesc();
-		out += secondPerson + " has " + faceFeatures.getEyes().getDesc();
-		out += secondPerson + " has " + faceFeatures.getEars().getDesc();
-		out += secondPerson + " has " + faceFeatures.getMouth().getDesc();
+		out+= bodyFeatures.getDesc();
+				
+		out += faceFeatures.getDesc();
+				
 		out += secondPerson + " is said to be a " + fightingSkillString + " figher.";
 		return out;
 	}
@@ -321,9 +329,6 @@ public class GameObjectPerson extends GameObject {
 			faceFeatures.setEars(new EarPersonFeature());
 			faceFeatures.setMouth(new MouthPersonFeature());
 		}
-
-		bodyFeatures.add(new BodyPersonFeature());
-		bodyFeatures.add(new ArmsPersonFeature());
 	}
 
 	@Override

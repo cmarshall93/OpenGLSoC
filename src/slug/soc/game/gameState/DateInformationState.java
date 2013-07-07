@@ -53,11 +53,11 @@ public class DateInformationState implements IGameState {
 			GL11.glPushMatrix();
 			if(currentEventIndex == i){
 				GL11.glColor3f(1f, 1f, 1f);
-				TextRenderer.getInstance().drawString(e.toString(), DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
+				TextRenderer.getInstance().drawString(e.getDesc(), DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
 			}
 			else{
 				GL11.glColor3f(0.6f,0.6f,0.6f);
-				TextRenderer.getInstance().drawString(e.toString(), DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
+				TextRenderer.getInstance().drawString(e.getDesc(), DEFAULT_TEXT_SIZE, Display.getDisplayMode().getWidth());
 			}
 			GL11.glPopMatrix();
 			GL11.glTranslatef(0f, DEFAULT_TEXT_SIZE, 0f);
@@ -76,8 +76,10 @@ public class DateInformationState implements IGameState {
 			Game.getInstance().changeToMainScreen();
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
-			GameObjectInformationState.getInstance().setObjectToDetail(events.get(currentEventIndex).getGameObject());
-			Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
+			EventInformationState.getInstance().setEventToDisplay(events.get(currentEventIndex));
+			Game.getInstance().changeToNextGameState(EventInformationState.getInstance());
+			//GameObjectInformationState.getInstance().setObjectToDetail(events.get(currentEventIndex).getGameObject());
+			//Game.getInstance().changeToNextGameState(GameObjectInformationState.getInstance());
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_UP)){//up
 			nextEvent(-1);

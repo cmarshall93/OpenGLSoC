@@ -42,7 +42,7 @@ public class GameObjectInformationState implements IGameState {
 			if(gameObject.hasOrders() && gameObject.getClass().equals(GameObjectPerson.class)){
 				GL11.glPushMatrix();
 				GL11.glColor3f(1f, 1f, 0f);
-				TextRenderer.getInstance().drawString((gameObject.getStringDesc()[0] + " is fosuced on " + ((GameObjectPerson) gameObject).getTask().getDesc()),
+				TextRenderer.getInstance().drawString((gameObject.getStringDesc()[0] + " is focused on " + ((GameObjectPerson) gameObject).getTask().getDesc()),
 						16, Display.getDisplayMode().getWidth());
 				GL11.glColor3f(1f,1f,1f);
 				GL11.glPopMatrix();

@@ -1,5 +1,7 @@
 package slug.soc.game.gameObjects.tasks;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.util.pathfinding.Path;
 
 import slug.soc.game.GameCalendar;
@@ -48,7 +50,7 @@ public class DuelTask extends AbstractTask {
 		}
 		else{
 			owner.giveOrders(path);
-			if(path.getLastCoord().getNextCoord() == null){
+			if(path.getLastCoord().getNextCoord() == null || path == null){
 				readyToDuel = true;
 			}
 			else{
@@ -63,15 +65,43 @@ public class DuelTask extends AbstractTask {
 	}
 
 	private void duel(){
-		if(((GameObjectPerson) owner).getFightingSkill() > ((GameObjectPerson) target).getFightingSkill()){
-			((GameObjectPerson) target).kill();
-			String out = owner.getName() + " fought and killed " + target.getName();
-			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out, owner));
+		int ownerFS = ((GameObjectPerson) owner).getFightingSkill();
+		int targetFS = ((GameObjectPerson) target).getFightingSkill();
+
+		ArrayList<GameObject> objs = new ArrayList<GameObject>();
+		objs.add(owner);
+		objs.add(target);
+		//owner of task wins
+		if(ownerFS > targetFS){
+			if(Math.abs(ownerFS - targetFS) < 20){
+				((GameObjectPerson) target).wound();
+				String out = owner.getName() + " fought and wounded " + target.getName();
+				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
+						"TESTESTESTS",
+						objs));
+			}
+			else{
+				((GameObjectPerson) target).kill();
+				String out = owner.getName() + " fought and killed " + target.getName();
+				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
+						"TESTESTSETSET",
+						objs));
+			}
 		}
+		//owner of task losses
 		else{
-			((GameObjectPerson) owner).kill();
-			String out = owner.getName() + " fought and was killed by " + target.getName();
-			GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,owner));
+			if(Math.abs(targetFS - ownerFS) < 20){
+				((GameObjectPerson) owner).wound();
+				String out = owner.getName() + " fought and was wounded by " + target.getName();
+				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,"TEST"
+						,objs));
+			}
+			else{
+				((GameObjectPerson) owner).kill();
+				String out = owner.getName() + " fought and was killed by " + target.getName();
+				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,"TEST"
+						,objs));
+			}
 		}
 	}
 
