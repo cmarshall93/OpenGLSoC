@@ -14,7 +14,7 @@ public class GameCalendarEvent {
 	private String shortDesc;
 	private String longDesc;
 	
-	public GameCalendarEvent(String shrotDesc,String longDesc, ArrayList<GameObject> objs){
+	public GameCalendarEvent(String shortDesc,String longDesc, ArrayList<GameObject> objs){
 		this.shortDesc = shortDesc;
 		this.longDesc = longDesc;
 		this.gameObjs = objs;

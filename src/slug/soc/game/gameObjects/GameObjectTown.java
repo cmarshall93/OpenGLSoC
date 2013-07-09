@@ -29,7 +29,7 @@ public class GameObjectTown extends GameObject {
 		if(owner != null){
 			ArrayList<GameObject> obj = new ArrayList<GameObject>();
 			obj.add(this);
-			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name,"TESTS", obj));
+			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name,"", obj));
 		}
 	}
 

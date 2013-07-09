@@ -19,7 +19,9 @@ public class GameObjectCastle extends GameObject {
 			civPopulation = RandomProvider.getInstance().nextInt(10000) + 1000;
 			ArrayList<GameObject> obj = new ArrayList<GameObject>();
 			obj.add(this);
-			dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(),"TEST", obj));
+			dateCreated.addEvent(new GameCalendarEvent("The complettion of work on castle" + owner.toString(),
+					"",
+					obj));
 		}
 	}
 

@@ -27,15 +27,16 @@ public class FamilyTreeState implements IGameState {
 	@Override
 	public void createImage() {
 		GL11.glPushMatrix();
+			GL11.glTranslatef(0,20,0);
 			GL11.glPushMatrix();
 				GL11.glTranslatef((Display.getDisplayMode().getWidth() / 2) - 8, 0, 0);
-				TextRenderer.getInstance().drawSymbol(faction.getHeadOfFamily().getTile().getSymbol(), 16);
+				TextRenderer.getInstance().drawSymbol(faction.getHeadOfFamily().getTile().getSymbol(), 20);
 			GL11.glPopMatrix();
-			GL11.glTranslatef(0, -20, 0);
-			float x = Display.getDisplayMode().getWidth() / faction.getHeadOfFamily().getChildren().size();
+			GL11.glTranslatef(0, 20, 0);
+			float x = Display.getDisplayMode().getWidth() / (faction.getHeadOfFamily().getChildren().size() + 1);
 			for(int i = 0;i < faction.getHeadOfFamily().getChildren().size(); i++){
 				GL11.glTranslatef(x, 0, 0);
-				TextRenderer.getInstance().drawSymbol(faction.getHeadOfFamily().getChildren().get(i).getTile().getSymbol(), 16);
+				TextRenderer.getInstance().drawSymbol(faction.getHeadOfFamily().getChildren().get(i).getTile().getSymbol(), 20);
 			}
 		GL11.glPopMatrix();
 	}

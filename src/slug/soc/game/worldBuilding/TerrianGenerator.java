@@ -447,8 +447,8 @@ public class TerrianGenerator {
 				Step current = path.getStep(i);
 				
 				ArrayList<GameObject> gObj = GameModeState.getInstance().getMap()[current.getY()][current.getX()].getGameObjects();
-				
-				if(prev != null && next != null){
+			
+				if(prev != null && next != null && !(GameModeState.getInstance().getMap()[current.getY()][current.getX()] instanceof TerrainObjectAbstractRiver)){
 					if(prev.getY() != current.getY() && next.getY() != current.getY()){	//if next and previous are above and below.
 						GameModeState.getInstance().getMap()[(int) current.getY()][(int) current.getX()] = new TerrainObjectRoadVertical();
 					}

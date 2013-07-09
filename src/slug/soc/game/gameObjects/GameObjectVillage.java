@@ -23,7 +23,7 @@ public class GameObjectVillage extends GameObject {
 		if(owner != null){
 			ArrayList<GameObject> obj = new ArrayList<GameObject>();
 			obj.add(this);
-			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name,"TEST", obj));
+			dateCreated.addEvent(new GameCalendarEvent("The founding of " + name,"", obj));
 		}
 	}
 

@@ -20,7 +20,7 @@ public class GameObjectHoldfast extends GameObject {
 		if(owner != null){
 			ArrayList<GameObject> obj = new ArrayList<GameObject>();
 			obj.add(this);
-			dateCreated.addEvent(new GameCalendarEvent("The completion of work on " + owner.toString() + " holdfast.","THIS", obj));
+			dateCreated.addEvent(new GameCalendarEvent("The completion of work on " + owner.toString() + " holdfast.","", obj));
 		}
 	}
 

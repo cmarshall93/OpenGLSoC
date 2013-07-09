@@ -19,7 +19,7 @@ public abstract class TerrainObject implements GameDrawable{
 	private GameTile baseTile;
 	private GameTile currentTile;
 
-	private ArrayList<GameObject> gameObjects;
+	protected ArrayList<GameObject> gameObjects;
 	private int numberOfGameObjects;
 	private int gameObjectIndex;
 
@@ -149,8 +149,16 @@ public abstract class TerrainObject implements GameDrawable{
 		return isBuildable;
 	}
 	
+	public void setIsBuildable(boolean b){
+		isBuildable = b;
+	}
+	
 	public boolean isTravelable() {
 		return isTravelable;
+	}
+	
+	public void setIsTravelable(boolean b){
+		isTravelable = b;
 	}
 
 	public String getDesc(){

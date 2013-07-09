@@ -112,7 +112,7 @@ public class GameObjectPerson extends GameObject {
 
 		ArrayList<GameObject> obj = new ArrayList<GameObject>();
 		obj.add(this);
-		dateCreated.addEvent(new GameCalendarEvent("The birth of " + getName() + ".","TESTST", obj));
+		dateCreated.addEvent(new GameCalendarEvent("The birth of " + getName() + ".","", obj));
 	}
 
 	@Override

@@ -77,14 +77,16 @@ public class DuelTask extends AbstractTask {
 				((GameObjectPerson) target).wound();
 				String out = owner.getName() + " fought and wounded " + target.getName();
 				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
-						"TESTESTESTS",
+						"The two parties fought for a couple of hours. The fight was close, until "
+						+ owner.getName() + " gained the upper hand and " + target.getName() + " yeilded.",
 						objs));
 			}
 			else{
 				((GameObjectPerson) target).kill();
 				String out = owner.getName() + " fought and killed " + target.getName();
 				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
-						"TESTESTSETSET",
+						"The two parties fought for less than an hour. The fight was one sided, " + target.getName()
+						+ " did not stand a chance in the fight and was killed.",
 						objs));
 			}
 		}
@@ -93,13 +95,17 @@ public class DuelTask extends AbstractTask {
 			if(Math.abs(targetFS - ownerFS) < 20){
 				((GameObjectPerson) owner).wound();
 				String out = owner.getName() + " fought and was wounded by " + target.getName();
-				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,"TEST"
+				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
+						"The two parties fought for a couple of hours. The fight was close, until "
+								+ target.getName() + " gained the upper hand and " + owner.getName() + " yeilded."
 						,objs));
 			}
 			else{
 				((GameObjectPerson) owner).kill();
 				String out = owner.getName() + " fought and was killed by " + target.getName();
-				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,"TEST"
+				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
+						"The two parties fought for less than an hour. The fight was one sided, " + owner.getName()
+						+ " did not stand a chance in the fight and was killed."
 						,objs));
 			}
 		}
