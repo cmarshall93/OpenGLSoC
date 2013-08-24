@@ -126,6 +126,13 @@ public class GameObjectPerson extends GameObject {
 	public String getName(){
 		return firstName + " " + lastName;
 	}
+	
+	public String getGender(){
+		if(isFemale){
+			return "Female";
+		}
+		return "Male";
+	}
 
 	public String toString(){
 		return "Family Member";
@@ -329,6 +336,16 @@ public class GameObjectPerson extends GameObject {
 			faceFeatures.setEars(new EarPersonFeature());
 			faceFeatures.setMouth(new MouthPersonFeature());
 		}
+	}
+	
+	public String[] getChildrenString(){
+		String[] out = new String[children.size()];
+		int i = 0;
+		for(GameObjectPerson g : children){
+			out[i] = g.getName();
+			i++;
+		}
+		return out;
 	}
 
 	@Override

@@ -54,7 +54,8 @@ public class HaveChildTask extends AbstractTask {
 				GameObjectPerson child = ((GameObjectPerson) target).haveChild((GameObjectPerson) target, (GameObjectPerson)owner);
 				if(child != null){
 					GameModeState.getInstance().addObjectToQueue(child);
-					GameModeState.getInstance().addNotification(owner.getName() + " and " + target.getName() + " have had a child.");
+					GameModeState.getInstance().addNotification(owner.getName() + " and " + target.getName() + " have had a child. Young " 
+					+ child.getName() + " is a baby " + child.getGender().toLowerCase() + ". ");
 				}}
 			isCompleted = true;
 		}

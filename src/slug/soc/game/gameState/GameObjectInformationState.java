@@ -55,6 +55,21 @@ public class GameObjectInformationState implements IGameState {
 				GL11.glColor3f(1f,1f,1f);
 				GL11.glPopMatrix();
 			}
+			if(gameObject instanceof GameObjectPerson){
+				if(((GameObjectPerson) gameObject).getChildren().size() > 0){
+					GL11.glTranslatef(0, 32, 0);
+					GL11.glPushMatrix();
+					TextRenderer.getInstance().drawString("Children : ", 16, Display.getDisplayMode().getWidth());
+					GL11.glPopMatrix();
+					GL11.glTranslatef(0, 18, 0);
+					for(String s : ((GameObjectPerson) gameObject).getChildrenString()){
+						GL11.glPushMatrix();
+						TextRenderer.getInstance().drawString(" -" + s, 16, Display.getDisplayMode().getWidth());
+						GL11.glPopMatrix();
+						GL11.glTranslatef(0,16,0);
+					}
+				}
+			}
 			//TextRenderer.getInstance().drawString(gameObject.getX() + " : " + gameObject.getY(), 16, Display.getDisplayMode().getWidth() - 16);
 		}
 		GL11.glPopMatrix();
