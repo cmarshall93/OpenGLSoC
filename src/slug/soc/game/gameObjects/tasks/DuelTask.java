@@ -8,6 +8,7 @@ import slug.soc.game.GameCalendar;
 import slug.soc.game.GameCalendarEvent;
 import slug.soc.game.Pathfinder;
 import slug.soc.game.gameObjects.GameObject;
+import slug.soc.game.gameObjects.GameObjectItem;
 import slug.soc.game.gameObjects.GameObjectPerson;
 import slug.soc.game.gameObjects.MovementOrder;
 import slug.soc.game.gameObjects.MovementOrderCoordinate;
@@ -49,6 +50,7 @@ public class DuelTask extends AbstractTask {
 			isCompleted = true;
 		}
 		else{
+			//TODO : Set this to only give path of length MovementDistance
 			owner.giveOrders(path);
 			if(path.getLastCoord().getNextCoord() == null || path == null){
 				readyToDuel = true;
@@ -83,6 +85,9 @@ public class DuelTask extends AbstractTask {
 			}
 			else{
 				((GameObjectPerson) target).kill();
+				for(GameObjectItem i : target.getItems()){
+					owner.addItem(i);
+				}
 				String out = owner.getName() + " fought and killed " + target.getName();
 				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
 						"The two parties fought for less than an hour. The fight was one sided, " + target.getName()
@@ -102,6 +107,9 @@ public class DuelTask extends AbstractTask {
 			}
 			else{
 				((GameObjectPerson) owner).kill();
+				for(GameObjectItem i : target.getItems()){
+					target.addItem(i);
+				}
 				String out = owner.getName() + " fought and was killed by " + target.getName();
 				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
 						"The two parties fought for less than an hour. The fight was one sided, " + owner.getName()

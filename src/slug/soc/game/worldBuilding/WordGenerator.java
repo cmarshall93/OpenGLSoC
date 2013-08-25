@@ -35,6 +35,8 @@ public class WordGenerator {
 	private File seaResourceFile = new File("textFiles/resources/sea.txt");
 	private File mountainResourceFile = new File("textFiles/resources/mountain.txt");
 	
+	private File itemsFile = new File("textFiles/items.txt");
+	
 	private Scanner scanner;
 	
 	protected WordGenerator(){
@@ -144,5 +146,9 @@ public class WordGenerator {
 	
 	public String getRandomMountainResource(){
 		return getRandomWordFromFile(mountainResourceFile);
+	}
+	
+	public String getRandomItem(){
+		return getRandomWordFromFile(itemsFile);
 	}
 }

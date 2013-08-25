@@ -61,7 +61,13 @@ public class GameObjectPerson extends GameObject {
 
 		interactions.add(new HaveChildInteraction(this));
 		interactions.add(new DuelInteraction(this));
-
+		//TODO : item testing
+		if(RandomProvider.getInstance().nextInt(2) == 1){
+			items.add(new GameObjectItem(x,y));
+			hasSpecialCondition = true;
+			
+		}
+		
 		rumors = new ArrayList<String>();
 		
 		fightingSkill = RandomProvider.getInstance().nextInt(101);
@@ -353,6 +359,12 @@ public class GameObjectPerson extends GameObject {
 		String out = "";
 		for(String s : rumors){
 			out += s;
+		}
+		if(items.size() > 0){
+			out += firstName + " is the owner of ";
+			for(GameObjectItem i : items){
+				out += i.getDetailedDesc() + ", ";
+			}
 		}
 		return out;
 	}

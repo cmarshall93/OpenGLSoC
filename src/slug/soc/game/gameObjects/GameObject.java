@@ -27,6 +27,8 @@ public abstract class GameObject implements GameDrawable {
 	protected int xPos;
 	protected int yPos;
 	
+	protected ArrayList<GameObjectItem> items;
+	
 	protected boolean hasOrders;
 	protected MovementOrder order;
 	
@@ -38,6 +40,7 @@ public abstract class GameObject implements GameDrawable {
 		dateCreated = new GameCalendarDate(GameCalendar.getInstance().getCurrentDate());
 		xPos = x;
 		yPos = y;
+		items = new ArrayList<GameObjectItem>();
 		
 		interactions = new ArrayList<AbstractInteraction>();
 		interactions.add(new MoveInteraction(this));
@@ -61,6 +64,18 @@ public abstract class GameObject implements GameDrawable {
 	
 	public void setLocation(String location){
 		this.location =  location;
+	}
+	
+	public void addItem(GameObjectItem item){
+		items.add(item);
+	}
+	
+	public void removeItem(GameObjectItem item){
+		items.remove(item);
+	}
+	
+	public ArrayList<GameObjectItem> getItems(){
+		return items;
 	}
 	
 	public void setXAndY(int x, int y){

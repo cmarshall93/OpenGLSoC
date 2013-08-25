@@ -60,6 +60,7 @@ public class HaveChildTask extends AbstractTask {
 			isCompleted = true;
 		}
 		else{
+			//Set this to only give path of length MovementDistance
 			owner.giveOrders(path);
 			if(path.getLastCoord().getNextCoord() == null || path == null){
 				readyToChild = true;
