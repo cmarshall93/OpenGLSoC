@@ -33,6 +33,7 @@ public class GameObjectPerson extends GameObject {
 	private GameObjectPerson mother;
 	private GameObjectPerson father;
 	private ArrayList<GameObjectPerson> children;
+	private ArrayList<GameObjectPerson> siblings;
 	
 	private ArrayList<String> rumors;
 
@@ -81,6 +82,7 @@ public class GameObjectPerson extends GameObject {
 		age = 0;
 
 		children = new ArrayList<GameObjectPerson>();
+		siblings = new ArrayList<GameObjectPerson>();
 
 		bodyFeatures = new PersonBodyFeatureSet(this);
 		faceFeatures = new PersonFaceFeatureSet(this);
@@ -225,12 +227,20 @@ public class GameObjectPerson extends GameObject {
 	public GameObjectPerson haveChild(GameObjectPerson person1, GameObjectPerson person2){
 		if(person1.isFemale() && !person2.isFemale()){
 			GameObjectPerson child = new GameObjectPerson(owner.getFactionColor().getColor(), owner, person1, person2, xPos, yPos);
+			for(GameObjectPerson p : children){
+				p.siblings.add(child);
+				child.siblings.add(p);
+			}
 			children.add(child);
 			person2.children.add(child);
 			return child;
 		}
 		else if(person2.isFemale() && !person1.isFemale()){
 			GameObjectPerson child = new GameObjectPerson(owner.getFactionColor().getColor(), owner, person2, person1, xPos, yPos);
+			for(GameObjectPerson p : children){
+				p.siblings.add(child);
+				child.siblings.add(p);
+			}
 			children.add(child);
 			person2.children.add(child);
 			return child;
@@ -288,6 +298,13 @@ public class GameObjectPerson extends GameObject {
 				+ fatherString + ".";
 		if(children.size() > 0){
 			out += secondPerson + " has " + children.size() + " children. ";
+		}
+		if(siblings.size() > 0){
+			out += secondPerson + " is the sibling of ";
+			for(GameObjectPerson p : siblings){
+				out += p.getName() + ", ";
+			}
+			out += ". ";
 		}
 		
 		out+= bodyFeatures.getDesc();

@@ -182,7 +182,9 @@ public class GameModeState implements IGameState, Runnable {
 		if(GameCalendar.getInstance().getCurrentDate().getEvents().size() > 0){
 			GameCalendar.getInstance().addKeyDate(GameCalendar.getInstance().getCurrentDate());
 		}
-		GameCalendar.getInstance().advanceDay();
+		for(int i = 0; i < 7;i++){
+			GameCalendar.getInstance().advanceDay();
+		}
 	}
 
 	public void addObjectToQueue(GameObject o){
