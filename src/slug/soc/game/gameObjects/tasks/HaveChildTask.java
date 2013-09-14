@@ -51,7 +51,7 @@ public class HaveChildTask extends AbstractTask {
 				GameModeState.getInstance().addNotification(" Rumors are spreading that " + owner.getName() + " likes the female touch.");
 			}
 			else{
-				GameObjectPerson child = ((GameObjectPerson) target).haveChild((GameObjectPerson) target, (GameObjectPerson)owner);
+				GameObjectPerson child = ((GameObjectPerson) target).haveChild((GameObjectPerson)owner);
 				if(child != null){
 					GameModeState.getInstance().addObjectToQueue(child);
 					GameModeState.getInstance().addNotification(owner.getName() + " and " + target.getName() + " have had a child. Young " 

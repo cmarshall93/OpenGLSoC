@@ -21,6 +21,9 @@ import slug.soc.game.gameObjects.peopleFeatures.MouthPersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.NosePersonFeature;
 import slug.soc.game.gameObjects.peopleFeatures.PersonBodyFeatureSet;
 import slug.soc.game.gameObjects.peopleFeatures.PersonFaceFeatureSet;
+import slug.soc.game.gameObjects.personality.AbstractPersonality;
+import slug.soc.game.gameObjects.personality.ControlPersonality;
+import slug.soc.game.gameObjects.personality.FrigidPersonality;
 import slug.soc.game.gameObjects.tasks.AbstractTask;
 import slug.soc.game.gameObjects.tiles.faction.TilePerson;
 import slug.soc.game.gameState.GameModeState;
@@ -34,7 +37,7 @@ public class GameObjectPerson extends GameObject {
 	private GameObjectPerson father;
 	private ArrayList<GameObjectPerson> children;
 	private ArrayList<GameObjectPerson> siblings;
-	
+
 	private ArrayList<String> rumors;
 
 	private boolean isFemale;
@@ -44,6 +47,7 @@ public class GameObjectPerson extends GameObject {
 
 	private PersonBodyFeatureSet bodyFeatures;
 	private PersonFaceFeatureSet faceFeatures;
+	private AbstractPersonality personality;
 
 	private Integer troopNumber;
 
@@ -65,12 +69,10 @@ public class GameObjectPerson extends GameObject {
 		//TODO : item testing
 		if(RandomProvider.getInstance().nextInt(2) == 1){
 			items.add(new GameObjectItem(x,y));
-			hasSpecialCondition = true;
-			
 		}
-		
+
 		rumors = new ArrayList<String>();
-		
+
 		fightingSkill = RandomProvider.getInstance().nextInt(101);
 		if(fightingSkill < 50){
 			fightingSkillString = "bad";
@@ -78,7 +80,7 @@ public class GameObjectPerson extends GameObject {
 		else{
 			fightingSkillString = "good";
 		}
-		
+
 		age = 0;
 
 		children = new ArrayList<GameObjectPerson>();
@@ -86,7 +88,17 @@ public class GameObjectPerson extends GameObject {
 
 		bodyFeatures = new PersonBodyFeatureSet(this);
 		faceFeatures = new PersonFaceFeatureSet(this);
-		
+
+
+		hasSpecialCondition = true;
+		if(RandomProvider.getInstance().nextInt(4) == 1){
+			personality = new FrigidPersonality();
+		}
+		else{
+			personality = new ControlPersonality();
+		}
+		rumors.add("They are said to be " + personality.toString());
+
 		lastName = owner.toString();
 		troopNumber= 1;
 		if(RandomProvider.getInstance().nextInt(2) == 0){
@@ -134,7 +146,7 @@ public class GameObjectPerson extends GameObject {
 	public String getName(){
 		return firstName + " " + lastName;
 	}
-	
+
 	public String getGender(){
 		if(isFemale){
 			return "Female";
@@ -145,7 +157,7 @@ public class GameObjectPerson extends GameObject {
 	public String toString(){
 		return "Family Member";
 	}
-	
+
 	public ArrayList<GameObjectPerson> getChildren(){
 		return children;
 	}
@@ -184,7 +196,7 @@ public class GameObjectPerson extends GameObject {
 		isDead = true;
 		ageAtDeath = GameCalendar.getInstance().getCurrentYear() - dateCreated.getYear();
 	}
-	
+
 	public void wound(){
 		bodyFeatures.wound();
 	}
@@ -224,19 +236,9 @@ public class GameObjectPerson extends GameObject {
 	}
 
 
-	public GameObjectPerson haveChild(GameObjectPerson person1, GameObjectPerson person2){
-		if(person1.isFemale() && !person2.isFemale()){
-			GameObjectPerson child = new GameObjectPerson(owner.getFactionColor().getColor(), owner, person1, person2, xPos, yPos);
-			for(GameObjectPerson p : children){
-				p.siblings.add(child);
-				child.siblings.add(p);
-			}
-			children.add(child);
-			person2.children.add(child);
-			return child;
-		}
-		else if(person2.isFemale() && !person1.isFemale()){
-			GameObjectPerson child = new GameObjectPerson(owner.getFactionColor().getColor(), owner, person2, person1, xPos, yPos);
+	public GameObjectPerson haveChild(GameObjectPerson person2){
+		GameObjectPerson child = personality.reactTryChild(this, person2);
+		if(child != null){
 			for(GameObjectPerson p : children){
 				p.siblings.add(child);
 				child.siblings.add(p);
@@ -247,7 +249,7 @@ public class GameObjectPerson extends GameObject {
 		}
 		else return null;
 	}
-	
+
 	public void addRumor(String s){
 		rumors.add(s);
 		hasSpecialCondition = true;
@@ -285,7 +287,7 @@ public class GameObjectPerson extends GameObject {
 		if(isDead){
 			out += "(DEAD) ";
 		}
-		
+
 		out += firstName + " " + lastName + " is a " + gender + ". A member of the " + getOwner() + " family(i), "
 				+ secondPerson.toLowerCase() + " was born on " + dateCreated.toString()  +" (b)" ;
 		if(!isDead){
@@ -306,11 +308,11 @@ public class GameObjectPerson extends GameObject {
 			}
 			out += ". ";
 		}
-		
+
 		out+= bodyFeatures.getDesc();
-				
+
 		out += faceFeatures.getDesc();
-				
+
 		out += secondPerson + " is said to be a " + fightingSkillString + " figher.";
 		return out;
 	}
@@ -360,7 +362,7 @@ public class GameObjectPerson extends GameObject {
 			faceFeatures.setMouth(new MouthPersonFeature());
 		}
 	}
-	
+
 	public String[] getChildrenString(){
 		String[] out = new String[children.size()];
 		int i = 0;
