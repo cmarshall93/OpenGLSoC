@@ -193,6 +193,9 @@ public class GameObjectPerson extends GameObject {
 
 	public void kill(){
 		GameModeState.getInstance().removeGameObject(this);
+		for(int i =0 ; i < items.size(); i++){
+			items.remove(i);
+		}
 		isDead = true;
 		ageAtDeath = GameCalendar.getInstance().getCurrentYear() - dateCreated.getYear();
 	}

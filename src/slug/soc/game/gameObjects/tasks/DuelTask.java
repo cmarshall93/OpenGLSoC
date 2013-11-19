@@ -84,10 +84,10 @@ public class DuelTask extends AbstractTask {
 						objs));
 			}
 			else{
-				((GameObjectPerson) target).kill();
 				for(GameObjectItem i : target.getItems()){
 					owner.addItem(i);
 				}
+				((GameObjectPerson) target).kill();
 				String out = owner.getName() + " fought and killed " + target.getName();
 				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
 						"The two parties fought for less than an hour. The fight was one sided, " + target.getName()
@@ -106,10 +106,10 @@ public class DuelTask extends AbstractTask {
 						,objs));
 			}
 			else{
-				((GameObjectPerson) owner).kill();
-				for(GameObjectItem i : target.getItems()){
+				for(GameObjectItem i : owner.getItems()){
 					target.addItem(i);
 				}
+				((GameObjectPerson) owner).kill();
 				String out = owner.getName() + " fought and was killed by " + target.getName();
 				GameCalendar.getInstance().getCurrentDate().addEvent(new GameCalendarEvent(out,
 						"The two parties fought for less than an hour. The fight was one sided, " + owner.getName()
